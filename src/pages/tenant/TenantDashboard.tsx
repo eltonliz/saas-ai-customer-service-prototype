@@ -197,7 +197,7 @@ export default function TenantDashboard({ context }: PageProps) {
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6" data-annotation-target="tenant-dashboard-metrics">
       {/* ================================================================ */}
       {/* Service context bar                                               */}
       {/* ================================================================ */}

@@ -1,7 +1,10 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { AppShell } from "./components/AppShell";
 import { Layout } from "./components/Layout";
 import { AppStoreProvider, useAppStore } from "./data/AppStore";
+import { AnnotationLayer } from "./components/RequirementBadge";
+import { TooltipManager } from "./components/RequirementTooltip";
+import { requirementAnnotations, type RequirementAnnotation } from "./data/requirementAnnotations";
 import type { AppContextValue, MenuItem, NavigationParams, PageProps, Portal, SidebarCategory } from "./types";
 
 // APP pages
@@ -294,10 +297,34 @@ function AppInner() {
   );
 }
 
+function AnnotationWrapper() {
+  const [activeAnnotations, setActiveAnnotations] = useState<RequirementAnnotation[]>([]);
+
+  useEffect(() => {
+    const hash = window.location.hash;
+    const path = hash ? hash.replace("#", "") : "/";
+    const matched = requirementAnnotations.filter((a) => {
+      if (!a.pagePath) return false;
+      return path.includes(a.pagePath) || a.pagePath.includes(path);
+    });
+    setActiveAnnotations(matched);
+  }, []);
+
+  return (
+    <>
+      <TooltipManager activeAnnotations={activeAnnotations} />
+      <AnnotationLayer annotations={activeAnnotations} onHover={(ann, rect) => {
+        window.__reqTooltipOpen?.(ann, rect);
+      }} />
+    </>
+  );
+}
+
 export default function App() {
   return (
     <AppStoreProvider>
       <AppInner />
+      <AnnotationWrapper />
     </AppStoreProvider>
   );
 }

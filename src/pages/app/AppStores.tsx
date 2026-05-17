@@ -10,7 +10,7 @@ export default function AppStores({ context, goPage }: PageProps) {
   const store = selected ? myStores.find((s) => s.id === selected) : null;
 
   return (
-    <div className="p-4">
+    <div className="p-4" data-annotation-target="app-stores-list">
       <h2 className="text-2xl font-bold text-slate-900 mb-4">门店服务</h2>
       {!store ? (
         <div className="space-y-3">
