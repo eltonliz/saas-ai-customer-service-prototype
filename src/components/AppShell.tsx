@@ -36,7 +36,7 @@ export function AppShell({ pageId, menus, onPageChange, onPortalChange, children
       <main className="grid-bg min-h-[calc(100vh-64px)] p-4 lg:p-8">
         <PhonePreview>
           <div className="flex min-h-[760px] flex-col">
-            <div className="flex-1 overflow-y-auto">{children}</div>
+            <div className="flex-1 min-h-0 flex flex-col">{children}</div>
             <nav className="grid grid-cols-5 border-t border-slate-200 bg-white px-1 py-2">
               {navItems.map((item) => {
                 const Icon = navIcons[item.id];
@@ -53,7 +53,7 @@ export function AppShell({ pageId, menus, onPageChange, onPortalChange, children
                     {Icon && <Icon size={20} />}
                     <span>{item.label}</span>
                     {item.badge !== undefined && (
-                      <span className="absolute top-1 right-1/3 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                      <span className="absolute top-1 right-1/3 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-sm font-bold text-white">
                         {item.badge}
                       </span>
                     )}
