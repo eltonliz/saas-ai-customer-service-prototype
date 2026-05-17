@@ -20,12 +20,12 @@ export default function PlatformAuditLog({}: PageProps) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <ScrollText size={20} className="text-slate-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">审计日志</h2>
-            <p className="text-sm text-slate-500 mt-1">记录平台级所有管理操作，支持按操作人、操作类型、操作对象筛选查询</p>
+            <h2 className="text-3xl font-bold text-slate-900">审计日志</h2>
+            <p className="text-base text-slate-500 mt-1">记录平台级所有管理操作，支持按操作人、操作类型、操作对象筛选查询</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -34,31 +34,31 @@ export default function PlatformAuditLog({}: PageProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="搜索操作人或操作类型..."
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-300 w-64"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-base outline-none focus:border-blue-300 w-64"
           />
         </div>
       </div>
       <div className="rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-sm">
+        <table className="w-full text-base">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作人</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作类型</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作对象</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">时间</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">IP</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">详情</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作人</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作类型</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作对象</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">时间</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">IP</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">详情</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((l) => (
-              <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 48 }}>
-                <td className="px-5 py-3 text-sm font-medium text-slate-800">{l.operator}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{l.action}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{l.target}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{l.time}</td>
-                <td className="px-5 py-3 text-sm text-slate-500 font-mono">{l.ip}</td>
-                <td className="px-5 py-3 text-sm text-slate-600 max-w-[200px] truncate">{l.detail}</td>
+              <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 56 }}>
+                <td className="px-5 py-3 text-base font-medium text-slate-800">{l.operator}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{l.action}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{l.target}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{l.time}</td>
+                <td className="px-5 py-3 text-base text-slate-500 font-mono">{l.ip}</td>
+                <td className="px-5 py-3 text-base text-slate-600 max-w-[200px] truncate">{l.detail}</td>
               </tr>
             ))}
           </tbody>

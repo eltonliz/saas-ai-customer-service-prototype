@@ -53,9 +53,9 @@ export default function OpsMonitor({}: PageProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-4">运维监控</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">运维监控</h2>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 mb-6">
         {[
           { icon: <Server size={16} className="text-emerald-500" />, label: "模型服务", value: "全部正常", sub: "3/3 模型可用", color: "bg-emerald-50" },
           { icon: <Activity size={16} className="text-blue-500" />, label: "接口成功率", value: "99.5%", sub: "近15分钟", color: "bg-blue-50" },
@@ -67,17 +67,17 @@ export default function OpsMonitor({}: PageProps) {
           <div key={card.label} className="rounded-2xl border border-slate-200 bg-white p-4">
             <div className="flex items-center gap-2 mb-2">
               <div className={`rounded-lg ${card.color} p-1.5`}>{card.icon}</div>
-              <span className="text-sm text-slate-500">{card.label}</span>
+              <span className="text-base text-slate-500">{card.label}</span>
             </div>
-            <p className="text-2xl font-bold text-slate-800">{card.value}</p>
-            <p className="text-sm text-slate-400 mt-0.5">{card.sub}</p>
+            <p className="text-3xl font-bold text-slate-800">{card.value}</p>
+            <p className="text-base text-slate-400 mt-0.5">{card.sub}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
             <Clock size={16} className="text-blue-500" />接口响应时间趋势（近7天）
           </h3>
           <div style={{ height: 230 }}>
@@ -93,8 +93,8 @@ export default function OpsMonitor({}: PageProps) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
             <BarChart3 size={16} className="text-indigo-500" />API调用QPS
           </h3>
           <div style={{ height: 230 }}>
@@ -111,15 +111,15 @@ export default function OpsMonitor({}: PageProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><Server size={16} className="text-blue-500" />模型服务状态</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2"><Server size={16} className="text-blue-500" />模型服务状态</h3>
           <div className="space-y-2">
             {modelStatuses.map((m) => (
               <div key={m.model} className="flex items-center justify-between rounded-lg border border-slate-100 p-3">
                 <div>
-                  <span className="text-sm font-medium text-slate-700">{m.model}</span>
-                  <div className="flex items-center gap-3 mt-0.5 text-sm text-slate-400">
+                  <span className="text-base font-medium text-slate-700">{m.model}</span>
+                  <div className="flex items-center gap-3 mt-0.5 text-base text-slate-400">
                     <span>延迟 {m.latency}</span>
                     <span>可用率 {m.availability}</span>
                     <span>{m.region}</span>
@@ -131,14 +131,14 @@ export default function OpsMonitor({}: PageProps) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><BarChart3 size={16} className="text-indigo-500" />接口监控</h3>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2"><BarChart3 size={16} className="text-indigo-500" />接口监控</h3>
           <div className="space-y-2">
             {apiMetrics.map((m) => (
               <div key={m.endpoint} className="flex items-center justify-between rounded-lg border border-slate-100 p-3">
                 <div>
-                  <span className="text-sm font-mono text-slate-600">{m.endpoint}</span>
-                  <div className="flex items-center gap-3 mt-0.5 text-sm text-slate-400">
+                  <span className="text-base font-mono text-slate-600">{m.endpoint}</span>
+                  <div className="flex items-center gap-3 mt-0.5 text-base text-slate-400">
                     <span>错误率 {m.errorRate}</span>
                     <span>延迟 {m.avgLatency}</span>
                     <span>QPS {m.qps}</span>
@@ -151,17 +151,17 @@ export default function OpsMonitor({}: PageProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><RefreshCw size={16} className="text-amber-500" />降级记录</h3>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2"><RefreshCw size={16} className="text-amber-500" />降级记录</h3>
           <div className="space-y-2">
             {degradationRecords.map((r) => (
               <div key={r.id} className="rounded-lg border border-slate-100 p-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-slate-700">{r.trigger}</span>
+                  <span className="text-base font-medium text-slate-700">{r.trigger}</span>
                   <StatusBadge status={r.status} />
                 </div>
-                <div className="text-sm text-slate-400">
+                <div className="text-base text-slate-400">
                   <span>{r.model}</span>
                   <span className="mx-2">·</span>
                   <span>持续 {r.duration}</span>
@@ -173,19 +173,19 @@ export default function OpsMonitor({}: PageProps) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><AlertTriangle size={16} className="text-rose-500" />告警列表</h3>
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2"><AlertTriangle size={16} className="text-rose-500" />告警列表</h3>
           <div className="space-y-2">
             {alerts.map((a) => (
               <div key={a.id} onClick={() => setSelectedAlert(a.id)} className="rounded-lg border border-slate-100 p-3 cursor-pointer hover:bg-slate-50">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
                     <div className={`w-1.5 h-1.5 rounded-full ${a.level === "critical" ? "bg-rose-500" : a.level === "warning" ? "bg-amber-500" : "bg-blue-500"}`} />
-                    <span className="text-sm font-medium text-slate-700">{a.title}</span>
+                    <span className="text-base font-medium text-slate-700">{a.title}</span>
                   </div>
-                  <span className="text-sm text-slate-400">{a.time}</span>
+                  <span className="text-base text-slate-400">{a.time}</span>
                 </div>
-                <div className="flex items-center gap-2 text-sm">
+                <div className="flex items-center gap-2 text-base">
                   <span className={a.acknowledged ? "text-slate-400" : "text-amber-600 font-medium"}>{a.acknowledged ? "已确认" : "待确认"}</span>
                 </div>
               </div>
@@ -196,25 +196,25 @@ export default function OpsMonitor({}: PageProps) {
 
       <Drawer open={selectedAlert !== null} title="告警详情" onClose={() => setSelectedAlert(null)}>
         {alert && (
-          <div className="space-y-4 text-sm">
+          <div className="space-y-4 text-base">
             <div className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${alert.level === "critical" ? "bg-rose-500" : alert.level === "warning" ? "bg-amber-500" : "bg-blue-500"}`} />
               <span className="font-medium">{alert.title}</span>
             </div>
             <div>
-              <span className="text-sm text-slate-400">告警时间</span>
+              <span className="text-base text-slate-400">告警时间</span>
               <p>{alert.time}</p>
             </div>
             <div>
-              <span className="text-sm text-slate-400">告警详情</span>
+              <span className="text-base text-slate-400">告警详情</span>
               <p className="mt-1">{alert.detail}</p>
             </div>
             <div>
-              <span className="text-sm text-slate-400">确认状态</span>
+              <span className="text-base text-slate-400">确认状态</span>
               <p className={alert.acknowledged ? "text-emerald-600" : "text-amber-600"}>{alert.acknowledged ? "已确认" : "待确认"}</p>
             </div>
             {!alert.acknowledged && (
-              <button type="button" className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">确认告警</button>
+              <button type="button" className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">确认告警</button>
             )}
           </div>
         )}

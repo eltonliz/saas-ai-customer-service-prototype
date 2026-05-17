@@ -45,28 +45,28 @@ export default function QualityInspection({ context, goPage }: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-slate-900">质检中心</h2>
+        <h2 className="text-2xl font-bold text-slate-900">质检中心</h2>
         <button
           type="button"
           onClick={() => goPage?.("knowledge-base", { tab: "gaps" } as any)}
-          className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors h-10"
+          className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-base font-medium text-blue-700 hover:bg-blue-100 transition-colors h-10"
         >
           <ExternalLink size={14} />
           前往知识缺口池
         </button>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
         <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 text-center">
-          <p className="text-2xl font-bold text-blue-700">{items.length}</p>
-          <p className="text-sm text-blue-500">AI回答抽检样本</p>
+          <p className="text-3xl font-bold text-blue-700">{items.length}</p>
+          <p className="text-base text-blue-500">AI回答抽检样本</p>
         </div>
         <div className="rounded-xl bg-emerald-50 border border-emerald-100 p-4 text-center">
-          <p className="text-2xl font-bold text-emerald-700">{items.filter((i) => i.correct).length}</p>
-          <p className="text-sm text-emerald-500">正确回答</p>
+          <p className="text-3xl font-bold text-emerald-700">{items.filter((i) => i.correct).length}</p>
+          <p className="text-base text-emerald-500">正确回答</p>
         </div>
         <div className="rounded-xl bg-orange-50 border border-orange-100 p-4 text-center">
-          <p className="text-2xl font-bold text-orange-700">{items.filter((i) => i.needGap).length}</p>
-          <p className="text-sm text-orange-500">需入知识缺口池</p>
+          <p className="text-3xl font-bold text-orange-700">{items.filter((i) => i.needGap).length}</p>
+          <p className="text-base text-orange-500">需入知识缺口池</p>
         </div>
       </div>
 
@@ -75,34 +75,34 @@ export default function QualityInspection({ context, goPage }: PageProps) {
           <div key={item.id} className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
-                <p className="text-sm font-medium text-slate-800 mb-1">Q: {item.question}</p>
-                <p className="text-sm text-slate-600 bg-slate-50 rounded-lg p-3">A: {item.aiAnswer}</p>
+                <p className="text-base font-medium text-slate-800 mb-1">Q: {item.question}</p>
+                <p className="text-base text-slate-600 bg-slate-50 rounded-lg p-3">A: {item.aiAnswer}</p>
               </div>
               <div className="flex flex-col items-end gap-1 ml-4">
                 <StatusBadge status={item.risk} />
-                <span className={`text-sm font-medium ${item.correct ? "text-emerald-600" : "text-red-500"}`}>
+                <span className={`text-base font-medium ${item.correct ? "text-emerald-600" : "text-red-500"}`}>
                   评分: {item.score}/5
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-3 pt-3 border-t border-slate-100">
-              <span className="text-sm text-slate-500">质检结果:</span>
+              <span className="text-base text-slate-500">质检结果:</span>
               {item.correct ? (
-                <span className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700"><Check size={12} className="inline mr-1" />正确</span>
+                <span className="rounded-full bg-emerald-50 px-3 py-1 text-base font-medium text-emerald-700"><Check size={12} className="inline mr-1" />正确</span>
               ) : (
-                <span className="rounded-full bg-red-50 px-3 py-1 text-sm font-medium text-red-700"><X size={12} className="inline mr-1" />需纠正</span>
+                <span className="rounded-full bg-red-50 px-3 py-1 text-base font-medium text-red-700"><X size={12} className="inline mr-1" />需纠正</span>
               )}
               {!item.correct && (
-                <button type="button" onClick={() => markCorrect(item.id)} className="rounded-lg border border-emerald-200 px-3 py-1 text-sm text-emerald-600 hover:bg-emerald-50 h-10 min-h-[40px]">
+                <button type="button" onClick={() => markCorrect(item.id)} className="rounded-lg border border-emerald-200 px-3 py-1 text-base text-emerald-600 hover:bg-emerald-50 h-10 min-h-[40px]">
                   <Check size={12} className="inline mr-1" />人工纠正为正确
                 </button>
               )}
               {item.needGap && addedToGapPool.has(item.id) ? (
-                <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-base font-medium text-emerald-700">
                   <BookOpen size={12} />已加入缺口池
                 </span>
               ) : item.needGap ? (
-                <span className="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-sm font-medium text-orange-700">
+                <span className="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-base font-medium text-orange-700">
                   <BookOpen size={12} />已入知识缺口池
                 </span>
               ) : null}
@@ -110,14 +110,14 @@ export default function QualityInspection({ context, goPage }: PageProps) {
                 <button
                   type="button"
                   onClick={() => handleAddToGapPool(item)}
-                  className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors h-10 min-h-[40px]"
+                  className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-base font-medium text-white hover:bg-blue-700 transition-colors h-10 min-h-[40px]"
                 >
                   <BookOpen size={12} />
                   加入知识缺口池
                 </button>
               )}
               {!item.correct && !item.needGap && (
-                <button type="button" onClick={() => markIncorrect(item.id)} className="rounded-lg border border-orange-200 px-3 py-1 text-sm text-orange-600 hover:bg-orange-50 h-10 min-h-[40px]">
+                <button type="button" onClick={() => markIncorrect(item.id)} className="rounded-lg border border-orange-200 px-3 py-1 text-base text-orange-600 hover:bg-orange-50 h-10 min-h-[40px]">
                   <BookOpen size={12} className="inline mr-1" />标记为需入池
                 </button>
               )}

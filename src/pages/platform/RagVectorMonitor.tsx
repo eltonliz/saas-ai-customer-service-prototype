@@ -60,9 +60,9 @@ export default function RagVectorMonitor({}: PageProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-4">RAG与向量库监控</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">RAG与向量库监控</h2>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
         {[
           { icon: <Database size={16} className="text-blue-500" />, label: "文档总量", value: totalDocs, sub: `索引在线率 ${onlineRate}%`, color: "bg-blue-50" },
           { icon: <Layers size={16} className="text-indigo-500" />, label: "切片总量", value: totalChunks, sub: `已索引文档 ${indexedDocs} 篇`, color: "bg-indigo-50" },
@@ -72,17 +72,17 @@ export default function RagVectorMonitor({}: PageProps) {
           <div key={card.label} className="rounded-2xl border border-slate-200 bg-white p-4">
             <div className="flex items-center gap-2 mb-2">
               <div className={`rounded-lg ${card.color} p-1.5`}>{card.icon}</div>
-              <span className="text-sm text-slate-500">{card.label}</span>
+              <span className="text-base text-slate-500">{card.label}</span>
             </div>
-            <p className="text-2xl font-bold text-slate-800">{card.value}</p>
-            <p className="text-sm text-slate-400 mt-0.5">{card.sub}</p>
+            <p className="text-3xl font-bold text-slate-800">{card.value}</p>
+            <p className="text-base text-slate-400 mt-0.5">{card.sub}</p>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
             <TrendingUp size={16} className="text-blue-500" />召回率趋势（近7天）
           </h3>
           <div style={{ height: 230 }}>
@@ -98,8 +98,8 @@ export default function RagVectorMonitor({}: PageProps) {
           </div>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+        <div className="rounded-2xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
             <BarChart3 size={16} className="text-indigo-500" />重排分分布
           </h3>
           <div style={{ height: 230 }}>
@@ -117,8 +117,8 @@ export default function RagVectorMonitor({}: PageProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 mb-6">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 mb-6">
+        <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
           <BarChart3 size={16} className="text-emerald-500" />租户文档数量对比
         </h3>
         <div style={{ height: 230 }}>
@@ -134,20 +134,20 @@ export default function RagVectorMonitor({}: PageProps) {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 bg-white p-5">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3">租户级RAG统计</h3>
+      <div className="rounded-2xl border border-slate-200 bg-white p-8">
+        <h3 className="text-base font-semibold text-slate-700 mb-3">租户级RAG统计</h3>
         <DataTable
           data={tenantStats}
           rowKey={(r) => r.id}
           onRowClick={(r) => setSelectedTenant(r.id)}
           columns={[
-            { key: "name", header: "租户", render: (r) => <span className="text-sm font-medium">{r.name}</span> },
-            { key: "docCount", header: "文档数", render: (r) => <span className="text-sm">{r.docCount}</span> },
-            { key: "onlineCount", header: "在线", render: (r) => <span className="text-sm">{r.onlineCount}</span> },
-            { key: "chunkCount", header: "切片", render: (r) => <span className="text-sm">{r.chunkCount}</span> },
-            { key: "avgRecall", header: "召回率", render: (r) => <span className="text-sm">{r.avgRecall}</span> },
-            { key: "avgConfidence", header: "置信度", render: (r) => <span className="text-sm">{r.avgConfidence}</span> },
-            { key: "gapCount", header: "缺口", render: (r) => <span className="text-sm text-amber-600">{r.gapCount}</span> },
+            { key: "name", header: "租户", render: (r) => <span className="text-base font-medium">{r.name}</span> },
+            { key: "docCount", header: "文档数", render: (r) => <span className="text-base">{r.docCount}</span> },
+            { key: "onlineCount", header: "在线", render: (r) => <span className="text-base">{r.onlineCount}</span> },
+            { key: "chunkCount", header: "切片", render: (r) => <span className="text-base">{r.chunkCount}</span> },
+            { key: "avgRecall", header: "召回率", render: (r) => <span className="text-base">{r.avgRecall}</span> },
+            { key: "avgConfidence", header: "置信度", render: (r) => <span className="text-base">{r.avgConfidence}</span> },
+            { key: "gapCount", header: "缺口", render: (r) => <span className="text-base text-amber-600">{r.gapCount}</span> },
             { key: "health", header: "健康度", render: (r) => <StatusBadge status={r.health} /> },
           ]}
         />
@@ -158,19 +158,19 @@ export default function RagVectorMonitor({}: PageProps) {
           const traces = ragTraces.filter((r) => r.tenantId === selectedTenant);
           const tenant = tenants.find((t) => t.id === selectedTenant);
           return (
-            <div className="space-y-4 text-sm">
+            <div className="space-y-4 text-base">
               <div className="flex items-center justify-between">
                 <span className="font-medium">{tenant?.name}</span>
-                <span className="text-sm text-slate-400">{traces.length} 条链路记录</span>
+                <span className="text-base text-slate-400">{traces.length} 条链路记录</span>
               </div>
               <div className="space-y-2">
                 {traces.map((t) => (
                   <div key={t.id} className="rounded-lg border border-slate-100 p-3">
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-slate-700">{t.question.slice(0, 30)}...</span>
-                      <span className="text-sm text-slate-400">{t.time}</span>
+                      <span className="text-base font-medium text-slate-700">{t.question.slice(0, 30)}...</span>
+                      <span className="text-base text-slate-400">{t.time}</span>
                     </div>
-                    <div className="flex items-center gap-3 text-sm text-slate-500">
+                    <div className="flex items-center gap-3 text-base text-slate-500">
                       <span>置信度 {(t.confidence * 100).toFixed(0)}%</span>
                       <span>最终片段 {t.finalChunks.length} 条</span>
                       <StatusBadge status={t.riskLevel} />

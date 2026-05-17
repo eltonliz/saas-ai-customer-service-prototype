@@ -14,6 +14,7 @@ import AppCourses from "./pages/app/AppCourses";
 import AppHealth from "./pages/app/AppHealth";
 import AppProfile from "./pages/app/AppProfile";
 import AppServiceHub from "./pages/app/AppServiceHub";
+import AppWebSdkPreview from "./pages/app/AppWebSdkPreview";
 
 // Tenant pages
 import TenantDashboard from "./pages/tenant/TenantDashboard";
@@ -194,7 +195,8 @@ const appPages: Record<string, React.ComponentType<PageProps>> = {
   "courses": AppCourses,
   "health": AppHealth,
   "profile": AppProfile,
-  "app-service": AppServiceHub
+  "app-service": AppServiceHub,
+  "web-sdk-preview": AppWebSdkPreview
 };
 
 const tenantPages: Record<string, React.ComponentType<PageProps>> = {

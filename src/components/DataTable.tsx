@@ -22,7 +22,7 @@ export function DataTable<T>({ columns, data, rowKey, onRowClick, empty = "æš‚æ—
         <thead>
           <tr className="border-b border-slate-200 bg-slate-50 text-left">
             {columns.map((col) => (
-              <th key={col.key} className="px-4 py-3 text-sm font-semibold text-slate-600" style={col.width ? { width: col.width } : undefined}>
+              <th key={col.key} className="px-4 py-3 text-base font-semibold text-slate-600" style={col.width ? { width: col.width } : undefined}>
                 {col.header}
               </th>
             ))}
@@ -31,7 +31,7 @@ export function DataTable<T>({ columns, data, rowKey, onRowClick, empty = "æš‚æ—
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className="px-4 py-12 text-center text-sm text-slate-400">{empty}</td>
+              <td colSpan={columns.length} className="px-4 py-12 text-center text-base text-slate-400">{empty}</td>
             </tr>
           ) : (
             data.map((row) => (
@@ -43,7 +43,7 @@ export function DataTable<T>({ columns, data, rowKey, onRowClick, empty = "æš‚æ—
                 }`}
               >
                 {columns.map((col) => (
-                  <td key={col.key} className="px-4 py-3 text-sm text-slate-700">{col.render(row)}</td>
+                  <td key={col.key} className="px-4 py-3 text-base text-slate-700">{col.render(row)}</td>
                 ))}
               </tr>
             ))

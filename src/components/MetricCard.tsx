@@ -24,10 +24,10 @@ export function MetricCard({ label, value, trend, trendUp, color = "slate", onCl
       disabled={!onClick}
       className={`flex flex-col gap-1 rounded-xl border p-4 text-left transition-shadow hover:shadow-md ${cs.bg} ${onClick ? "cursor-pointer" : "cursor-default"}`}
     >
-      <span className="text-sm font-medium text-slate-500">{label}</span>
-      <span className={`text-2xl font-bold ${cs.text}`}>{value}</span>
+      <span className="text-base font-medium text-slate-500">{label}</span>
+      <span className={`text-3xl font-bold ${cs.text}`}>{value}</span>
       {trend && (
-        <span className={`text-sm ${trendUp ? "text-emerald-600" : "text-red-500"}`}>
+        <span className={`text-base ${trendUp ? "text-emerald-600" : "text-red-500"}`}>
           {trendUp ? "↑" : "↓"} {trend}
         </span>
       )}

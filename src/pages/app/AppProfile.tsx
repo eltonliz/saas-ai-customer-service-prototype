@@ -23,32 +23,32 @@ export default function AppProfile({ context, goPage }: PageProps) {
   return (
     <div className="p-4">
       {/* User Card */}
-      <div className="rounded-2xl bg-white p-5 shadow-sm border border-slate-100 mb-4">
-        <div className="flex items-center gap-4 mb-4">
+      <div className="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 mb-4">
+        <div className="flex items-center gap-5 mb-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
             <User size={28} className="text-blue-600" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-slate-900">{user?.name ?? "用户"}</h3>
+            <h3 className="text-xl font-semibold text-slate-900">{user?.name ?? "用户"}</h3>
             <div className="flex items-center gap-2 mt-1">
-              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-sm font-medium text-amber-700">
+              <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-2.5 py-0.5 text-base font-medium text-amber-700">
                 <Crown size={12} /> {user?.level ?? "普通会员"}
               </span>
             </div>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-4 text-center">
+        <div className="grid grid-cols-3 gap-5 text-center">
           <div className="rounded-xl bg-amber-50 py-3">
-            <p className="text-xl font-bold text-amber-700">{user?.coupons ?? 0}</p>
-            <p className="text-sm text-amber-600 mt-0.5">优惠券</p>
+            <p className="text-2xl font-bold text-amber-700">{user?.coupons ?? 0}</p>
+            <p className="text-base text-amber-600 mt-0.5">优惠券</p>
           </div>
           <div className="rounded-xl bg-blue-50 py-3">
-            <p className="text-xl font-bold text-blue-700">{user?.points ?? 0}</p>
-            <p className="text-sm text-blue-600 mt-0.5">积分</p>
+            <p className="text-2xl font-bold text-blue-700">{user?.points ?? 0}</p>
+            <p className="text-base text-blue-600 mt-0.5">积分</p>
           </div>
           <div className="rounded-xl bg-indigo-50 py-3">
-            <p className="text-xl font-bold text-indigo-700">{myConversations.length}</p>
-            <p className="text-sm text-indigo-600 mt-0.5">历史咨询</p>
+            <p className="text-2xl font-bold text-indigo-700">{myConversations.length}</p>
+            <p className="text-base text-indigo-600 mt-0.5">历史咨询</p>
           </div>
         </div>
       </div>
@@ -60,13 +60,13 @@ export default function AppProfile({ context, goPage }: PageProps) {
             key={item.label}
             type="button"
             onClick={item.onClick}
-            className="flex w-full items-center justify-between px-5 py-4 text-sm text-slate-700 hover:bg-slate-50 transition-colors"
+            className="flex w-full items-center justify-between px-5 py-4 text-base text-slate-700 hover:bg-slate-50 transition-colors"
           >
             <div className="flex items-center gap-3">
               <item.icon size={20} className={item.color} />
-              <span className="text-sm font-medium">{item.label}</span>
+              <span className="text-base font-medium">{item.label}</span>
               {item.count !== undefined && (
-                <span className="text-sm text-slate-300">({item.count})</span>
+                <span className="text-base text-slate-300">({item.count})</span>
               )}
             </div>
             <ChevronRight size={18} className="text-slate-300" />
@@ -74,7 +74,7 @@ export default function AppProfile({ context, goPage }: PageProps) {
         ))}
       </div>
 
-      <p className="text-center text-sm text-slate-400 mt-6">SaaS AI客服 v1.0</p>
+      <p className="text-center text-base text-slate-400 mt-6">SaaS AI客服 v1.0</p>
     </div>
   );
 }

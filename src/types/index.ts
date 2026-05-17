@@ -178,7 +178,7 @@ export interface Message {
   content: string;
   time: string;
   status: "发送中" | "已送达" | "已读";
-  cardType?: "商品卡片" | "订单卡片" | "工单卡片";
+  cardType?: "商品卡片" | "订单卡片" | "工单卡片" | "库存查询" | "库存查询结果" | "物流查询" | "物流查询结果";
   cardData?: Record<string, string>;
 }
 

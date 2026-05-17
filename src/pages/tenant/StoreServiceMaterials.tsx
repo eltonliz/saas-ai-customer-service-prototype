@@ -12,43 +12,43 @@ export default function StoreServiceMaterials({ goPage }: PageProps) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50">
             <Store size={20} className="text-emerald-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">门店客服资料</h2>
-            <p className="text-sm text-slate-500 mt-1">管理门店相关的服务信息、库存数据及客服话术</p>
+            <h2 className="text-3xl font-bold text-slate-900">门店客服资料</h2>
+            <p className="text-base text-slate-500 mt-1">管理门店相关的服务信息、库存数据及客服话术</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 h-10">
+        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
           + 新增门店资料
         </button>
       </div>
       <div className="rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-sm">
+        <table className="w-full text-base">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">门店名称</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">城市</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">地址</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">在售商品数</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">状态</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">门店名称</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">城市</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">地址</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">在售商品数</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">状态</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作</th>
             </tr>
           </thead>
           <tbody>
             {mockStores.map((s) => (
-              <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 48 }}>
-                <td className="px-5 py-3 text-sm font-medium text-slate-800">{s.name}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{s.city}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{s.address}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{s.inventory}</td>
+              <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 56 }}>
+                <td className="px-5 py-3 text-base font-medium text-slate-800">{s.name}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{s.city}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{s.address}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{s.inventory}</td>
                 <td className="px-5 py-3">
-                  <span className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${s.status === "营业中" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{s.status}</span>
+                  <span className={`inline-flex rounded-full px-2.5 py-0.5 text-sm font-medium ${s.status === "营业中" ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700"}`}>{s.status}</span>
                 </td>
                 <td className="px-5 py-3">
-                  <button className="text-sm text-blue-600 hover:text-blue-800 mr-3">编辑</button>
-                  <button className="text-sm text-slate-400 hover:text-slate-600">详情</button>
+                  <button className="text-base text-blue-600 hover:text-blue-800 mr-3">编辑</button>
+                  <button className="text-base text-slate-400 hover:text-slate-600">详情</button>
                 </td>
               </tr>
             ))}

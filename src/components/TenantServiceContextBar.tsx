@@ -18,7 +18,7 @@ export function TenantServiceContextBar() {
 
   return (
     <div className="mb-4 rounded-xl border border-blue-100 bg-blue-50/50 px-4 py-3">
-      <div className="flex flex-wrap items-center gap-3 text-sm text-blue-800">
+      <div className="flex flex-wrap items-center gap-3 text-base text-blue-800">
         {/* Tenant — display only */}
         <div className="flex items-center gap-1.5">
           <Building2 size={14} />
@@ -33,7 +33,7 @@ export function TenantServiceContextBar() {
             <select
               value={ctx.currentMerchantId}
               onChange={(e) => store.setMerchantId(e.target.value)}
-              className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-sm font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
+              className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-base font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
             >
               {tenantMerchants.map((m) => (
                 <option key={m.id} value={m.id}>{m.name}</option>
@@ -51,7 +51,7 @@ export function TenantServiceContextBar() {
             <select
               value={ctx.currentStoreId}
               onChange={(e) => store.setStoreId(e.target.value)}
-              className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-sm font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
+              className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-base font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
             >
               {merchantStores.map((s) => (
                 <option key={s.id} value={s.id}>{s.name}</option>
@@ -67,7 +67,7 @@ export function TenantServiceContextBar() {
           <select
             value={ctx.currentBusinessLine}
             onChange={(e) => store.setBusinessLine(e.target.value as BusinessLine)}
-            className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-sm font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
+            className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-base font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
           >
             {businessLines.map((bl) => (
               <option key={bl} value={bl}>{bl}</option>
@@ -82,7 +82,7 @@ export function TenantServiceContextBar() {
           <select
             value={ctx.currentChannel}
             onChange={(e) => store.setChannel(e.target.value as Channel)}
-            className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-sm font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
+            className="appearance-none rounded-md border border-blue-200 bg-white py-1 pl-2 pr-7 text-base font-medium text-blue-800 outline-none hover:border-blue-400 focus:border-blue-500 cursor-pointer"
           >
             {channels.map((ch) => (
               <option key={ch} value={ch}>{ch}</option>
@@ -91,7 +91,7 @@ export function TenantServiceContextBar() {
           <ChevronDown className="pointer-events-none absolute right-1.5 top-1.5 text-blue-400" size={12} />
         </div>
       </div>
-      <p className="mt-1.5 text-sm text-blue-600">
+      <p className="mt-1.5 text-base text-blue-600">
         当前数据范围按所选上下文过滤：会话、工单、知识库、数据看板
       </p>
     </div>

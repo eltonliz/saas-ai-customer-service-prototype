@@ -1,6 +1,6 @@
 import type { PageProps } from "../../types";
 import { useAppStore } from "../../data/AppStore";
-import { RotateCcw, Store, GraduationCap, Heart, Wrench, Crown, ChevronRight } from "lucide-react";
+import { RotateCcw, Store, GraduationCap, Heart, Wrench, Crown, ChevronRight, Smartphone } from "lucide-react";
 
 export default function AppServiceHub({ context, goPage }: PageProps) {
   const store = useAppStore();
@@ -68,11 +68,20 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       desc: "查看会员等级权益与福利",
       detail: "黄金会员专属优惠、优先客服、积分兑换等多重权益",
     },
+    {
+      id: "web-sdk-preview",
+      icon: Smartphone,
+      bgClass: "bg-sky-50",
+      iconColor: "text-sky-500",
+      label: "H5 SDK预览",
+      desc: "模拟网页嵌入AI客服组件",
+      detail: "模拟H5网页嵌入AI客服聊天组件，支持商品详情页和订单详情页切换，查看SDK集成效果",
+    },
   ];
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold text-slate-800 mb-4">我的服务</h1>
+      <h1 className="text-3xl font-bold text-slate-800 mb-4">我的服务</h1>
       <div className="grid grid-cols-2 gap-3">
         {services.map((svc) => {
           const Icon = svc.icon;
@@ -87,21 +96,21 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
                   goPage?.(svc.id);
                 }
               }}
-              className="rounded-xl bg-white p-5 shadow-sm border border-slate-100 text-left hover:shadow-md transition-shadow"
+              className="rounded-xl bg-white p-8 shadow-sm border border-slate-100 text-left hover:shadow-md transition-shadow"
             >
               <div className={`w-11 h-11 rounded-xl ${svc.bgClass} flex items-center justify-center mb-3`}>
                 <Icon size={22} className={svc.iconColor} />
               </div>
               <div className="flex items-center gap-2 mb-1">
-                <h3 className="text-sm font-semibold text-slate-800">{svc.label}</h3>
+                <h3 className="text-base font-semibold text-slate-800">{svc.label}</h3>
                 {svc.count && (
-                  <span className="inline-flex rounded-full bg-slate-100 px-1.5 py-0.5 text-sm font-medium text-slate-500">
+                  <span className="inline-flex rounded-full bg-slate-100 px-1.5 py-0.5 text-base font-medium text-slate-500">
                     {svc.count}
                   </span>
                 )}
               </div>
-              <p className="text-sm text-slate-400 mb-2 leading-relaxed">{svc.detail}</p>
-              <span className="inline-flex items-center gap-0.5 text-sm text-blue-600 font-medium">
+              <p className="text-base text-slate-400 mb-2 leading-relaxed">{svc.detail}</p>
+              <span className="inline-flex items-center gap-0.5 text-base text-blue-600 font-medium">
                 查看详情 <ChevronRight size={14} />
               </span>
             </button>

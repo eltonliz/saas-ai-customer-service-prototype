@@ -186,7 +186,7 @@ export default function GlobalRiskControl({}: PageProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-4">全局风控中心</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">全局风控中心</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
         {([
@@ -199,7 +199,7 @@ export default function GlobalRiskControl({}: PageProps) {
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            className={`rounded-lg px-4 py-2 text-base font-medium transition-colors ${tab === t.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
           >
             {t.label}
           </button>
@@ -208,15 +208,15 @@ export default function GlobalRiskControl({}: PageProps) {
 
       {tab === "words" && (
         <div className="space-y-4">
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <div className="rounded-xl border border-slate-200 bg-white p-8">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+              <h3 className="text-base font-semibold text-slate-700 flex items-center gap-2">
                 <Shield size={16} className="text-rose-500" />敏感词列表
               </h3>
               <button
                 type="button"
                 onClick={openWordCreate}
-                className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+                className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-base font-medium text-white hover:bg-blue-700"
               >
                 <Plus size={14} />新增规则
               </button>
@@ -225,11 +225,11 @@ export default function GlobalRiskControl({}: PageProps) {
               data={sensitiveWords}
               rowKey={(r) => r.word}
               columns={[
-                { key: "word", header: "敏感词", render: (r) => <span className="text-sm font-medium text-rose-600">{r.word}</span> },
-                { key: "category", header: "分类", render: (r) => <span className="text-sm">{r.category}</span> },
+                { key: "word", header: "敏感词", render: (r) => <span className="text-base font-medium text-rose-600">{r.word}</span> },
+                { key: "category", header: "分类", render: (r) => <span className="text-base">{r.category}</span> },
                 { key: "level", header: "风险等级", render: (r) => <StatusBadge status={r.level} /> },
-                { key: "action", header: "处置动作", render: (r) => <span className="text-sm">{r.action}</span> },
-                { key: "scope", header: "适用范围", render: (r) => <span className="text-sm">{r.scope}</span> },
+                { key: "action", header: "处置动作", render: (r) => <span className="text-base">{r.action}</span> },
+                { key: "scope", header: "适用范围", render: (r) => <span className="text-base">{r.scope}</span> },
                 {
                   key: "actions",
                   header: "操作",
@@ -238,14 +238,14 @@ export default function GlobalRiskControl({}: PageProps) {
                       <button
                         type="button"
                         onClick={() => openWordEdit(r)}
-                        className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                        className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
                       >
                         <Pencil size={12} />编辑
                       </button>
                       <button
                         type="button"
                         onClick={() => handleWordDelete(r.word)}
-                        className="flex items-center gap-0.5 rounded-md border border-red-200 px-2 py-1 text-sm text-red-500 hover:bg-red-50"
+                        className="flex items-center gap-0.5 rounded-md border border-red-200 px-2 py-1 text-base text-red-500 hover:bg-red-50"
                       >
                         <Trash2 size={12} />删除
                       </button>
@@ -256,15 +256,15 @@ export default function GlobalRiskControl({}: PageProps) {
             />
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
+          <div className="rounded-xl border border-slate-200 bg-white p-8">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+              <h3 className="text-base font-semibold text-slate-700 flex items-center gap-2">
                 <AlertTriangle size={16} className="text-amber-500" />禁用话术列表
               </h3>
               <button
                 type="button"
                 onClick={openPhraseCreate}
-                className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+                className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-base font-medium text-white hover:bg-blue-700"
               >
                 <Plus size={14} />新增规则
               </button>
@@ -273,8 +273,8 @@ export default function GlobalRiskControl({}: PageProps) {
               data={forbiddenPhrases}
               rowKey={(r) => r.phrase}
               columns={[
-                { key: "phrase", header: "禁用话术", render: (r) => <span className="text-sm font-medium text-amber-600">{r.phrase}</span> },
-                { key: "reason", header: "禁用原因", render: (r) => <span className="text-sm">{r.reason}</span> },
+                { key: "phrase", header: "禁用话术", render: (r) => <span className="text-base font-medium text-amber-600">{r.phrase}</span> },
+                { key: "reason", header: "禁用原因", render: (r) => <span className="text-base">{r.reason}</span> },
                 { key: "level", header: "风险等级", render: (r) => <StatusBadge status={r.level} /> },
                 {
                   key: "actions",
@@ -284,14 +284,14 @@ export default function GlobalRiskControl({}: PageProps) {
                       <button
                         type="button"
                         onClick={() => openPhraseEdit(r)}
-                        className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                        className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
                       >
                         <Pencil size={12} />编辑
                       </button>
                       <button
                         type="button"
                         onClick={() => handlePhraseDelete(r.phrase)}
-                        className="flex items-center gap-0.5 rounded-md border border-red-200 px-2 py-1 text-sm text-red-500 hover:bg-red-50"
+                        className="flex items-center gap-0.5 rounded-md border border-red-200 px-2 py-1 text-base text-red-500 hover:bg-red-50"
                       >
                         <Trash2 size={12} />删除
                       </button>
@@ -306,8 +306,8 @@ export default function GlobalRiskControl({}: PageProps) {
 
       {tab === "health" && (
         <div className="space-y-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <h3 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2">
+          <div className="rounded-xl border border-slate-200 bg-white p-8">
+            <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
               <Shield size={16} className="text-rose-500" />大健康风控样本
             </h3>
             <DataTable
@@ -315,10 +315,10 @@ export default function GlobalRiskControl({}: PageProps) {
               rowKey={(r) => r.id}
               onRowClick={(r) => setViewSample(r.id)}
               columns={[
-                { key: "question", header: "用户问题", render: (r) => <span className="text-sm">{r.question}</span> },
-                { key: "riskType", header: "风险类型", render: (r) => <span className="text-sm">{r.riskType}</span> },
+                { key: "question", header: "用户问题", render: (r) => <span className="text-base">{r.question}</span> },
+                { key: "riskType", header: "风险类型", render: (r) => <span className="text-base">{r.riskType}</span> },
                 { key: "level", header: "风险等级", render: (r) => <StatusBadge status={r.level} /> },
-                { key: "disposition", header: "处置", render: (r) => <span className="text-sm">{r.disposition}</span> },
+                { key: "disposition", header: "处置", render: (r) => <span className="text-base">{r.disposition}</span> },
                 {
                   key: "actions",
                   header: "操作",
@@ -326,7 +326,7 @@ export default function GlobalRiskControl({}: PageProps) {
                     <button
                       type="button"
                       onClick={(e) => { e.stopPropagation(); setViewSample(r.id); }}
-                      className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                      className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
                     >
                       <Eye size={12} />查看
                     </button>
@@ -336,9 +336,9 @@ export default function GlobalRiskControl({}: PageProps) {
             />
           </div>
 
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">大健康风控规则说明</h3>
-            <div className="space-y-2 text-sm text-slate-600">
+          <div className="rounded-xl border border-slate-200 bg-white p-8">
+            <h3 className="text-base font-semibold text-slate-700 mb-3">大健康风控规则说明</h3>
+            <div className="space-y-2 text-base text-slate-600">
               <p className="rounded-lg bg-rose-50 border border-rose-100 p-3">
                 <span className="font-medium text-rose-700">拦截规则：</span>疾病诊断、治疗效果承诺、药品推荐、引导放弃就医
               </p>
@@ -354,9 +354,9 @@ export default function GlobalRiskControl({}: PageProps) {
       )}
 
       {tab === "aftersale" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">售后高风险规则</h3>
-          <div className="space-y-2 text-sm text-slate-600">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">售后高风险规则</h3>
+          <div className="space-y-2 text-base text-slate-600">
             <p className="rounded-lg bg-amber-50 border border-amber-100 p-3">
               <span className="font-medium text-amber-700">大额退款标记：</span>退款金额超过500元，AI说明规则后自动建议转人工处理，不可直接承诺退款
             </p>
@@ -376,53 +376,53 @@ export default function GlobalRiskControl({}: PageProps) {
       {tab === "templates" && (
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-slate-400">{riskTemplates.length} 个策略模板</span>
+            <span className="text-base text-slate-400">{riskTemplates.length} 个策略模板</span>
             <button
               type="button"
               onClick={openTplCreate}
-              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"
             >
               <Plus size={14} />新增规则
             </button>
           </div>
           {riskTemplates.map((tpl) => (
-            <div key={tpl.id} className="rounded-xl border border-slate-200 bg-white p-5">
+            <div key={tpl.id} className="rounded-xl border border-slate-200 bg-white p-8">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <Shield size={16} className="text-indigo-500" />
-                  <h3 className="text-sm font-semibold text-slate-700">{tpl.name}</h3>
+                  <h3 className="text-base font-semibold text-slate-700">{tpl.name}</h3>
                 </div>
                 <div className="flex gap-1">
                   <button
                     type="button"
                     onClick={() => openTplEdit(tpl)}
-                    className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                    className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
                   >
                     <Pencil size={12} />编辑
                   </button>
                   <button
                     type="button"
                     onClick={() => handleTplDelete(tpl.id)}
-                    className="flex items-center gap-0.5 rounded-md border border-red-200 px-2 py-1 text-sm text-red-500 hover:bg-red-50"
+                    className="flex items-center gap-0.5 rounded-md border border-red-200 px-2 py-1 text-base text-red-500 hover:bg-red-50"
                   >
                     <Trash2 size={12} />删除
                   </button>
                   <button
                     type="button"
                     onClick={() => { setSelectedTpl(tpl.id); setDispatchModal(true); }}
-                    className="flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-sm text-blue-600 hover:bg-blue-100"
+                    className="flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-base text-blue-600 hover:bg-blue-100"
                   >
                     <Send size={12} />下发至租户
                   </button>
                 </div>
               </div>
               <div className="flex gap-2 mb-3">
-                <span className="text-sm text-slate-400">类型：{tpl.type}</span>
-                <span className="text-sm text-slate-400">范围：{tpl.scope}</span>
+                <span className="text-base text-slate-400">类型：{tpl.type}</span>
+                <span className="text-base text-slate-400">范围：{tpl.scope}</span>
               </div>
               <div className="space-y-1">
                 {tpl.rules.map((rule) => (
-                  <div key={rule} className="flex items-center gap-2 text-sm text-slate-600">
+                  <div key={rule} className="flex items-center gap-2 text-base text-slate-600">
                     <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
                     {rule}
                   </div>
@@ -436,23 +436,23 @@ export default function GlobalRiskControl({}: PageProps) {
       {/* View Sample Modal */}
       <Modal open={viewSample !== null} title="风控样本详情" onClose={() => setViewSample(null)} size="md">
         {sample && (
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-base">
             <div>
-              <span className="text-sm text-slate-400">用户问题</span>
+              <span className="text-base text-slate-400">用户问题</span>
               <p className="font-medium">{sample.question}</p>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div><span className="text-sm text-slate-400">风险类型</span><p>{sample.riskType}</p></div>
-              <div><span className="text-sm text-slate-400">风险等级</span><StatusBadge status={sample.level} /></div>
+              <div><span className="text-base text-slate-400">风险类型</span><p>{sample.riskType}</p></div>
+              <div><span className="text-base text-slate-400">风险等级</span><StatusBadge status={sample.level} /></div>
             </div>
             <div>
-              <span className="text-sm text-slate-400">安全回复</span>
-              <div className="mt-1 rounded-lg bg-emerald-50 border border-emerald-100 p-3 text-sm text-emerald-800">
+              <span className="text-base text-slate-400">安全回复</span>
+              <div className="mt-1 rounded-lg bg-emerald-50 border border-emerald-100 p-3 text-base text-emerald-800">
                 {sample.safeReply}
               </div>
             </div>
             <div>
-              <span className="text-sm text-slate-400">处置方式</span>
+              <span className="text-base text-slate-400">处置方式</span>
               <p className="text-amber-600">{sample.disposition}</p>
             </div>
           </div>
@@ -461,43 +461,43 @@ export default function GlobalRiskControl({}: PageProps) {
 
       {/* Dispatch Modal */}
       <Modal open={dispatchModal} title="下发策略至租户" onClose={() => setDispatchModal(false)} size="md">
-        <div className="space-y-3 text-sm">
-          <p className="text-sm text-slate-500">选择要下发此风控策略的租户：</p>
+        <div className="space-y-3 text-base">
+          <p className="text-base text-slate-500">选择要下发此风控策略的租户：</p>
           {tenants.map((t) => (
             <label key={t.id} className="flex items-center gap-2 rounded-lg border border-slate-100 p-3 cursor-pointer hover:bg-slate-50">
               <input type="checkbox" className="rounded" />
               <div>
-                <p className="text-sm font-medium">{t.name}</p>
-                <p className="text-sm text-slate-400">{t.industry}</p>
+                <p className="text-base font-medium">{t.name}</p>
+                <p className="text-base text-slate-400">{t.industry}</p>
               </div>
             </label>
           ))}
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setDispatchModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={() => setDispatchModal(false)} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">确认下发</button>
+          <button type="button" onClick={() => setDispatchModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={() => setDispatchModal(false)} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">确认下发</button>
         </div>
       </Modal>
 
       {/* Sensitive Word Create/Edit Modal */}
       <Modal open={wordModal} title={editingWord ? "编辑敏感词" : "新增敏感词"} onClose={() => setWordModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">敏感词</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">敏感词</label>
             <input
               value={wordForm.word}
               onChange={(e) => setWordForm((f) => ({ ...f, word: e.target.value }))}
               placeholder="输入敏感词"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">分类</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">分类</label>
               <select
                 value={wordForm.category}
                 onChange={(e) => setWordForm((f) => ({ ...f, category: e.target.value }))}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               >
                 {["疾病诊断", "治疗效果承诺", "药品推荐", "交易纠纷", "投诉敏感词", "投诉升级", "健康安全"].map((c) => (
                   <option key={c}>{c}</option>
@@ -505,11 +505,11 @@ export default function GlobalRiskControl({}: PageProps) {
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">风险等级</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">风险等级</label>
               <select
                 value={wordForm.level}
                 onChange={(e) => setWordForm((f) => ({ ...f, level: e.target.value }))}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               >
                 {["低风险", "中风险", "高风险"].map((l) => (
                   <option key={l}>{l}</option>
@@ -518,20 +518,20 @@ export default function GlobalRiskControl({}: PageProps) {
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">处置动作</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">处置动作</label>
             <input
               value={wordForm.action}
               onChange={(e) => setWordForm((f) => ({ ...f, action: e.target.value }))}
               placeholder="如：拦截+转人工"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">适用范围</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">适用范围</label>
             <select
               value={wordForm.scope}
               onChange={(e) => setWordForm((f) => ({ ...f, scope: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             >
               {["全平台", "大健康", "售后"].map((s) => (
                 <option key={s}>{s}</option>
@@ -540,8 +540,8 @@ export default function GlobalRiskControl({}: PageProps) {
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setWordModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleWordSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={() => setWordModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleWordSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             {editingWord ? "保存" : "创建"}
           </button>
         </div>
@@ -549,31 +549,31 @@ export default function GlobalRiskControl({}: PageProps) {
 
       {/* Forbidden Phrase Create/Edit Modal */}
       <Modal open={phraseModal} title={editingPhrase ? "编辑禁用话术" : "新增禁用话术"} onClose={() => setPhraseModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">禁用话术</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">禁用话术</label>
             <input
               value={phraseForm.phrase}
               onChange={(e) => setPhraseForm((f) => ({ ...f, phrase: e.target.value }))}
               placeholder="输入禁用话术"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">禁用原因</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">禁用原因</label>
             <input
               value={phraseForm.reason}
               onChange={(e) => setPhraseForm((f) => ({ ...f, reason: e.target.value }))}
               placeholder="如：疗效承诺"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">风险等级</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">风险等级</label>
             <select
               value={phraseForm.level}
               onChange={(e) => setPhraseForm((f) => ({ ...f, level: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             >
               {["低风险", "中风险", "高风险"].map((l) => (
                 <option key={l}>{l}</option>
@@ -582,8 +582,8 @@ export default function GlobalRiskControl({}: PageProps) {
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setPhraseModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handlePhraseSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={() => setPhraseModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handlePhraseSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             {editingPhrase ? "保存" : "创建"}
           </button>
         </div>
@@ -591,50 +591,50 @@ export default function GlobalRiskControl({}: PageProps) {
 
       {/* Template Create/Edit Modal */}
       <Modal open={tplModal} title={editingTpl ? "编辑风控策略" : "新增风控策略"} onClose={() => setTplModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">策略名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">策略名称</label>
             <input
               value={tplForm.name}
               onChange={(e) => setTplForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="输入策略名称"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">类型</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">类型</label>
               <input
                 value={tplForm.type}
                 onChange={(e) => setTplForm((f) => ({ ...f, type: e.target.value }))}
                 placeholder="如：健康合规"
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">适用范围</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">适用范围</label>
               <input
                 value={tplForm.scope}
                 onChange={(e) => setTplForm((f) => ({ ...f, scope: e.target.value }))}
                 placeholder="如：大健康业务线"
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">规则列表（每行一条）</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">规则列表（每行一条）</label>
             <textarea
               value={tplForm.rules}
               onChange={(e) => setTplForm((f) => ({ ...f, rules: e.target.value }))}
               placeholder="疾病诊断拦截&#10;治疗效果拦截&#10;药品推荐拦截"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none font-mono"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none font-mono"
               rows={8}
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setTplModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleTplSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={() => setTplModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleTplSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             {editingTpl ? "保存" : "创建"}
           </button>
         </div>

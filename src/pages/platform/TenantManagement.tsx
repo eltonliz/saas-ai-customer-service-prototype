@@ -74,11 +74,11 @@ export default function TenantManagement({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-slate-900">租户管理</h2>
+        <h2 className="text-2xl font-bold text-slate-900">租户管理</h2>
         <button
           type="button"
           onClick={() => setCreateModal(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"
         >
           <Plus size={14} />新增租户
         </button>
@@ -91,8 +91,8 @@ export default function TenantManagement({}: PageProps) {
           setDetailModal(true);
         }}
         columns={[
-          { key: "name", header: "租户名称", render: (r) => <span className="font-medium text-sm">{r.name}</span> },
-          { key: "industry", header: "行业", render: (r) => <span className="text-sm">{r.industry}</span> },
+          { key: "name", header: "租户名称", render: (r) => <span className="font-medium text-base">{r.name}</span> },
+          { key: "industry", header: "行业", render: (r) => <span className="text-base">{r.industry}</span> },
           {
             key: "status",
             header: "状态",
@@ -108,22 +108,22 @@ export default function TenantManagement({}: PageProps) {
               </button>
             ),
           },
-          { key: "package", header: "套餐", render: (r) => <span className="text-sm">{r.packageName}</span> },
+          { key: "package", header: "套餐", render: (r) => <span className="text-base">{r.packageName}</span> },
           {
             key: "expires",
             header: "到期时间",
             render: (r) => (
-              <span className={`text-sm ${r.expiresAt < "2026-08-01" ? "text-red-500" : "text-slate-600"}`}>
+              <span className={`text-base ${r.expiresAt < "2026-08-01" ? "text-red-500" : "text-slate-600"}`}>
                 {r.expiresAt}
               </span>
             ),
           },
-          { key: "channels", header: "已接入渠道", render: (r) => <span className="text-sm">{r.channels.join("、")}</span> },
+          { key: "channels", header: "已接入渠道", render: (r) => <span className="text-base">{r.channels.join("、")}</span> },
           {
             key: "token",
             header: "Token额度",
             render: (r) => (
-              <span className="text-sm">
+              <span className="text-base">
                 {(r.tokenUsed / 10000).toFixed(1)}万 / {(r.tokenLimit / 10000).toFixed(1)}万
               </span>
             ),
@@ -138,7 +138,7 @@ export default function TenantManagement({}: PageProps) {
                   e.stopPropagation();
                   openEdit(r);
                 }}
-                className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
               >
                 <Pencil size={12} />编辑
               </button>
@@ -149,31 +149,31 @@ export default function TenantManagement({}: PageProps) {
 
       {/* Create Modal */}
       <Modal open={createModal} title="新增租户" onClose={() => setCreateModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">租户名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">租户名称</label>
             <input
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="输入租户名称"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">行业</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">行业</label>
             <input
               value={form.industry}
               onChange={(e) => setForm((f) => ({ ...f, industry: e.target.value }))}
               placeholder="输入行业"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">套餐版本</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">套餐版本</label>
             <select
               value={form.packageName}
               onChange={(e) => setForm((f) => ({ ...f, packageName: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             >
               {["基础版", "专业版", "行业版", "旗舰版"].map((p) => (
                 <option key={p}>{p}</option>
@@ -182,10 +182,10 @@ export default function TenantManagement({}: PageProps) {
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setCreateModal(false)} className="rounded-lg border px-4 py-2 text-sm">
+          <button type="button" onClick={() => setCreateModal(false)} className="rounded-lg border px-4 py-2 text-base">
             取消
           </button>
-          <button type="button" onClick={handleCreate} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={handleCreate} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             创建
           </button>
         </div>
@@ -193,31 +193,31 @@ export default function TenantManagement({}: PageProps) {
 
       {/* Edit Modal */}
       <Modal open={editModal} title="编辑租户" onClose={() => setEditModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">租户名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">租户名称</label>
             <input
               value={editForm.name}
               onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="输入租户名称"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">行业</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">行业</label>
             <input
               value={editForm.industry}
               onChange={(e) => setEditForm((f) => ({ ...f, industry: e.target.value }))}
               placeholder="输入行业"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">套餐版本</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">套餐版本</label>
             <select
               value={editForm.packageName}
               onChange={(e) => setEditForm((f) => ({ ...f, packageName: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             >
               {["基础版", "专业版", "行业版", "旗舰版"].map((p) => (
                 <option key={p}>{p}</option>
@@ -225,20 +225,20 @@ export default function TenantManagement({}: PageProps) {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">到期时间</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">到期时间</label>
             <input
               value={editForm.expiresAt}
               onChange={(e) => setEditForm((f) => ({ ...f, expiresAt: e.target.value }))}
               placeholder="YYYY-MM-DD"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setEditModal(false)} className="rounded-lg border px-4 py-2 text-sm">
+          <button type="button" onClick={() => setEditModal(false)} className="rounded-lg border px-4 py-2 text-base">
             取消
           </button>
-          <button type="button" onClick={handleEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={handleEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             保存
           </button>
         </div>
@@ -247,47 +247,47 @@ export default function TenantManagement({}: PageProps) {
       {/* Detail Modal */}
       <Modal open={detailModal} title="租户详情" onClose={() => setDetailModal(false)} size="lg">
         {viewingTenant && (
-          <div className="space-y-4 text-sm">
+          <div className="space-y-4 text-base">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <span className="text-sm text-slate-400">租户名称</span>
+                <span className="text-base text-slate-400">租户名称</span>
                 <p className="font-medium text-slate-900">{viewingTenant.name}</p>
               </div>
               <div>
-                <span className="text-sm text-slate-400">行业</span>
+                <span className="text-base text-slate-400">行业</span>
                 <p className="text-slate-700">{viewingTenant.industry}</p>
               </div>
               <div>
-                <span className="text-sm text-slate-400">状态</span>
+                <span className="text-base text-slate-400">状态</span>
                 <div className="mt-0.5">
                   <StatusBadge status={viewingTenant.status} />
                 </div>
               </div>
               <div>
-                <span className="text-sm text-slate-400">套餐</span>
+                <span className="text-base text-slate-400">套餐</span>
                 <p className="text-slate-700">{viewingTenant.packageName}</p>
               </div>
               <div>
-                <span className="text-sm text-slate-400">到期时间</span>
+                <span className="text-base text-slate-400">到期时间</span>
                 <p className="text-slate-700">{viewingTenant.expiresAt}</p>
               </div>
               <div>
-                <span className="text-sm text-slate-400">坐席数</span>
+                <span className="text-base text-slate-400">坐席数</span>
                 <p className="text-slate-700">{viewingTenant.seatLimit} 个</p>
               </div>
               <div>
-                <span className="text-sm text-slate-400">知识库容量</span>
+                <span className="text-base text-slate-400">知识库容量</span>
                 <p className="text-slate-700">{viewingTenant.knowledgeCapacity} 条</p>
               </div>
               <div>
-                <span className="text-sm text-slate-400">已接入渠道</span>
+                <span className="text-base text-slate-400">已接入渠道</span>
                 <p className="text-slate-700">{viewingTenant.channels.length ? viewingTenant.channels.join("、") : "暂无"}</p>
               </div>
             </div>
             <div>
-              <span className="text-sm text-slate-400">Token使用情况</span>
+              <span className="text-base text-slate-400">Token使用情况</span>
               <div className="mt-2">
-                <div className="flex justify-between text-sm text-slate-500 mb-1">
+                <div className="flex justify-between text-base text-slate-500 mb-1">
                   <span>已用 {(viewingTenant.tokenUsed / 10000).toFixed(1)}万</span>
                   <span>上限 {(viewingTenant.tokenLimit / 10000).toFixed(1)}万</span>
                 </div>

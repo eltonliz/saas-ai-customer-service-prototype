@@ -210,7 +210,7 @@ export default function PlatformSettings({}: PageProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-4">系统设置</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">系统设置</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit overflow-x-auto">
         {([
@@ -226,7 +226,7 @@ export default function PlatformSettings({}: PageProps) {
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`flex items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors whitespace-nowrap ${tab === t.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+            className={`flex items-center gap-1 rounded-lg px-4 py-2 text-base font-medium transition-colors whitespace-nowrap ${tab === t.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
           >
             {t.icon}{t.label}
           </button>
@@ -235,15 +235,15 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Roles */}
       {tab === "roles" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">角色与权限管理</h3>
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">角色与权限管理</h3>
           <DataTable
             data={roles}
             rowKey={(r) => r.role}
             columns={[
-              { key: "role", header: "角色名称", render: (r) => <span className="text-sm font-medium">{r.role}</span> },
-              { key: "permissions", header: "权限范围", render: (r) => <span className="text-sm text-slate-500">{r.permissions}</span> },
-              { key: "users", header: "用户数", render: (r) => <span className="text-sm">{r.users}</span> },
+              { key: "role", header: "角色名称", render: (r) => <span className="text-base font-medium">{r.role}</span> },
+              { key: "permissions", header: "权限范围", render: (r) => <span className="text-base text-slate-500">{r.permissions}</span> },
+              { key: "users", header: "用户数", render: (r) => <span className="text-base">{r.users}</span> },
               {
                 key: "actions",
                 header: "操作",
@@ -251,7 +251,7 @@ export default function PlatformSettings({}: PageProps) {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); openRoleEdit(r); }}
-                    className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                    className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
                   >
                     <Pencil size={12} />编辑
                   </button>
@@ -264,21 +264,21 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Channels */}
       {tab === "channels" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">渠道配置</h3>
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">渠道配置</h3>
           <div className="space-y-2">
             {channels.map((ch) => (
               <div key={ch.name} className="flex items-center justify-between rounded-lg border border-slate-100 p-3">
                 <div className="flex items-center gap-2">
                   <Globe size={14} className="text-slate-400" />
-                  <span className="text-sm font-medium text-slate-700">{ch.name}</span>
+                  <span className="text-base font-medium text-slate-700">{ch.name}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-slate-400">状态：{ch.status}</span>
+                  <span className="text-base text-slate-400">状态：{ch.status}</span>
                   <button
                     type="button"
                     onClick={() => openChannelEdit(ch)}
-                    className="flex items-center gap-0.5 text-sm text-blue-600 hover:underline"
+                    className="flex items-center gap-0.5 text-base text-blue-600 hover:underline"
                   >
                     <Pencil size={12} />编辑
                   </button>
@@ -291,18 +291,18 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Audit */}
       {tab === "audit" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">审计日志</h3>
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">审计日志</h3>
           <DataTable
             data={auditLogs}
             rowKey={(r) => r.id}
             onRowClick={(r) => setAuditDetail(r)}
             columns={[
-              { key: "user", header: "操作人", render: (r) => <span className="text-sm font-medium">{r.user}</span> },
-              { key: "action", header: "操作", render: (r) => <span className="text-sm">{r.action}</span> },
-              { key: "target", header: "操作对象", render: (r) => <span className="text-sm text-slate-500">{r.target}</span> },
-              { key: "time", header: "时间", render: (r) => <span className="text-sm text-slate-400">{r.time}</span> },
-              { key: "ip", header: "IP", render: (r) => <span className="text-sm font-mono text-slate-400">{r.ip}</span> },
+              { key: "user", header: "操作人", render: (r) => <span className="text-base font-medium">{r.user}</span> },
+              { key: "action", header: "操作", render: (r) => <span className="text-base">{r.action}</span> },
+              { key: "target", header: "操作对象", render: (r) => <span className="text-base text-slate-500">{r.target}</span> },
+              { key: "time", header: "时间", render: (r) => <span className="text-base text-slate-400">{r.time}</span> },
+              { key: "ip", header: "IP", render: (r) => <span className="text-base font-mono text-slate-400">{r.ip}</span> },
             ]}
           />
         </div>
@@ -310,16 +310,16 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Rate Limit */}
       {tab === "ratelimit" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">限流规则配置</h3>
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">限流规则配置</h3>
           <DataTable
             data={rateLimits}
             rowKey={(r) => r.api}
             columns={[
-              { key: "api", header: "接口", render: (r) => <span className="text-sm font-medium">{r.api}</span> },
-              { key: "limit", header: "全局限流", render: (r) => <span className="text-sm">{r.limit}</span> },
-              { key: "burst", header: "突发上限", render: (r) => <span className="text-sm">{r.burst}</span> },
-              { key: "perTenant", header: "单租户限流", render: (r) => <span className="text-sm">{r.perTenant}</span> },
+              { key: "api", header: "接口", render: (r) => <span className="text-base font-medium">{r.api}</span> },
+              { key: "limit", header: "全局限流", render: (r) => <span className="text-base">{r.limit}</span> },
+              { key: "burst", header: "突发上限", render: (r) => <span className="text-base">{r.burst}</span> },
+              { key: "perTenant", header: "单租户限流", render: (r) => <span className="text-base">{r.perTenant}</span> },
               {
                 key: "actions",
                 header: "操作",
@@ -327,7 +327,7 @@ export default function PlatformSettings({}: PageProps) {
                   <button
                     type="button"
                     onClick={(e) => { e.stopPropagation(); openRateEdit(r); }}
-                    className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                    className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
                   >
                     <Pencil size={12} />编辑
                   </button>
@@ -340,9 +340,9 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Retention */}
       {tab === "retention" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">数据保留策略</h3>
-          <div className="space-y-2 text-sm text-slate-600">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">数据保留策略</h3>
+          <div className="space-y-2 text-base text-slate-600">
             {retentions.map((r) => (
               <div key={r.label} className="flex items-center justify-between rounded-lg border border-slate-100 p-3">
                 <div>
@@ -354,7 +354,7 @@ export default function PlatformSettings({}: PageProps) {
                   <button
                     type="button"
                     onClick={() => openRetentionEdit(r)}
-                    className="flex items-center gap-0.5 text-sm text-blue-500 hover:underline"
+                    className="flex items-center gap-0.5 text-base text-blue-500 hover:underline"
                   >
                     <Pencil size={12} />编辑
                   </button>
@@ -367,9 +367,9 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Privacy */}
       {tab === "privacy" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">隐私与数据删除</h3>
-          <div className="space-y-3 text-sm text-slate-600">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">隐私与数据删除</h3>
+          <div className="space-y-3 text-base text-slate-600">
             <div className="rounded-lg bg-blue-50 border border-blue-100 p-3">
               <p className="font-medium text-blue-700 mb-1">用户数据脱敏规则</p>
               <p>手机号显示为138****1234格式；订单号在非本用户场景下脱敏；用户姓名仅显示姓氏+先生/女士</p>
@@ -388,21 +388,21 @@ export default function PlatformSettings({}: PageProps) {
 
       {/* Params */}
       {tab === "params" && (
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">全局参数配置</h3>
-          <div className="space-y-3 text-sm">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-700 mb-3">全局参数配置</h3>
+          <div className="space-y-3 text-base">
             {params.map((p) => (
               <div key={p.label} className="flex items-center justify-between rounded-lg border border-slate-100 p-3">
                 <div>
-                  <span className="text-sm font-medium text-slate-700">{p.label}</span>
-                  <p className="text-sm text-slate-400">{p.desc}</p>
+                  <span className="text-base font-medium text-slate-700">{p.label}</span>
+                  <p className="text-base text-slate-400">{p.desc}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-mono text-blue-600">{p.value}</span>
+                  <span className="text-base font-mono text-blue-600">{p.value}</span>
                   <button
                     type="button"
                     onClick={() => openParamEdit(p)}
-                    className="flex items-center gap-0.5 text-sm text-blue-500 hover:underline"
+                    className="flex items-center gap-0.5 text-base text-blue-500 hover:underline"
                   >
                     <Pencil size={12} />编辑
                   </button>
@@ -416,68 +416,68 @@ export default function PlatformSettings({}: PageProps) {
       {/* Audit Detail Modal */}
       <Modal open={auditDetail !== null} title="审计日志详情" onClose={() => setAuditDetail(null)} size="md">
         {auditDetail && (
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-base">
             <div className="grid grid-cols-2 gap-3">
-              <div><span className="text-sm text-slate-400">操作人</span><p className="font-medium">{auditDetail.user}</p></div>
-              <div><span className="text-sm text-slate-400">时间</span><p>{auditDetail.time}</p></div>
+              <div><span className="text-base text-slate-400">操作人</span><p className="font-medium">{auditDetail.user}</p></div>
+              <div><span className="text-base text-slate-400">时间</span><p>{auditDetail.time}</p></div>
             </div>
-            <div><span className="text-sm text-slate-400">操作</span><p>{auditDetail.action}</p></div>
-            <div><span className="text-sm text-slate-400">操作对象</span><p className="text-slate-500">{auditDetail.target}</p></div>
-            <div><span className="text-sm text-slate-400">IP地址</span><p className="font-mono">{auditDetail.ip}</p></div>
+            <div><span className="text-base text-slate-400">操作</span><p>{auditDetail.action}</p></div>
+            <div><span className="text-base text-slate-400">操作对象</span><p className="text-slate-500">{auditDetail.target}</p></div>
+            <div><span className="text-base text-slate-400">IP地址</span><p className="font-mono">{auditDetail.ip}</p></div>
           </div>
         )}
       </Modal>
 
       {/* Role Edit Modal */}
       <Modal open={roleModal} title="编辑角色权限" onClose={() => setRoleModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">角色名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">角色名称</label>
             <input
               value={roleForm.role}
               disabled
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none bg-slate-50 text-slate-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none bg-slate-50 text-slate-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">权限范围</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">权限范围</label>
             <textarea
               value={roleForm.permissions}
               onChange={(e) => setRoleForm((f) => ({ ...f, permissions: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
               rows={3}
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">用户数</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">用户数</label>
             <input
               type="number"
               value={roleForm.users}
               onChange={(e) => setRoleForm((f) => ({ ...f, users: +e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setRoleModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleRoleSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
+          <button type="button" onClick={() => setRoleModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleRoleSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
 
       {/* Channel Edit Modal */}
       <Modal open={channelModal} title="渠道配置" onClose={() => setChannelModal(false)} size="sm">
         {editingChannel && (
-          <div className="space-y-3 text-sm">
+          <div className="space-y-3 text-base">
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">渠道名称</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">渠道名称</label>
               <input
                 value={editingChannel.name}
                 disabled
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none bg-slate-50 text-slate-400"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none bg-slate-50 text-slate-400"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">状态</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">状态</label>
               <div className="flex gap-4">
                 <label className="flex items-center gap-2">
                   <input
@@ -488,7 +488,7 @@ export default function PlatformSettings({}: PageProps) {
                       setEditingChannel((prev) => (prev ? { ...prev, status: "启用" } : null))
                     }
                   />
-                  <span className="text-sm">启用</span>
+                  <span className="text-base">启用</span>
                 </label>
                 <label className="flex items-center gap-2">
                   <input
@@ -499,131 +499,131 @@ export default function PlatformSettings({}: PageProps) {
                       setEditingChannel((prev) => (prev ? { ...prev, status: "停用" } : null))
                     }
                   />
-                  <span className="text-sm">停用</span>
+                  <span className="text-base">停用</span>
                 </label>
               </div>
             </div>
           </div>
         )}
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setChannelModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={toggleChannelStatus} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
+          <button type="button" onClick={() => setChannelModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={toggleChannelStatus} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
 
       {/* Rate Limit Edit Modal */}
       <Modal open={rateLimitModal} title="编辑限流规则" onClose={() => setRateLimitModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">接口</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">接口</label>
             <input
               value={editingRate?.api || ""}
               disabled
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none bg-slate-50 text-slate-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none bg-slate-50 text-slate-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">全局限流</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">全局限流</label>
             <input
               value={rateForm.limit}
               onChange={(e) => setRateForm((f) => ({ ...f, limit: e.target.value }))}
               placeholder="如：1000 QPS"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">突发上限</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">突发上限</label>
             <input
               value={rateForm.burst}
               onChange={(e) => setRateForm((f) => ({ ...f, burst: e.target.value }))}
               placeholder="如：1500 QPS"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">单租户限流</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">单租户限流</label>
             <input
               value={rateForm.perTenant}
               onChange={(e) => setRateForm((f) => ({ ...f, perTenant: e.target.value }))}
               placeholder="如：50 QPS"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setRateLimitModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleRateSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
+          <button type="button" onClick={() => setRateLimitModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleRateSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
 
       {/* Retention Edit Modal */}
       <Modal open={retentionModal} title="编辑数据保留策略" onClose={() => setRetentionModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">数据类别</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">数据类别</label>
             <input
               value={editingRetention?.label || ""}
               disabled
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none bg-slate-50 text-slate-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none bg-slate-50 text-slate-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">保留期限</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">保留期限</label>
             <input
               value={retentionForm.period}
               onChange={(e) => setRetentionForm((f) => ({ ...f, period: e.target.value }))}
               placeholder="如：90天"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">说明</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">说明</label>
             <textarea
               value={retentionForm.desc}
               onChange={(e) => setRetentionForm((f) => ({ ...f, desc: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               rows={2}
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setRetentionModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleRetentionSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
+          <button type="button" onClick={() => setRetentionModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleRetentionSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
 
       {/* Param Edit Modal */}
       <Modal open={paramModal} title="编辑全局参数" onClose={() => setParamModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">参数名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">参数名称</label>
             <input
               value={editingParam?.label || ""}
               disabled
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none bg-slate-50 text-slate-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none bg-slate-50 text-slate-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">参数值</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">参数值</label>
             <input
               value={paramForm.value}
               onChange={(e) => setParamForm((f) => ({ ...f, value: e.target.value }))}
               placeholder="输入参数值"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400 font-mono"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 font-mono"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">说明</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">说明</label>
             <input
               value={paramForm.desc}
               onChange={(e) => setParamForm((f) => ({ ...f, desc: e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setParamModal(false)} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleParamSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
+          <button type="button" onClick={() => setParamModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleParamSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
     </div>

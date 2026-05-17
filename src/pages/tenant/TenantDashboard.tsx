@@ -124,9 +124,9 @@ function TrendTooltip({ active, payload, label }: {
   if (!active || !payload || payload.length === 0) return null;
   return (
     <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg">
-      <p className="text-sm font-semibold text-slate-500 mb-1">{label}</p>
+      <p className="text-base font-semibold text-slate-500 mb-1">{label}</p>
       {payload.map((entry, idx) => (
-        <p key={idx} className="text-sm" style={{ color: entry.color }}>
+        <p key={idx} className="text-base" style={{ color: entry.color }}>
           {entry.name}: {entry.value}
         </p>
       ))}
@@ -201,11 +201,11 @@ export default function TenantDashboard({ context }: PageProps) {
       {/* ================================================================ */}
       {/* Service context bar                                               */}
       {/* ================================================================ */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-5 py-3">
+      <div className="flex flex-wrap items-center justify-between gap-5 rounded-xl border border-slate-200 bg-white px-5 py-3">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-slate-400">当前租户</span>
-            <span className="text-sm font-semibold text-slate-800">
+            <span className="text-base font-medium text-slate-400">当前租户</span>
+            <span className="text-base font-semibold text-slate-800">
               {tenant?.name ?? context.currentTenantId}
             </span>
             {tenant && (
@@ -214,8 +214,8 @@ export default function TenantDashboard({ context }: PageProps) {
           </div>
           <span className="text-slate-200">|</span>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-slate-400">当前商家</span>
-            <span className="text-sm font-semibold text-slate-800">
+            <span className="text-base font-medium text-slate-400">当前商家</span>
+            <span className="text-base font-semibold text-slate-800">
               {merchant?.name ?? context.currentMerchantId}
             </span>
             {merchant && (
@@ -224,13 +224,13 @@ export default function TenantDashboard({ context }: PageProps) {
           </div>
           <span className="text-slate-200">|</span>
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-slate-400">业务线</span>
-            <span className="text-sm font-medium text-slate-700">
+            <span className="text-base font-medium text-slate-400">业务线</span>
+            <span className="text-base font-medium text-slate-700">
               {context.currentBusinessLine}
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-3 text-sm text-slate-400">
+        <div className="flex items-center gap-3 text-base text-slate-400">
           <div className="flex items-center gap-1">
             <Users size={14} />
             <span>在线客服 {activeAgents}/{agents.length}</span>
@@ -282,19 +282,31 @@ export default function TenantDashboard({ context }: PageProps) {
       </div>
 
       {/* ================================================================ */}
+      {/* Metric cards row 2 (6 cards)                                     */}
+      {/* ================================================================ */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <MetricCard label="FAQ响应时间" value="0.8s" trend="较上周 -0.1s" trendUp color="green" />
+        <MetricCard label="RAG完整回答时间" value="2.4s" trend="较上周 -0.3s" trendUp color="blue" />
+        <MetricCard label="工具调用成功率" value="96.2%" trend="较上周 +1.5%" trendUp color="green" />
+        <MetricCard label="风控拦截率" value="3.8%" trend="较上周 -0.5%" trendUp={false} color="orange" />
+        <MetricCard label="Token消耗" value={tokenUsed >= 10000 ? `${(tokenUsed/10000).toFixed(1)}万` : tokenUsed.toLocaleString()} color="slate" />
+        <MetricCard label="幻觉率" value="2.1%" trend="较上周 -0.8%" trendUp={false} color="red" />
+      </div>
+
+      {/* ================================================================ */}
       {/* Charts grid (2x2)                                                */}
       {/* ================================================================ */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* ---------------------------------------------------------------- */}
         {/* Top-left: Consultation trend line chart                          */}
         {/* ---------------------------------------------------------------- */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <TrendingUp size={16} className="text-blue-500" />
             咨询趋势（近7天）
           </h3>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={300}>
             <LineChart data={trendData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
               <XAxis dataKey="day" tick={{ fontSize: 12, fill: "#94A3B8" }} axisLine={{ stroke: "#E2E8F0" }} tickLine={false} />
@@ -333,18 +345,18 @@ export default function TenantDashboard({ context }: PageProps) {
               />
             </LineChart>
           </ResponsiveContainer>
-          <p className="mt-3 text-sm text-slate-500 leading-relaxed">会话趋势反映每日用户咨询量变化。AI解决率=AI独立解决数/总会话数，目标{'>'}60%。转人工率上升可能表明知识库覆盖不足或机器人意图识别准确率下降，建议检查近期未召回Query和差评会话。</p>
+          <p className="mt-3 text-base text-slate-500 leading-relaxed">会话趋势反映每日用户咨询量变化。AI解决率=AI独立解决数/总会话数，目标{'>'}60%。转人工率上升可能表明知识库覆盖不足或机器人意图识别准确率下降，建议检查近期未召回Query和差评会话。</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
         {/* Top-right: Issue type pie chart                                  */}
         {/* ---------------------------------------------------------------- */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <MessageCircle size={16} className="text-indigo-500" />
             咨询问题类型分布
           </h3>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
                 data={issueTypeData}
@@ -374,18 +386,18 @@ export default function TenantDashboard({ context }: PageProps) {
               />
             </PieChart>
           </ResponsiveContainer>
-          <p className="mt-3 text-sm text-slate-500 leading-relaxed">问题类型分布反映用户核心诉求结构。某类型占比突增可能反映产品变更、促销活动或外部舆情事件，建议结合时间趋势分析原因并及时补充对应知识库。</p>
+          <p className="mt-3 text-base text-slate-500 leading-relaxed">问题类型分布反映用户核心诉求结构。某类型占比突增可能反映产品变更、促销活动或外部舆情事件，建议结合时间趋势分析原因并及时补充对应知识库。</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
         {/* Bottom-left: Ticket status bar chart                             */}
         {/* ---------------------------------------------------------------- */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <TicketIcon size={16} className="text-amber-500" />
             工单状态分布
           </h3>
-          <ResponsiveContainer width="100%" height={260}>
+          <ResponsiveContainer width="100%" height={300}>
             <BarChart data={ticketStatusData} margin={{ top: 4, right: 8, left: 0, bottom: 4 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" vertical={false} />
               <XAxis dataKey="status" tick={{ fontSize: 12, fill: "#94A3B8" }} axisLine={{ stroke: "#E2E8F0" }} tickLine={false} />
@@ -417,14 +429,14 @@ export default function TenantDashboard({ context }: PageProps) {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
-          <p className="mt-3 text-sm text-slate-500 leading-relaxed">工单状态反映客服团队处理效率。待处理积压{'>'}10个需关注人力配置；已关闭占比高且SLA达标说明团队运转良好。建议关注'等待用户补充'状态的工单，主动触达用户推进处理。</p>
+          <p className="mt-3 text-base text-slate-500 leading-relaxed">工单状态反映客服团队处理效率。待处理积压{'>'}10个需关注人力配置；已关闭占比高且SLA达标说明团队运转良好。建议关注'等待用户补充'状态的工单，主动触达用户推进处理。</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
         {/* Bottom-right: Product consultation bar chart                     */}
         {/* ---------------------------------------------------------------- */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <Package size={16} className="text-emerald-500" />
             商品咨询与转化
           </h3>
@@ -481,17 +493,17 @@ export default function TenantDashboard({ context }: PageProps) {
               />
             </ComposedChart>
           </ResponsiveContainer>
-          <p className="mt-3 text-sm text-slate-500 leading-relaxed">动销商品排行用于观察咨询到下单的转化情况。高咨询低转化商品建议优化商品详情页或直播话术；高咨询高转化商品可作为主推爆品。转化率&lt;15%需重点优化。</p>
+          <p className="mt-3 text-base text-slate-500 leading-relaxed">动销商品排行用于观察咨询到下单的转化情况。高咨询低转化商品建议优化商品详情页或直播话术；高咨询高转化商品可作为主推爆品。转化率&lt;15%需重点优化。</p>
         </div>
       </div>
 
       {/* ================================================================ */}
       {/* Bottom row: Hot topics + Knowledge gaps + Risk alerts             */}
       {/* ================================================================ */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* ---- Hot topics Top 10 ---- */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <Star size={16} className="text-amber-500" />
             热门问题 Top 10
           </h3>
@@ -502,7 +514,7 @@ export default function TenantDashboard({ context }: PageProps) {
                 className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-slate-50 transition-colors"
               >
                 <span className={`
-                  flex h-5 w-5 items-center justify-center rounded text-sm font-bold
+                  flex h-5 w-5 items-center justify-center rounded text-base font-bold
                   ${i < 3
                     ? "bg-amber-100 text-amber-700"
                     : "bg-slate-100 text-slate-400"
@@ -510,29 +522,29 @@ export default function TenantDashboard({ context }: PageProps) {
                 `}>
                   {i + 1}
                 </span>
-                <span className="flex-1 text-sm text-slate-700 truncate">{item.topic}</span>
-                <span className="text-sm font-medium text-slate-400 tabular-nums">{item.count}次</span>
+                <span className="flex-1 text-base text-slate-700 truncate">{item.topic}</span>
+                <span className="text-base font-medium text-slate-400 tabular-nums">{item.count}次</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* ---- Knowledge gap alerts ---- */}
-        <div className="rounded-xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
+          <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
             <BookOpen size={16} className="text-violet-500" />
             知识缺口提醒
           </h3>
 
           {/* Gap summary */}
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-5 mb-4">
             <div className="flex-1 rounded-lg bg-violet-50 px-3 py-2">
-              <p className="text-sm text-violet-500 font-medium">待处理缺口</p>
-              <p className="text-xl font-bold text-violet-700">{pendingGaps}</p>
+              <p className="text-base text-violet-500 font-medium">待处理缺口</p>
+              <p className="text-2xl font-bold text-violet-700">{pendingGaps}</p>
             </div>
             <div className="flex-1 rounded-lg bg-blue-50 px-3 py-2">
-              <p className="text-sm text-blue-500 font-medium">Token消耗</p>
-              <p className="text-xl font-bold text-blue-700">
+              <p className="text-base text-blue-500 font-medium">Token消耗</p>
+              <p className="text-2xl font-bold text-blue-700">
                 {tokenUsed >= 10000
                   ? `${(tokenUsed / 10000).toFixed(1)}万`
                   : tokenUsed.toLocaleString()}
@@ -555,8 +567,8 @@ export default function TenantDashboard({ context }: PageProps) {
                       <StatusBadge status={gap.status} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm text-slate-700 truncate">{gap.question}</p>
-                      <p className="text-sm text-slate-400 mt-0.5">
+                      <p className="text-base text-slate-700 truncate">{gap.question}</p>
+                      <p className="text-base text-slate-400 mt-0.5">
                         {gap.businessLine ?? ""} {gap.channel ?? ""}
                       </p>
                     </div>
@@ -564,28 +576,28 @@ export default function TenantDashboard({ context }: PageProps) {
                 ))}
             </div>
           ) : (
-            <div className="flex items-center justify-center py-6 text-sm text-slate-400">
+            <div className="flex items-center justify-center py-6 text-base text-slate-400">
               暂无待处理的知识缺口
             </div>
           )}
         </div>
 
         {/* ---- Risk alerts ---- */}
-        <div className="rounded-xl border border-red-100 bg-red-50/60 p-5">
-          <h3 className="text-sm font-semibold text-red-700 mb-4 flex items-center gap-2">
+        <div className="rounded-xl border border-red-100 bg-red-50/60 p-8">
+          <h3 className="text-base font-semibold text-red-700 mb-4 flex items-center gap-2">
             <AlertTriangle size={16} />
             风险提醒
           </h3>
 
           {/* Risk summary */}
-          <div className="flex items-center gap-4 mb-4">
+          <div className="flex items-center gap-5 mb-4">
             <div className="flex-1 rounded-lg bg-white/80 px-3 py-2">
-              <p className="text-sm text-red-400 font-medium">高风险会话</p>
-              <p className="text-xl font-bold text-red-600">{highRisk}</p>
+              <p className="text-base text-red-400 font-medium">高风险会话</p>
+              <p className="text-2xl font-bold text-red-600">{highRisk}</p>
             </div>
             <div className="flex-1 rounded-lg bg-white/80 px-3 py-2">
-              <p className="text-sm text-slate-400 font-medium">中风险会话</p>
-              <p className="text-xl font-bold text-amber-600">
+              <p className="text-base text-slate-400 font-medium">中风险会话</p>
+              <p className="text-2xl font-bold text-amber-600">
                 {filteredConvs.filter((c) => c.riskLevel === "中风险").length}
               </p>
             </div>
@@ -601,8 +613,8 @@ export default function TenantDashboard({ context }: PageProps) {
                 >
                   <StatusBadge status="高风险" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-sm text-slate-700 truncate">{c.title}</p>
-                    <p className="text-sm text-slate-400 mt-0.5 flex items-center gap-1">
+                    <p className="text-base text-slate-700 truncate">{c.title}</p>
+                    <p className="text-base text-slate-400 mt-0.5 flex items-center gap-1">
                       <Clock size={12} />
                       {c.createdAt}
                     </p>
@@ -611,7 +623,7 @@ export default function TenantDashboard({ context }: PageProps) {
               ))}
             </div>
           ) : (
-            <div className="flex items-center justify-center py-6 text-sm text-slate-400">
+            <div className="flex items-center justify-center py-6 text-base text-slate-400">
               暂无风险会话
             </div>
           )}

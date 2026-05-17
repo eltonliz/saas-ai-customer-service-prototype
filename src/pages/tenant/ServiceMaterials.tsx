@@ -91,14 +91,14 @@ export default function ServiceMaterials({}: PageProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-4">商品/课程/门店客服资料</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">商品/课程/门店客服资料</h2>
       <div className="mb-4 flex flex-wrap gap-2">
         {tabs.map((t) => (
           <button
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-base font-medium transition-colors ${
               tab === t.id ? "bg-blue-600 text-white" : "border border-slate-200 text-slate-600 hover:bg-slate-50"
             }`}
           >
@@ -108,8 +108,8 @@ export default function ServiceMaterials({}: PageProps) {
       </div>
 
       <div className="flex items-center justify-between mb-3">
-        <h3 className="text-sm font-semibold text-slate-800">{materials[tab].title}</h3>
-        <button type="button" onClick={openAddModal} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">
+        <h3 className="text-base font-semibold text-slate-800">{materials[tab].title}</h3>
+        <button type="button" onClick={openAddModal} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700">
           <Plus size={14} />新增
         </button>
       </div>
@@ -119,8 +119,8 @@ export default function ServiceMaterials({}: PageProps) {
           <div key={i} className="rounded-xl border border-slate-200 bg-white p-4">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <h3 className="text-sm font-semibold text-slate-800 mb-2">{item.name}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                <h3 className="text-base font-semibold text-slate-800 mb-2">{item.name}</h3>
+                <p className="text-base text-slate-600 leading-relaxed">{item.desc}</p>
               </div>
               <div className="flex gap-1.5 ml-3 flex-shrink-0">
                 <button type="button" onClick={() => openEditModal(i)} className="rounded-lg border border-slate-200 p-1.5 text-slate-400 hover:text-amber-600 hover:border-amber-200 hover:bg-amber-50">
@@ -143,28 +143,28 @@ export default function ServiceMaterials({}: PageProps) {
       >
         <div className="space-y-3">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">名称</label>
             <input
               value={materialForm.name}
               onChange={(e) => setMaterialForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="输入名称"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">描述</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">描述</label>
             <textarea
               value={materialForm.desc}
               onChange={(e) => setMaterialForm((f) => ({ ...f, desc: e.target.value }))}
               placeholder="输入描述"
               rows={3}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400 resize-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 resize-none"
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setMaterialModal({ open: false, editingIndex: null })} className="rounded-lg border px-4 py-2 text-sm">取消</button>
-          <button type="button" onClick={handleMaterialSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
+          <button type="button" onClick={() => setMaterialModal({ open: false, editingIndex: null })} className="rounded-lg border px-4 py-2 text-base">取消</button>
+          <button type="button" onClick={handleMaterialSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
     </div>

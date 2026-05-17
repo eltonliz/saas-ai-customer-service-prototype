@@ -46,7 +46,7 @@ export function AppShell({ pageId, menus, onPageChange, onPortalChange, children
                     key={item.id}
                     type="button"
                     onClick={() => onPageChange(item.id)}
-                    className={`relative flex flex-col items-center gap-0.5 py-2 text-sm font-medium transition-colors ${
+                    className={`relative flex flex-col items-center gap-0.5 py-2 text-base font-medium transition-colors ${
                       active ? "text-blue-600" : "text-slate-400"
                     }`}
                   >

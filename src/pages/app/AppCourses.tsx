@@ -13,7 +13,7 @@ export default function AppCourses({ goPage }: PageProps) {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold text-slate-900 mb-4">课程学习</h2>
+      <h2 className="text-2xl font-bold text-slate-900 mb-4">课程学习</h2>
       {!course ? (
         <div className="space-y-3">
           {courses.map((c) => (
@@ -23,44 +23,44 @@ export default function AppCourses({ goPage }: PageProps) {
                   <BookOpen size={20} className="text-violet-500" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-semibold text-slate-800">{c.title}</h3>
+                  <h3 className="text-base font-semibold text-slate-800">{c.title}</h3>
                   <div className="flex flex-wrap gap-1.5 mt-1">
                     {c.tags.map((t) => (
-                      <span key={t} className="rounded-md bg-violet-50 px-2 py-0.5 text-sm text-violet-600">{t}</span>
+                      <span key={t} className="rounded-md bg-violet-50 px-2 py-0.5 text-base text-violet-600">{t}</span>
                     ))}
                   </div>
                 </div>
               </div>
-              <div className="space-y-1 text-sm text-slate-500">
+              <div className="space-y-1 text-base text-slate-500">
                 <div className="flex items-center gap-1.5"><User size={14} className="text-slate-300" />{c.instructor}</div>
                 <div className="flex items-center gap-1.5"><Clock size={14} className="text-slate-300" />{c.duration} · 有效期{c.expiry}</div>
               </div>
-              <p className="text-sm text-slate-400 mt-2">{c.desc}</p>
+              <p className="text-base text-slate-400 mt-2">{c.desc}</p>
             </button>
           ))}
         </div>
       ) : (
         <div>
-          <button type="button" onClick={() => setSelected(null)} className="mb-4 text-sm text-blue-600 hover:text-blue-700">&larr; 返回列表</button>
-          <div className="rounded-2xl bg-white p-5 shadow-sm border border-slate-100">
+          <button type="button" onClick={() => setSelected(null)} className="mb-4 text-base text-blue-600 hover:text-blue-700">&larr; 返回列表</button>
+          <div className="rounded-2xl bg-white p-8 shadow-sm border border-slate-100">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-violet-100">
                 <BookOpen size={24} className="text-violet-600" />
               </div>
               <div>
-                <h3 className="text-base font-semibold text-slate-900">{course.title}</h3>
-                <p className="text-sm text-slate-400">{course.instructor}</p>
+                <h3 className="text-lg font-semibold text-slate-900">{course.title}</h3>
+                <p className="text-base text-slate-400">{course.instructor}</p>
               </div>
             </div>
-            <div className="space-y-3 text-sm text-slate-600 mb-4">
+            <div className="space-y-3 text-base text-slate-600 mb-4">
               <div className="flex items-center gap-2"><User size={16} className="text-slate-400" /><span>讲师：{course.instructor}</span></div>
               <div className="flex items-center gap-2"><Clock size={16} className="text-slate-400" /><span>{course.duration} · 有效期{course.expiry}</span></div>
               <div className="flex items-center gap-2"><Shield size={16} className="text-slate-400" /><span>学习权益：支持回放、倍速播放、下载</span></div>
               <div className="flex items-center gap-2"><RotateCcw size={16} className="text-slate-400" /><span>回放入口：我的 → 我的课程</span></div>
             </div>
-            <p className="text-sm text-slate-500 bg-slate-50 rounded-xl p-3">{course.desc}</p>
+            <p className="text-base text-slate-500 bg-slate-50 rounded-xl p-3">{course.desc}</p>
             <div className="mt-4 flex gap-3">
-              <button type="button" onClick={() => goPage?.("ai-service", { chatPrompt: `咨询课程 ${course.title}` })} className="flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 hover:bg-blue-100">
+              <button type="button" onClick={() => goPage?.("ai-service", { chatPrompt: `咨询课程 ${course.title}` })} className="flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-base font-medium text-blue-700 hover:bg-blue-100">
                 <Headphones size={16} />课程客服
               </button>
             </div>

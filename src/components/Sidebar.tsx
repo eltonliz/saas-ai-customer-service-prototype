@@ -57,7 +57,7 @@ export function Sidebar({ categories, active, onChange, title }: SidebarProps) {
 
   return (
     <aside className="sticky top-16 h-[calc(100vh-64px)] w-60 shrink-0 overflow-y-auto border-r border-slate-200 bg-white/80 px-2 py-4">
-      <p className="mb-3 px-3 text-sm font-semibold text-slate-500">{title}</p>
+      <p className="mb-3 px-3 text-base font-semibold text-slate-500">{title}</p>
       <nav className="flex flex-col gap-0.5">
         {categories.map((cat) => {
           const Icon = iconMap[cat.label] ?? LayoutDashboard;
@@ -68,7 +68,7 @@ export function Sidebar({ categories, active, onChange, title }: SidebarProps) {
               <button
                 type="button"
                 onClick={() => toggle(cat.id)}
-                className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm font-medium transition-colors ${
+                className={`flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-base font-medium transition-colors ${
                   hasActiveChild
                     ? "text-blue-700"
                     : "text-slate-600 hover:bg-slate-100"
@@ -90,7 +90,7 @@ export function Sidebar({ categories, active, onChange, title }: SidebarProps) {
                         key={item.id}
                         type="button"
                         onClick={() => onChange(item.id)}
-                        className={`rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                        className={`rounded-lg px-3 py-2 text-left text-base transition-colors ${
                           isActive
                             ? "bg-blue-50 text-blue-700 font-medium"
                             : "text-slate-500 hover:bg-slate-50 hover:text-slate-700"

@@ -20,12 +20,12 @@ export default function TenantAuditLog({}: PageProps) {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <ScrollText size={20} className="text-slate-600" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">操作日志</h2>
-            <p className="text-sm text-slate-500 mt-1">记录租户内所有管理操作，支持按操作人、操作类型筛选查询</p>
+            <h2 className="text-3xl font-bold text-slate-900">操作日志</h2>
+            <p className="text-base text-slate-500 mt-1">记录租户内所有管理操作，支持按操作人、操作类型筛选查询</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -34,32 +34,32 @@ export default function TenantAuditLog({}: PageProps) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="搜索操作人或操作类型..."
-            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-blue-300 w-56"
+            className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-base outline-none focus:border-blue-300 w-56"
           />
         </div>
       </div>
       <div className="rounded-xl border border-slate-200 bg-white">
-        <table className="w-full text-sm">
+        <table className="w-full text-base">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作人</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作类型</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作对象</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">时间</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">IP</th>
-              <th className="text-left px-5 py-3 text-sm font-semibold text-slate-600">操作</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作人</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作类型</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作对象</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">时间</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">IP</th>
+              <th className="text-left px-5 py-3 text-base font-semibold text-slate-600">操作</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((l) => (
-              <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 48 }}>
-                <td className="px-5 py-3 text-sm font-medium text-slate-800">{l.operator}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{l.action}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{l.target}</td>
-                <td className="px-5 py-3 text-sm text-slate-600">{l.time}</td>
-                <td className="px-5 py-3 text-sm text-slate-500 font-mono">{l.ip}</td>
+              <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 56 }}>
+                <td className="px-5 py-3 text-base font-medium text-slate-800">{l.operator}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{l.action}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{l.target}</td>
+                <td className="px-5 py-3 text-base text-slate-600">{l.time}</td>
+                <td className="px-5 py-3 text-base text-slate-500 font-mono">{l.ip}</td>
                 <td className="px-5 py-3">
-                  <button className="text-sm text-blue-600 hover:text-blue-800">详情</button>
+                  <button className="text-base text-blue-600 hover:text-blue-800">详情</button>
                 </td>
               </tr>
             ))}

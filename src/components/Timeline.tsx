@@ -37,9 +37,9 @@ export function Timeline({ items }: TimelineProps) {
               {!isLast && <div className="my-0.5 w-0.5 flex-1 bg-slate-200" />}
             </div>
             <div className={`pb-5 ${isLast ? "" : ""}`}>
-              <p className="text-sm font-semibold text-slate-700">{item.title}</p>
-              <p className="text-sm text-slate-400">{item.time}</p>
-              {item.detail && <p className="mt-1 text-sm text-slate-500">{item.detail}</p>}
+              <p className="text-base font-semibold text-slate-700">{item.title}</p>
+              <p className="text-base text-slate-400">{item.time}</p>
+              {item.detail && <p className="mt-1 text-base text-slate-500">{item.detail}</p>}
             </div>
           </div>
         );

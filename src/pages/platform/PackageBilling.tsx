@@ -122,31 +122,31 @@ export default function PackageBilling({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-slate-900">套餐与计费</h2>
+        <h2 className="text-2xl font-bold text-slate-900">套餐与计费</h2>
         <button
           type="button"
           onClick={() => setCreateModal(true)}
-          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+          className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"
         >
           <Plus size={14} />新增套餐
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-6">
         {list.map((p) => (
-          <div key={p.id} className="rounded-xl border border-slate-200 bg-white p-5 hover:shadow-md transition-shadow">
+          <div key={p.id} className="rounded-xl border border-slate-200 bg-white p-8 hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-1">
-              <h3 className="text-sm font-bold text-slate-800">{p.name}</h3>
+              <h3 className="text-base font-bold text-slate-800">{p.name}</h3>
               <button
                 type="button"
                 onClick={() => openEdit(p)}
-                className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-sm text-slate-500 hover:bg-slate-50"
+                className="flex items-center gap-0.5 rounded-md border border-slate-200 px-2 py-1 text-base text-slate-500 hover:bg-slate-50"
               >
                 <Pencil size={12} />编辑
               </button>
             </div>
-            <p className="text-lg font-bold text-blue-600 mb-3">{p.price}</p>
-            <div className="space-y-1.5 text-sm text-slate-600">
+            <p className="text-xl font-bold text-blue-600 mb-3">{p.price}</p>
+            <div className="space-y-1.5 text-base text-slate-600">
               <div className="flex justify-between"><span>AI调用</span><span>{p.aiCalls}</span></div>
               <div className="flex justify-between"><span>Token额度</span><span>{p.tokens}</span></div>
               <div className="flex justify-between"><span>坐席</span><span>{p.seats}个</span></div>
@@ -154,15 +154,15 @@ export default function PackageBilling({}: PageProps) {
               <div className="flex justify-between"><span>超额策略</span><span className="text-amber-600">{p.overage}</span></div>
             </div>
             {p.description && (
-              <p className="mt-2 text-sm text-slate-400">{p.description}</p>
+              <p className="mt-2 text-base text-slate-400">{p.description}</p>
             )}
           </div>
         ))}
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5">
-        <h3 className="text-sm font-semibold text-slate-700 mb-3">到期提醒配置</h3>
-        <div className="space-y-2 text-sm text-slate-500">
+      <div className="rounded-xl border border-slate-200 bg-white p-8">
+        <h3 className="text-base font-semibold text-slate-700 mb-3">到期提醒配置</h3>
+        <div className="space-y-2 text-base text-slate-500">
           <p>· 到期前30天发送续费提醒</p>
           <p>· 到期前7天发送续费提醒</p>
           <p>· 到期后7天未续费自动停用</p>
@@ -172,70 +172,70 @@ export default function PackageBilling({}: PageProps) {
 
       {/* Create Modal */}
       <Modal open={createModal} title="新增套餐" onClose={() => setCreateModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">套餐名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">套餐名称</label>
             <input
               value={form.name}
               onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="输入套餐名称"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">价格</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">价格</label>
             <input
               value={form.price}
               onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))}
               placeholder="如：￥1,999/月"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">坐席数</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">坐席数</label>
               <input
                 type="number"
                 value={form.seatLimit}
                 onChange={(e) => setForm((f) => ({ ...f, seatLimit: +e.target.value }))}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">Token上限</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">Token上限</label>
               <input
                 type="number"
                 value={form.tokenLimit}
                 onChange={(e) => setForm((f) => ({ ...f, tokenLimit: +e.target.value }))}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">知识库容量（条）</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">知识库容量（条）</label>
             <input
               type="number"
               value={form.knowledgeCapacity}
               onChange={(e) => setForm((f) => ({ ...f, knowledgeCapacity: +e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">描述</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">描述</label>
             <textarea
               value={form.description}
               onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="输入套餐描述..."
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               rows={2}
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setCreateModal(false)} className="rounded-lg border px-4 py-2 text-sm">
+          <button type="button" onClick={() => setCreateModal(false)} className="rounded-lg border px-4 py-2 text-base">
             取消
           </button>
-          <button type="button" onClick={handleCreate} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={handleCreate} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             创建
           </button>
         </div>
@@ -243,70 +243,70 @@ export default function PackageBilling({}: PageProps) {
 
       {/* Edit Modal */}
       <Modal open={editModal} title="编辑套餐" onClose={() => setEditModal(false)} size="md">
-        <div className="space-y-3 text-sm">
+        <div className="space-y-3 text-base">
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">套餐名称</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">套餐名称</label>
             <input
               value={editForm.name}
               onChange={(e) => setEditForm((f) => ({ ...f, name: e.target.value }))}
               placeholder="输入套餐名称"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">价格</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">价格</label>
             <input
               value={editForm.price}
               onChange={(e) => setEditForm((f) => ({ ...f, price: e.target.value }))}
               placeholder="如：￥1,999/月"
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">坐席数</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">坐席数</label>
               <input
                 type="number"
                 value={editForm.seatLimit}
                 onChange={(e) => setEditForm((f) => ({ ...f, seatLimit: +e.target.value }))}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-500 mb-1">Token上限</label>
+              <label className="block text-base font-medium text-slate-500 mb-1">Token上限</label>
               <input
                 type="number"
                 value={editForm.tokenLimit}
                 onChange={(e) => setEditForm((f) => ({ ...f, tokenLimit: +e.target.value }))}
-                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+                className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">知识库容量（条）</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">知识库容量（条）</label>
             <input
               type="number"
               value={editForm.knowledgeCapacity}
               onChange={(e) => setEditForm((f) => ({ ...f, knowledgeCapacity: +e.target.value }))}
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-500 mb-1">描述</label>
+            <label className="block text-base font-medium text-slate-500 mb-1">描述</label>
             <textarea
               value={editForm.description}
               onChange={(e) => setEditForm((f) => ({ ...f, description: e.target.value }))}
               placeholder="输入套餐描述..."
-              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm outline-none"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
               rows={2}
             />
           </div>
         </div>
         <div className="flex justify-end gap-3 mt-4">
-          <button type="button" onClick={() => setEditModal(false)} className="rounded-lg border px-4 py-2 text-sm">
+          <button type="button" onClick={() => setEditModal(false)} className="rounded-lg border px-4 py-2 text-base">
             取消
           </button>
-          <button type="button" onClick={handleEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">
+          <button type="button" onClick={handleEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">
             保存
           </button>
         </div>
