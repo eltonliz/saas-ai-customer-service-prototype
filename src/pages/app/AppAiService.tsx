@@ -294,32 +294,32 @@ export default function AppAiService({ goPage }: PageProps) {
       <div ref={containerRef} className="flex-1 overflow-y-auto bg-[#F7F9FC]">
         <ChatWindow
           messages={augmentedMessages}
+          header={
+            showWelcome ? (
+              <div className="pb-2">
+                <p className="text-base text-slate-400 mb-2">您可以这样问我</p>
+                <div className="flex flex-wrap gap-2">
+                  {quickChips.map((chip) => {
+                    const Icon = chip.icon;
+                    return (
+                      <button
+                        key={chip.label}
+                        type="button"
+                        onClick={() => handleChipClick(chip)}
+                        disabled={processing}
+                        className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-base text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-colors disabled:opacity-50 h-10"
+                      >
+                        <Icon size={15} />
+                        {chip.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : undefined
+          }
           footer={
             <div>
-              {/* Welcome chips — shown before first user message */}
-              {showWelcome && (
-                <div className="px-4 pb-3">
-                  <p className="text-base text-slate-400 mb-2">您可以这样问我</p>
-                  <div className="flex flex-wrap gap-2">
-                    {quickChips.map((chip) => {
-                      const Icon = chip.icon;
-                      return (
-                        <button
-                          key={chip.label}
-                          type="button"
-                          onClick={() => handleChipClick(chip)}
-                          disabled={processing}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-base text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-colors disabled:opacity-50 h-10"
-                        >
-                          <Icon size={15} />
-                          {chip.label}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
               {/* Multi-turn inline actions */}
               {conversationStage === "asking-order" && (
                 <div className="px-4 py-3 border-t border-slate-100">

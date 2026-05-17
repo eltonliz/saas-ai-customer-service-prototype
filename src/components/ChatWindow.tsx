@@ -3,6 +3,7 @@ import { User, Bot, UserCheck, Package, FileText, Ticket } from "lucide-react";
 
 interface ChatWindowProps {
   messages: Message[];
+  header?: React.ReactNode;
   footer?: React.ReactNode;
 }
 
@@ -134,11 +135,12 @@ function ChatBubble({ msg }: { msg: Message }) {
   );
 }
 
-export function ChatWindow({ messages, footer }: ChatWindowProps) {
+export function ChatWindow({ messages, header, footer }: ChatWindowProps) {
   return (
     <div className="flex flex-col h-full">
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-        {messages.length === 0 && (
+        {header}
+        {messages.length === 0 && !header && (
           <p className="text-center text-base text-slate-400 py-12">暂无消息，开始对话吧</p>
         )}
         {messages.map((msg) => (
