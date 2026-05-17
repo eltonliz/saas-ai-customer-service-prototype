@@ -7,8 +7,8 @@ const quickChips: { label: string; icon: LucideIcon }[] = [
   { label: "查订单物流", icon: Truck },
   { label: "申请售后", icon: RotateCcw },
   { label: "问商品库存", icon: Package },
-  { label: "找附近门店", icon: MapPin },
-  { label: "查课程权益", icon: BookOpen },
+  { label: "附近门店", icon: MapPin },
+  { label: "课程权益", icon: BookOpen },
   { label: "健康咨询", icon: Heart },
 ];
 
@@ -35,11 +35,11 @@ const responses: Record<string, { userSteps: string[]; reply: string; cardType?:
     cardType: "商品卡片",
     cardData: { name: "直播专享营养套装", price: "199", stock: "库存充足" },
   },
-  "找附近门店": {
+  "附近门店": {
     userSteps: ["正在查询附近门店…", "已获取门店信息"],
     reply: "您附近有2家门店，营业时间为10:00-21:00。到店前建议提前预约，可享受优先服务。",
   },
-  "查课程权益": {
+  "课程权益": {
     userSteps: ["正在检索课程权益…", "已获取课程详情"],
     reply: "已购课程有效期为365天，支持回放和倍速播放。回放入口在'我的-我的课程'中。",
   },
@@ -215,7 +215,7 @@ export default function AppAiService({ goPage }: PageProps) {
     if (text.includes("排队")) { simulateProcessing("排队"); return; }
 
     // Match quick chip keywords
-    const matched = quickChips.find((c) => text.includes(c.label) || text.includes(c.label.replace("查", "").replace("问", "").replace("找", "")));
+    const matched = quickChips.find((c) => text.includes(c.label) || text.includes(c.label.replace("查", "").replace("问", "")));
     if (matched) {
       simulateProcessing(matched.label);
     } else if (text.includes("人工")) {
@@ -298,7 +298,7 @@ export default function AppAiService({ goPage }: PageProps) {
             showWelcome ? (
               <div className="pb-2">
                 <p className="text-base text-slate-400 mb-2">您可以这样问我</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {quickChips.map((chip) => {
                     const Icon = chip.icon;
                     return (
@@ -307,9 +307,9 @@ export default function AppAiService({ goPage }: PageProps) {
                         type="button"
                         onClick={() => handleChipClick(chip)}
                         disabled={processing}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-base text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-colors disabled:opacity-50 h-10"
+                        className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-base text-slate-600 hover:border-blue-300 hover:bg-blue-50 hover:text-blue-600 transition-colors disabled:opacity-50 h-11"
                       >
-                        <Icon size={15} />
+                        <Icon size={16} className="text-slate-400" />
                         {chip.label}
                       </button>
                     );
