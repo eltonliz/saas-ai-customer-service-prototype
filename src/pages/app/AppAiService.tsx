@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { Message, PageProps } from "../../types";
 import { ChatWindow } from "../../components/ChatWindow";
-import { Send, UserPlus, Package, ShoppingCart, RotateCcw, Store, GraduationCap, Heart, ThumbsUp, ThumbsDown, Copy, Download, MapPin, BookOpen, Truck, type LucideIcon } from "lucide-react";
+import { Send, UserPlus, Package, ShoppingCart, RotateCcw, Store, GraduationCap, Heart, ThumbsUp, ThumbsDown, MapPin, BookOpen, Truck, type LucideIcon } from "lucide-react";
 
 const quickChips: { label: string; icon: LucideIcon }[] = [
   { label: "查订单物流", icon: Truck },
@@ -291,7 +291,7 @@ export default function AppAiService({ goPage }: PageProps) {
       )}
 
       {/* Messages */}
-      <div ref={containerRef} className="flex-1 overflow-y-auto bg-[#F7F9FC]">
+      <div ref={containerRef} className="flex-1 min-h-0 bg-[#F7F9FC]">
         <ChatWindow
           messages={augmentedMessages}
           header={
@@ -372,33 +372,6 @@ export default function AppAiService({ goPage }: PageProps) {
                       }}
                       className={`inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-base transition-colors ${[...augmentedMessages].reverse().find((m) => m.showRating && ratings[m.id] === "down") ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-500 hover:bg-slate-200"}`}
                     ><ThumbsDown size={14} /></button>
-                  </div>
-                  <div className="flex items-center justify-center gap-3 py-1 border-t border-slate-100">
-                    <button type="button" onClick={() => {
-                      const lastAi = [...augmentedMessages].reverse().find(m => m.sender === "AI客服");
-                      if (lastAi) {
-                        const lastUser = [...messages].reverse().find(m => m.sender === "用户");
-                        if (lastUser) {
-                          const chip = quickChips.find(c => lastUser.content.includes(c.label));
-                          if (chip) {
-                            setMessages(prev => prev.filter(m => m.id !== lastAi.id));
-                            simulateProcessing(chip.label);
-                          }
-                        }
-                      }
-                    }} className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-base text-slate-500 hover:bg-slate-100"><RotateCcw size={14} />重新生成</button>
-                    <button type="button" onClick={() => {
-                      const lastAi = [...augmentedMessages].reverse().find(m => m.sender === "AI客服");
-                      if (lastAi) navigator.clipboard.writeText(lastAi.content).then(() => alert("已复制到剪贴板")).catch(() => {});
-                    }} className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-base text-slate-500 hover:bg-slate-100"><Copy size={14} />复制</button>
-                    <button type="button" onClick={() => {
-                      const exportData = messages.map(m => ({ sender: m.sender, content: m.content, time: m.time }));
-                      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
-                      const url = URL.createObjectURL(blob);
-                      const a = document.createElement("a");
-                      a.href = url; a.download = `chat-export-${Date.now()}.json`;
-                      a.click(); URL.revokeObjectURL(url);
-                    }} className="inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-base text-slate-500 hover:bg-slate-100"><Download size={14} />导出</button>
                   </div>
                 </>
               )}

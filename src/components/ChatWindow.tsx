@@ -137,7 +137,7 @@ function ChatBubble({ msg }: { msg: Message }) {
 
 export function ChatWindow({ messages, header, footer }: ChatWindowProps) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col min-h-0 flex-1">
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
         {header}
         {messages.length === 0 && !header && (
