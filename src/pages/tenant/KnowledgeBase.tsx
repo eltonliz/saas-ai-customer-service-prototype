@@ -6,7 +6,7 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Drawer } from "../../components/Drawer";
 import { faqs } from "../../data/mockData";
-import { Eye, Upload, Check, X, Send, PauseCircle, Edit3, Trash2 } from "lucide-react";
+import { Eye, Upload, Check, X, Send, PauseCircle, Edit3, Trash2, BarChart3, TrendingUp, FileText, Plus } from "lucide-react";
 
 type Tab = "faq" | "docs" | "review" | "gap";
 
@@ -37,6 +37,11 @@ export default function KnowledgeBase({ context }: PageProps) {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingDocId, setEditingDocId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ title: "", type: "FAQ文档", content: "" });
+
+  // Tracking modal for gap
+  const [trackingModalOpen, setTrackingModalOpen] = useState(false);
+  const [trackingGapId, setTrackingGapId] = useState<string | null>(null);
+  const trackingGap = trackingGapId ? myGaps.find((g) => g.id === trackingGapId) : null;
 
   const myDocs = useMemo(
     () => storeDocs.filter((d) => !deletedDocIds.has(d.id)),
@@ -86,16 +91,92 @@ export default function KnowledgeBase({ context }: PageProps) {
   }
 
   function handleGapGenerateCandidate(id: string) {
-    store.updateKnowledgeGap(id, { status: "已生成候选知识", candidate: "AI已生成候选知识，等待人工审核。" });
+    const gap = myGaps.find((g) => g.id === id);
+    if (!gap) return;
+    // Create a pending document from the gap
+    const doc = {
+      id: `doc-gap-${Date.now()}`,
+      tenantId: context.currentTenantId,
+      merchantId: context.currentMerchantId,
+      title: gap.question,
+      type: "FAQ文档",
+      status: "待审核" as const,
+      businessLine: gap.businessLine || context.currentBusinessLine,
+      references: 0,
+      hitRate: 0,
+      chunks: 0,
+      updatedAt: new Date().toISOString().slice(0, 10),
+      content: `【AI候选】基于缺口自动生成：${gap.candidate || "AI自动生成的候选回答"}`,
+      reviewComment: "",
+    };
+    store.addKnowledgeDoc(doc);
+    store.updateKnowledgeGap(id, { status: "已生成候选知识", candidate: gap.candidate || "AI已生成候选知识，等待人工审核。" });
+    alert("已生成候选FAQ，请前往审核队列审核");
+  }
+
+  function handleGapSubmitReview(id: string) {
+    store.updateKnowledgeGap(id, { status: "待审核" });
   }
 
   function handleGapApprove(id: string) {
-    store.updateKnowledgeGap(id, { status: "已发布", candidate: "审核通过，已发布。追踪命中效果。" });
+    const gap = myGaps.find((g) => g.id === id);
+    if (!gap) return;
+    // Create a FAQ document when publishing
+    const doc = {
+      id: `doc-pub-${Date.now()}`,
+      tenantId: context.currentTenantId,
+      merchantId: context.currentMerchantId,
+      title: gap.question,
+      type: "FAQ文档",
+      status: "已发布" as const,
+      businessLine: gap.businessLine || context.currentBusinessLine,
+      references: 0,
+      hitRate: 0,
+      chunks: 0,
+      updatedAt: new Date().toISOString().slice(0, 10),
+      content: gap.candidate || "审核通过的候选知识",
+      reviewComment: reviewComment || "审核通过",
+    };
+    store.addKnowledgeDoc(doc);
+    store.updateKnowledgeGap(id, {
+      status: "已发布",
+      candidate: "审核通过，已发布。追踪命中效果。",
+      publishedHits: 0,
+      publishedResolutionRate: 0,
+    });
+    setReviewComment("");
+    alert("已发布上线");
   }
 
   function handleGapReject(id: string) {
     store.updateKnowledgeGap(id, { status: "已驳回", candidate: `审核驳回原因: ${reviewComment || "内容不符合平台规范"}` });
     setReviewComment("");
+  }
+
+  function handleGapTrack(id: string) {
+    // Move to tracking and show stats
+    const gap = myGaps.find((g) => g.id === id);
+    if (!gap) return;
+    if (gap.status === "已发布") {
+      store.updateKnowledgeGap(id, { status: "追踪中" });
+    }
+    setTrackingGapId(id);
+    setTrackingModalOpen(true);
+  }
+
+  function getTrackingHitCount(gap: typeof myGaps[number]) {
+    if (gap.publishedHits !== undefined && gap.publishedHits > 0) return gap.publishedHits;
+    return Math.floor(Math.random() * 50);
+  }
+
+  function getTrackingResolutionRate(gap: typeof myGaps[number]) {
+    if (gap.publishedResolutionRate !== undefined && gap.publishedResolutionRate > 0) return gap.publishedResolutionRate;
+    return Math.floor(Math.random() * 36) + 60; // 60-95%
+  }
+
+  function getTrackingNegativeRate(gap: typeof myGaps[number]) {
+    if (gap.negativeFeedbackRate !== undefined && gap.negativeFeedbackRate > 0) return gap.negativeFeedbackRate;
+    return Math.floor(Math.random() * 15);
   }
 
   function openEditModal(docId: string) {
@@ -248,20 +329,120 @@ export default function KnowledgeBase({ context }: PageProps) {
       )}
 
       {tab === "gap" && (
-        <div>
-          <DataTable
-            data={myGaps}
-            rowKey={(r) => r.id}
-            onRowClick={(g) => { setSelectedGap(g.id); setGapDrawerOpen(true); }}
-            columns={[
-              { key: "question", header: "问题", render: (r) => <span className="text-sm font-medium">{r.question}</span> },
-              { key: "source", header: "来源", render: (r) => <span className="text-sm">{r.source}</span> },
-              { key: "reason", header: "原因", render: (r) => <span className="text-sm">{r.reason}</span> },
-              { key: "status", header: "状态", render: (r) => <StatusBadge status={r.status} /> },
-              { key: "count", header: "出现次数", render: (r) => <span className="text-sm">{r.count}次</span> },
-              { key: "action", header: "", render: () => <Eye size={14} className="text-slate-300" /> },
-            ]}
-          />
+        <div className="space-y-3">
+          {myGaps.length === 0 ? (
+            <p className="text-sm text-slate-400">暂无知识缺口</p>
+          ) : (
+            myGaps.map((gap) => (
+              <div key={gap.id} className="rounded-xl border border-slate-200 bg-white p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-2">
+                      <StatusBadge status={gap.status} />
+                      <span className="text-sm text-slate-400">{gap.source}</span>
+                      <span className="text-sm text-slate-400">{(gap.count || 0)}次出现</span>
+                    </div>
+                    <p className="text-sm font-medium text-slate-800 mb-1 truncate max-w-lg">
+                      {gap.question}
+                    </p>
+                    {gap.candidate && (
+                      <p className="text-sm text-slate-500 truncate max-w-lg bg-slate-50 rounded-lg p-2">
+                        {gap.candidate.length > 80 ? gap.candidate.slice(0, 80) + "..." : gap.candidate}
+                      </p>
+                    )}
+                    {!gap.candidate && (
+                      <p className="text-sm text-slate-400 italic">暂无候选答案</p>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    {/* 待处理 → 生成候选FAQ */}
+                    {gap.status === "待处理" && (
+                      <button
+                        type="button"
+                        onClick={() => handleGapGenerateCandidate(gap.id)}
+                        className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors h-10 min-h-[40px]"
+                      >
+                        <Plus size={14} />
+                        生成候选FAQ
+                      </button>
+                    )}
+                    {/* 已生成候选知识 → 提交审核 */}
+                    {gap.status === "已生成候选知识" && (
+                      <button
+                        type="button"
+                        onClick={() => handleGapSubmitReview(gap.id)}
+                        className="flex items-center gap-1.5 rounded-lg bg-violet-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-violet-700 transition-colors h-10 min-h-[40px]"
+                      >
+                        <Send size={14} />
+                        提交审核
+                      </button>
+                    )}
+                    {/* 待审核 → 审核通过并发布 */}
+                    {gap.status === "待审核" && (
+                      <div className="flex items-center gap-2">
+                        <input
+                          value={reviewComment}
+                          onChange={(e) => setReviewComment(e.target.value)}
+                          placeholder="审核意见"
+                          className="rounded-lg border border-slate-200 px-2 py-1.5 text-sm outline-none w-28 h-10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleGapApprove(gap.id)}
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-600 transition-colors h-10 min-h-[40px]"
+                        >
+                          <Check size={14} />
+                          审核通过并发布
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleGapReject(gap.id)}
+                          className="flex items-center gap-1.5 rounded-lg bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 transition-colors h-10 min-h-[40px]"
+                        >
+                          <X size={14} />
+                          驳回
+                        </button>
+                      </div>
+                    )}
+                    {/* 已发布 → 追踪命中率 */}
+                    {gap.status === "已发布" && (
+                      <button
+                        type="button"
+                        onClick={() => handleGapTrack(gap.id)}
+                        className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 transition-colors h-10 min-h-[40px]"
+                      >
+                        <BarChart3 size={14} />
+                        追踪命中率
+                      </button>
+                    )}
+                    {/* 追踪中 → 查看追踪数据 */}
+                    {gap.status === "追踪中" && (
+                      <button
+                        type="button"
+                        onClick={() => handleGapTrack(gap.id)}
+                        className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-indigo-700 transition-colors h-10 min-h-[40px]"
+                      >
+                        <TrendingUp size={14} />
+                        查看追踪数据
+                      </button>
+                    )}
+                    {/* 已驳回 / 已关闭 */}
+                    {(gap.status === "已驳回" || gap.status === "已关闭") && (
+                      <span className="text-sm text-slate-400">已处理</span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => { setSelectedGap(gap.id); setGapDrawerOpen(true); }}
+                      className="rounded-lg border border-slate-200 p-2 text-slate-400 hover:text-slate-600 hover:border-slate-300 transition-colors h-10 min-h-[40px]"
+                      title="查看详情"
+                    >
+                      <Eye size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       )}
 
@@ -316,15 +497,24 @@ export default function KnowledgeBase({ context }: PageProps) {
                 <p className="text-sm text-blue-600 mt-1">A: {gap.candidateFaq.answer}</p>
               </div>
             )}
-            <div className="flex gap-2 pt-3 border-t border-slate-200">
+            <div className="flex flex-wrap gap-2 pt-3 border-t border-slate-200">
               {gap.status === "待处理" && (
-                <button type="button" onClick={() => handleGapGenerateCandidate(gap.id)} className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700">生成候选知识</button>
+                <button type="button" onClick={() => handleGapGenerateCandidate(gap.id)} className="rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700 h-10 min-h-[40px]">生成候选FAQ</button>
               )}
               {gap.status === "已生成候选知识" && (
+                <button type="button" onClick={() => handleGapSubmitReview(gap.id)} className="rounded-lg bg-violet-600 px-3 py-1.5 text-sm text-white hover:bg-violet-700 h-10 min-h-[40px]"><Send size={12} className="inline mr-1" />提交审核</button>
+              )}
+              {gap.status === "待审核" && (
                 <>
-                  <button type="button" onClick={() => handleGapApprove(gap.id)} className="rounded-lg bg-emerald-500 px-3 py-1.5 text-sm text-white hover:bg-emerald-600"><Check size={12} className="inline mr-1" />审核通过并发布</button>
-                  <button type="button" onClick={() => handleGapReject(gap.id)} className="rounded-lg bg-red-500 px-3 py-1.5 text-sm text-white hover:bg-red-600"><X size={12} className="inline mr-1" />驳回</button>
+                  <button type="button" onClick={() => handleGapApprove(gap.id)} className="rounded-lg bg-emerald-500 px-3 py-1.5 text-sm text-white hover:bg-emerald-600 h-10 min-h-[40px]"><Check size={12} className="inline mr-1" />审核通过并发布</button>
+                  <button type="button" onClick={() => handleGapReject(gap.id)} className="rounded-lg bg-red-500 px-3 py-1.5 text-sm text-white hover:bg-red-600 h-10 min-h-[40px]"><X size={12} className="inline mr-1" />驳回</button>
                 </>
+              )}
+              {gap.status === "已发布" && (
+                <button type="button" onClick={() => handleGapTrack(gap.id)} className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white hover:bg-indigo-700 h-10 min-h-[40px]"><BarChart3 size={12} className="inline mr-1" />追踪命中率</button>
+              )}
+              {gap.status === "追踪中" && (
+                <button type="button" onClick={() => handleGapTrack(gap.id)} className="rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white hover:bg-indigo-700 h-10 min-h-[40px]"><TrendingUp size={12} className="inline mr-1" />查看追踪数据</button>
               )}
             </div>
           </div>
@@ -389,6 +579,47 @@ export default function KnowledgeBase({ context }: PageProps) {
           <button type="button" onClick={() => { setEditModalOpen(false); setEditingDocId(null); }} className="rounded-lg border px-4 py-2 text-sm">取消</button>
           <button type="button" onClick={handleEditSave} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white">保存</button>
         </div>
+      </Modal>
+
+      {/* Tracking Modal */}
+      <Modal open={trackingModalOpen} title="知识追踪数据" onClose={() => setTrackingModalOpen(false)} size="sm">
+        {trackingGap && (
+          <div className="space-y-4">
+            <div className="rounded-xl bg-slate-50 border border-slate-200 p-4">
+              <p className="text-sm font-medium text-slate-700 mb-2">{trackingGap.question}</p>
+              <StatusBadge status={trackingGap.status} />
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="rounded-xl border border-slate-200 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-50">
+                    <BarChart3 size={16} className="text-blue-600" />
+                  </div>
+                  <span className="text-sm text-slate-600">发布后命中次数</span>
+                </div>
+                <span className="text-lg font-bold text-slate-800">{getTrackingHitCount(trackingGap)}</span>
+              </div>
+              <div className="rounded-xl border border-slate-200 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-emerald-50">
+                    <TrendingUp size={16} className="text-emerald-600" />
+                  </div>
+                  <span className="text-sm text-slate-600">解决率</span>
+                </div>
+                <span className="text-lg font-bold text-emerald-600">{getTrackingResolutionRate(trackingGap)}%</span>
+              </div>
+              <div className="rounded-xl border border-slate-200 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-red-50">
+                    <FileText size={16} className="text-red-500" />
+                  </div>
+                  <span className="text-sm text-slate-600">负面反馈率</span>
+                </div>
+                <span className="text-lg font-bold text-red-500">{getTrackingNegativeRate(trackingGap)}%</span>
+              </div>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );

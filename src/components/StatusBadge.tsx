@@ -62,7 +62,8 @@ const colorMap: Record<string, string> = {
   // gap
   "待处理": "bg-slate-100 text-slate-600",
   "待生成候选": "bg-blue-50 text-blue-700",
-  "已生成候选知识": "bg-indigo-50 text-indigo-700",
+  "已生成候选知识": "bg-violet-50 text-violet-700",
+  "追踪中": "bg-indigo-50 text-indigo-700",
   // fallback
   "已通知": "bg-emerald-50 text-emerald-700",
   "未通知": "bg-amber-50 text-amber-700",

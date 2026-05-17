@@ -333,6 +333,7 @@ export default function TenantDashboard({ context }: PageProps) {
               />
             </LineChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500 leading-relaxed">会话趋势反映每日用户咨询量变化。AI解决率=AI独立解决数/总会话数，目标{'>'}60%。转人工率上升可能表明知识库覆盖不足或机器人意图识别准确率下降，建议检查近期未召回Query和差评会话。</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
@@ -373,6 +374,7 @@ export default function TenantDashboard({ context }: PageProps) {
               />
             </PieChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500 leading-relaxed">问题类型分布反映用户核心诉求结构。某类型占比突增可能反映产品变更、促销活动或外部舆情事件，建议结合时间趋势分析原因并及时补充对应知识库。</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
@@ -415,6 +417,7 @@ export default function TenantDashboard({ context }: PageProps) {
               </Bar>
             </BarChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500 leading-relaxed">工单状态反映客服团队处理效率。待处理积压{'>'}10个需关注人力配置；已关闭占比高且SLA达标说明团队运转良好。建议关注'等待用户补充'状态的工单，主动触达用户推进处理。</p>
         </div>
 
         {/* ---------------------------------------------------------------- */}
@@ -478,6 +481,7 @@ export default function TenantDashboard({ context }: PageProps) {
               />
             </ComposedChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500 leading-relaxed">动销商品排行用于观察咨询到下单的转化情况。高咨询低转化商品建议优化商品详情页或直播话术；高咨询高转化商品可作为主推爆品。转化率&lt;15%需重点优化。</p>
         </div>
       </div>
 

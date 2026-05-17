@@ -155,6 +155,7 @@ export default function PlatformDashboard({}: PageProps) {
               <Line type="monotone" dataKey="calls" stroke="#2563EB" strokeWidth={2} dot={{ fill: "#2563EB", r: 4 }} activeDot={{ r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500">平台API调用量反映所有租户的总活跃度。骤降需排查服务可用性或渠道切换；骤升可能为营销活动或异常流量，建议结合限流策略分析。</p>
         </div>
 
         {/* Token Consumption by Tenant */}
@@ -172,6 +173,7 @@ export default function PlatformDashboard({}: PageProps) {
               <Bar dataKey="tokens" fill="#6366F1" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500">Token消耗反映各租户AI使用量。快速增长需关注是否有低效调用或滥用；单个租户占比{'>'}50%需评估资源分配合理性。</p>
         </div>
 
         {/* Tenant Package Distribution */}
@@ -221,6 +223,7 @@ export default function PlatformDashboard({}: PageProps) {
               <Line type="monotone" dataKey="rate" stroke="#10B981" strokeWidth={2} dot={{ fill: "#10B981", r: 4 }} activeDot={{ r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
+          <p className="mt-3 text-sm text-slate-500">AI回答成功率是平台核心质量指标。低于95%需排查知识库覆盖度、模型调用质量和Prompt版本变更影响。持续下降将直接影响租户续费意愿。</p>
         </div>
 
         {/* Risk Interception Types */}

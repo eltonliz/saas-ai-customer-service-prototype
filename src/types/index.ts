@@ -253,7 +253,7 @@ export interface KnowledgeGap {
   question: string;
   reason: string;
   candidate: string;
-  status: "待处理" | "待生成候选" | "已生成候选知识" | "待审核" | "已发布" | "已驳回" | "已关闭";
+  status: "待处理" | "待生成候选" | "已生成候选知识" | "待审核" | "已发布" | "已驳回" | "已关闭" | "追踪中";
   candidateFaq?: {
     question: string;
     similarQuestions: string[];

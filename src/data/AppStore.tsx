@@ -23,6 +23,8 @@ interface AppStoreState {
   addTicket: (ticket: Ticket) => void;
   updateKnowledgeDoc: (id: string, patch: Partial<KnowledgeDocument>) => void;
   updateKnowledgeGap: (id: string, patch: Partial<KnowledgeGap>) => void;
+  addKnowledgeGap: (gap: KnowledgeGap) => void;
+  addKnowledgeDoc: (doc: KnowledgeDocument) => void;
   updateAfterSale: (id: string, patch: Partial<AfterSale>) => void;
   addAfterSale: (as: AfterSale) => void;
 }
@@ -82,6 +84,10 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
         setKnowledgeDocs((prev) => prev.map((d) => (d.id === id ? { ...d, ...patch } : d))),
       updateKnowledgeGap: (id, patch) =>
         setKnowledgeGaps((prev) => prev.map((g) => (g.id === id ? { ...g, ...patch } : g))),
+      addKnowledgeGap: (gap) =>
+        setKnowledgeGaps((prev) => [...prev, gap]),
+      addKnowledgeDoc: (doc) =>
+        setKnowledgeDocs((prev) => [...prev, doc]),
       updateAfterSale: (id, patch) =>
         setAfterSales((prev) => prev.map((a) => (a.id === id ? { ...a, ...patch } : a))),
       addAfterSale: (as) => setAfterSales((prev) => [...prev, as]),

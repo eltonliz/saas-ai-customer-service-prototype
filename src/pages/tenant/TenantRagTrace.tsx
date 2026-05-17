@@ -1,9 +1,10 @@
 import { useState } from "react";
 import type { PageProps, RagTrace, RagChunk } from "../../types";
 import { ragTraces } from "../../data/mockData";
+import { useAppStore } from "../../data/AppStore";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Timeline } from "../../components/Timeline";
-import { Search, Zap, Layers, Filter, FileText, BarChart3, AlertTriangle, Wrench, MessageSquare, BookOpen } from "lucide-react";
+import { Search, Zap, Layers, Filter, FileText, BarChart3, AlertTriangle, Wrench, MessageSquare, BookOpen, Plus } from "lucide-react";
 
 /* ──── Chunk table (14px font, 48px rows, light-gray header) ──── */
 function ChunkTable({ chunks }: { chunks: RagChunk[] }) {
@@ -61,9 +62,39 @@ function ChunkTable({ chunks }: { chunks: RagChunk[] }) {
 
 /* ──── Main component ──── */
 export default function TenantRagTrace({ context }: PageProps) {
+  const store = useAppStore();
   const myTraces = ragTraces.filter((t) => t.tenantId === context.currentTenantId);
   const [selected, setSelected] = useState<RagTrace>(myTraces[0] ?? ragTraces[0]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [addedToGapPool, setAddedToGapPool] = useState<Set<string>>(new Set());
+
+  const showGapButton =
+    selected.enteredKnowledgeGap ||
+    selected.confidence < 0.7 ||
+    (selected.feedback && selected.feedback.length > 0);
+
+  function handleAddToGapPool() {
+    const gap = {
+      id: `gap-${Date.now()}`,
+      tenantId: context.currentTenantId,
+      merchantId: context.currentMerchantId,
+      storeId: selected.storeId,
+      conversationId: selected.conversationId,
+      channel: selected.channel,
+      businessLine: selected.businessLine,
+      intent: selected.intent,
+      count: 1,
+      feedback: selected.feedback || "",
+      source: "rag-trace",
+      question: selected.question,
+      reason: selected.confidence < 0.7 ? "置信度过低" : selected.feedback || "知识覆盖不足",
+      candidate: "",
+      status: "待处理" as const,
+    };
+    store.addKnowledgeGap(gap);
+    alert("已加入知识缺口池");
+    setAddedToGapPool((prev) => new Set(prev).add(selected.id));
+  }
 
   const filteredTraces = searchQuery
     ? myTraces.filter(
@@ -421,6 +452,25 @@ export default function TenantRagTrace({ context }: PageProps) {
                 <span className="text-sm font-medium text-slate-700">{selected.finalChunks.length}</span>
               </div>
             </div>
+            {showGapButton && (
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                {addedToGapPool.has(selected.id) ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
+                    <BookOpen size={14} />
+                    已加入知识缺口池
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleAddToGapPool}
+                    className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors h-10"
+                  >
+                    <Plus size={16} />
+                    加入知识缺口池
+                  </button>
+                )}
+              </div>
+            )}
           </div>
 
         </div>

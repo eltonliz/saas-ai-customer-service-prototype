@@ -28,6 +28,9 @@ export default function PlatformServiceWorkbench({}: PageProps) {
   const [selectedConv, setSelectedConv] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [convState, setConvState] = useState(platformConvs);
+  const [ticketState, setTicketState] = useState(platformTickets);
+  const [createTicketOpen, setCreateTicketOpen] = useState(false);
+  const [newTicket, setNewTicket] = useState({ title: "", type: "系统故障", priority: "中", owner: "", sla: "4小时" });
 
   const activeConv = convState.find((c) => c.id === selectedConv);
   const msgs = useMemo(() => {
@@ -122,7 +125,7 @@ export default function PlatformServiceWorkbench({}: PageProps) {
                     )}
                     {activeConv.status === "人工接待中" && (
                       <>
-                        <button type="button" className="flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-200"><Ticket size={12} />建工单</button>
+                        <button type="button" onClick={() => setCreateTicketOpen(true)} className="flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-200"><Ticket size={12} />建工单</button>
                         <button type="button" onClick={() => handleClose(activeConv.id)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-500 hover:bg-slate-50"><XCircle size={12} />结束</button>
                       </>
                     )}
@@ -156,9 +159,12 @@ export default function PlatformServiceWorkbench({}: PageProps) {
 
       {tab === "tickets" && (
         <div className="rounded-2xl border border-slate-200 bg-white p-5">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">平台工单列表</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-sm font-semibold text-slate-700">平台工单列表</h3>
+            <button type="button" onClick={() => setCreateTicketOpen(true)} className="flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-sm text-white hover:bg-blue-700"><Ticket size={12} />新建工单</button>
+          </div>
           <div className="space-y-2">
-            {platformTickets.map((t) => (
+            {ticketState.map((t) => (
               <div key={t.id} className="flex items-center justify-between rounded-lg border border-slate-100 p-3 hover:bg-slate-50 cursor-pointer">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
@@ -186,6 +192,50 @@ export default function PlatformServiceWorkbench({}: PageProps) {
           <p>平台客服仅处理：商家咨询平台操作问题、跨商家争议、支付异常、平台投诉、商家资质审核。商家私有的商品/订单/售后/门店咨询由商家自身客服处理。</p>
         </div>
       </div>
+
+      <Modal open={createTicketOpen} title="新建工单" onClose={() => setCreateTicketOpen(false)}>
+        <div className="space-y-4">
+          <div>
+            <label className="text-sm font-medium text-slate-700">工单标题</label>
+            <input value={newTicket.title} onChange={(e) => setNewTicket((p) => ({ ...p, title: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400" placeholder="输入工单标题" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium text-slate-700">类型</label>
+              <select value={newTicket.type} onChange={(e) => setNewTicket((p) => ({ ...p, type: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-2 py-2 text-sm outline-none">
+                <option>系统故障</option><option>跨商家争议</option><option>平台投诉</option><option>审核工单</option><option>其他</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-slate-700">优先级</label>
+              <select value={newTicket.priority} onChange={(e) => setNewTicket((p) => ({ ...p, priority: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-2 py-2 text-sm outline-none">
+                <option>低</option><option>中</option><option>高</option><option>紧急</option>
+              </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="text-sm font-medium text-slate-700">负责人</label>
+              <input value={newTicket.owner} onChange={(e) => setNewTicket((p) => ({ ...p, owner: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm outline-none focus:border-blue-400" placeholder="负责人" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-slate-700">SLA</label>
+              <select value={newTicket.sla} onChange={(e) => setNewTicket((p) => ({ ...p, sla: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-2 py-2 text-sm outline-none">
+                <option>2小时</option><option>4小时</option><option>8小时</option><option>24小时</option><option>48小时</option>
+              </select>
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <button type="button" onClick={() => setCreateTicketOpen(false)} className="rounded-lg border border-slate-200 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50">取消</button>
+            <button type="button" onClick={() => {
+              if (!newTicket.title.trim()) return;
+              setTicketState((prev) => [{ id: `pt-${Date.now()}`, ...newTicket, status: "已分配" as const, createdAt: new Date().toISOString().slice(0, 16).replace("T", " ") }, ...prev]);
+              setNewTicket({ title: "", type: "系统故障", priority: "中", owner: "", sla: "4小时" });
+              setCreateTicketOpen(false);
+            }} className="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">确认创建</button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

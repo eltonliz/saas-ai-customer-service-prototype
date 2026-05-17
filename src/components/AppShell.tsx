@@ -21,10 +21,10 @@ const navIcons: Record<string, LucideIcon> = {
   "profile": User,
 };
 
-const navItems = [
+const navItems: { id: string; label: string; badge?: number }[] = [
   { id: "app-home", label: "首页" },
-  { id: "ai-service", label: "AI客服" },
-  { id: "orders", label: "订单" },
+  { id: "ai-service", label: "AI客服", badge: 1 },
+  { id: "orders", label: "订单", badge: 2 },
   { id: "app-service", label: "服务" },
   { id: "profile", label: "我的" },
 ];
@@ -46,12 +46,17 @@ export function AppShell({ pageId, menus, onPageChange, onPortalChange, children
                     key={item.id}
                     type="button"
                     onClick={() => onPageChange(item.id)}
-                    className={`flex flex-col items-center gap-0.5 py-2 text-sm font-medium transition-colors ${
+                    className={`relative flex flex-col items-center gap-0.5 py-2 text-sm font-medium transition-colors ${
                       active ? "text-blue-600" : "text-slate-400"
                     }`}
                   >
                     {Icon && <Icon size={20} />}
                     <span>{item.label}</span>
+                    {item.badge !== undefined && (
+                      <span className="absolute top-1 right-1/3 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold text-white">
+                        {item.badge}
+                      </span>
+                    )}
                   </button>
                 );
               })}

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
+import { useAppStore } from "../../data/AppStore";
 import { StatusBadge } from "../../components/StatusBadge";
-import { Check, X, BookOpen, Shield } from "lucide-react";
+import { Check, X, BookOpen, ExternalLink } from "lucide-react";
 
 const inspections = [
   { id: "ins-1", question: "直播间那款营养套装还有库存吗？", aiAnswer: "当前库存充足，售价199元...", score: 5, correct: true, needGap: false, risk: "低风险" },
@@ -11,11 +12,30 @@ const inspections = [
   { id: "ins-5", question: "课程回放在哪里看？", aiAnswer: "已购课程有效期365天...", score: 5, correct: true, needGap: false, risk: "低风险" },
 ];
 
-export default function QualityInspection({}: PageProps) {
+export default function QualityInspection({ context, goPage }: PageProps) {
+  const store = useAppStore();
   const [items, setItems] = useState(inspections);
+  const [addedToGapPool, setAddedToGapPool] = useState<Set<string>>(new Set());
 
   function markCorrect(id: string) {
     setItems((prev) => prev.map((i) => i.id === id ? { ...i, correct: true, needGap: false } : i));
+  }
+
+  function handleAddToGapPool(item: typeof inspections[number]) {
+    const gap = {
+      id: `gap-${Date.now()}`,
+      tenantId: context.currentTenantId,
+      merchantId: context.currentMerchantId,
+      source: "quality-inspection",
+      question: item.question,
+      reason: "质检判定不合格",
+      candidate: "",
+      status: "待处理" as const,
+      feedback: item.aiAnswer,
+    };
+    store.addKnowledgeGap(gap);
+    setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, needGap: true } : i));
+    setAddedToGapPool((prev) => new Set(prev).add(item.id));
   }
 
   function markIncorrect(id: string) {
@@ -24,7 +44,17 @@ export default function QualityInspection({}: PageProps) {
 
   return (
     <div>
-      <h2 className="text-xl font-bold text-slate-900 mb-4">质检中心</h2>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-bold text-slate-900">质检中心</h2>
+        <button
+          type="button"
+          onClick={() => goPage?.("knowledge-base", { tab: "gaps" } as any)}
+          className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100 transition-colors h-10"
+        >
+          <ExternalLink size={14} />
+          前往知识缺口池
+        </button>
+      </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
         <div className="rounded-xl bg-blue-50 border border-blue-100 p-4 text-center">
           <p className="text-2xl font-bold text-blue-700">{items.length}</p>
@@ -63,18 +93,32 @@ export default function QualityInspection({}: PageProps) {
                 <span className="rounded-full bg-red-50 px-3 py-1 text-sm font-medium text-red-700"><X size={12} className="inline mr-1" />需纠正</span>
               )}
               {!item.correct && (
-                <button type="button" onClick={() => markCorrect(item.id)} className="rounded-lg border border-emerald-200 px-3 py-1 text-sm text-emerald-600 hover:bg-emerald-50">
+                <button type="button" onClick={() => markCorrect(item.id)} className="rounded-lg border border-emerald-200 px-3 py-1 text-sm text-emerald-600 hover:bg-emerald-50 h-10 min-h-[40px]">
                   <Check size={12} className="inline mr-1" />人工纠正为正确
                 </button>
               )}
-              {item.needGap && (
+              {item.needGap && addedToGapPool.has(item.id) ? (
+                <span className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700">
+                  <BookOpen size={12} />已加入缺口池
+                </span>
+              ) : item.needGap ? (
                 <span className="flex items-center gap-1 rounded-full bg-orange-50 px-3 py-1 text-sm font-medium text-orange-700">
                   <BookOpen size={12} />已入知识缺口池
                 </span>
-              )}
+              ) : null}
               {!item.needGap && !item.correct && (
-                <button type="button" onClick={() => markIncorrect(item.id)} className="rounded-lg border border-orange-200 px-3 py-1 text-sm text-orange-600 hover:bg-orange-50">
-                  <BookOpen size={12} className="inline mr-1" />加入知识缺口池
+                <button
+                  type="button"
+                  onClick={() => handleAddToGapPool(item)}
+                  className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors h-10 min-h-[40px]"
+                >
+                  <BookOpen size={12} />
+                  加入知识缺口池
+                </button>
+              )}
+              {!item.correct && !item.needGap && (
+                <button type="button" onClick={() => markIncorrect(item.id)} className="rounded-lg border border-orange-200 px-3 py-1 text-sm text-orange-600 hover:bg-orange-50 h-10 min-h-[40px]">
+                  <BookOpen size={12} className="inline mr-1" />标记为需入池
                 </button>
               )}
             </div>

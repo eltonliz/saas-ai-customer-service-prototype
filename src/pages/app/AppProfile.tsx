@@ -1,6 +1,6 @@
 import type { PageProps } from "../../types";
 import { users, conversations, tickets, afterSales } from "../../data/mockData";
-import { User, Ticket, MessageSquare, Wrench, Settings, ChevronRight, Star, Crown, ShoppingBag } from "lucide-react";
+import { User, Ticket, MessageSquare, Wrench, Settings, ChevronRight, Star, Crown, ShoppingBag, MapPin, Heart, HelpCircle, Info } from "lucide-react";
 
 export default function AppProfile({ context, goPage }: PageProps) {
   const user = users.find((u) => u.id === context.currentUserId);
@@ -12,8 +12,12 @@ export default function AppProfile({ context, goPage }: PageProps) {
     { icon: ShoppingBag, label: "我的订单", count: undefined, color: "text-blue-500", onClick: () => goPage?.("orders") },
     { icon: Wrench, label: "我的售后", count: myAfterSales.length, color: "text-amber-500", onClick: () => goPage?.("after-sales") },
     { icon: MessageSquare, label: "历史咨询", count: myConversations.length, color: "text-indigo-500", onClick: () => goPage?.("ai-service") },
-    { icon: Ticket, label: "我的工单", count: myTickets.length, color: "text-violet-500", onClick: () => goPage?.("orders") },
+    { icon: Ticket, label: "我的工单", count: myTickets.length, color: "text-violet-500", onClick: () => goPage?.("after-sales") },
+    { icon: MapPin, label: "地址管理", count: undefined, color: "text-emerald-500", onClick: () => goPage?.("profile") },
+    { icon: Heart, label: "我的收藏", count: undefined, color: "text-rose-500", onClick: () => goPage?.("profile") },
+    { icon: HelpCircle, label: "帮助中心", count: undefined, color: "text-cyan-500", onClick: () => goPage?.("profile") },
     { icon: Settings, label: "设置", count: undefined, color: "text-slate-500", onClick: () => goPage?.("profile") },
+    { icon: Info, label: "关于我们", count: undefined, color: "text-slate-500", onClick: () => goPage?.("profile") },
   ];
 
   return (
@@ -69,6 +73,8 @@ export default function AppProfile({ context, goPage }: PageProps) {
           </button>
         ))}
       </div>
+
+      <p className="text-center text-sm text-slate-400 mt-6">SaaS AI客服 v1.0</p>
     </div>
   );
 }

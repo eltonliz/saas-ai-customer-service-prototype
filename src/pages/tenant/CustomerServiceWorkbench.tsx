@@ -5,8 +5,8 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Drawer } from "../../components/Drawer";
 import { ChatWindow } from "../../components/ChatWindow";
-import { users, orders, customerServiceAgents } from "../../data/mockData";
-import { Send, UserPlus, FilePlus, XCircle, Tag, BookOpen, MessageSquare, ChevronRight, Bot, Search, FileText, Shield, Clock, User, ShoppingBag, Star, AlertTriangle, Info, type LucideIcon } from "lucide-react";
+import { users, orders, customerServiceAgents, weComNotifications } from "../../data/mockData";
+import { Send, UserPlus, FilePlus, XCircle, Tag, BookOpen, MessageSquare, ChevronRight, Bot, Search, FileText, Shield, Clock, User, ShoppingBag, Star, AlertTriangle, Info, Database, type LucideIcon } from "lucide-react";
 
 type QueueGroup = "待接入" | "AI接待中" | "人工接待中" | "等待用户补充" | "已关联工单" | "已关闭";
 type RightTab = "user" | "orders" | "aiSuggestion" | "knowledge" | "records" | "trace";
@@ -64,6 +64,8 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
   const linkedTicket = selected ? tickets.find((t) => t.conversationId === selected.id) : undefined;
   const convTags = selected ? (localTags[selected.id] ?? selected.tags) : [];
   const convNotes = selected ? (notes[selected.id] ?? []) : [];
+  const convWeCom = selected ? weComNotifications.filter((n) => n.conversationId === selected.id) : [];
+  const recordsBadgeCount = convTags.length + convNotes.length + (linkedTicket ? 1 : 0);
 
   function accessConversation() {
     if (!selected) return;
@@ -237,10 +239,14 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
 
       {/* Right: Info Panel with Tabs */}
       <div className="w-[380px] shrink-0 border-l border-slate-200 bg-white flex flex-col">
-        <div className="border-b border-slate-200 px-2">
+        <div className="border-b border-slate-200 px-2 sticky top-0 z-10 bg-white">
           <div className="flex gap-0 overflow-x-auto">
             {rightTabs.map((tab) => {
               const Icon = tab.icon;
+              const badgeCount =
+                tab.key === "orders" && currentOrder ? 1 :
+                tab.key === "records" && recordsBadgeCount > 0 ? recordsBadgeCount :
+                null;
               return (
                 <button
                   key={tab.key}
@@ -251,6 +257,9 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
                   }`}
                 >
                   <Icon size={15} />{tab.label}
+                  {badgeCount !== null && (
+                    <span className="ml-0.5 rounded-full bg-slate-200 text-xs px-1.5 py-0.5 text-slate-500 min-w-[18px] text-center leading-none">{badgeCount}</span>
+                  )}
                 </button>
               );
             })}
@@ -429,6 +438,40 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
                   </div>
                 </div>
               )}
+
+              {/* WeCom Notification Section */}
+              <div>
+                <h4 className="text-sm font-semibold text-slate-700 mb-2 flex items-center gap-2"><MessageSquare size={14} className="text-emerald-500" />企微通知</h4>
+                {convWeCom.length > 0 ? (
+                  <div className="space-y-3">
+                    {convWeCom.map((n) => (
+                      <div key={n.id} className="rounded-lg border border-slate-200 p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-slate-700">{n.target}</span>
+                          <StatusBadge status={n.status} />
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-slate-400">
+                          <Clock size={12} />
+                          <span>{n.time}</span>
+                        </div>
+                        <p className="text-sm text-slate-600 line-clamp-2">{n.summary}</p>
+                        <div className="flex items-center gap-3 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => alert("已重新发送企微通知")}
+                            className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm text-amber-600 hover:bg-amber-100"
+                          >
+                            重新通知
+                          </button>
+                          <span className="text-sm text-blue-500 cursor-pointer hover:underline">{n.entry}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-slate-400 py-2">暂无企微通知</p>
+                )}
+              </div>
             </div>
           )}
 
@@ -456,15 +499,8 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
                   <span className="text-sm text-slate-400">置信度</span>
                   <span className="text-sm font-semibold text-slate-700">0.91</span>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">Token消耗</span>
-                  <span className="text-sm text-slate-700">620</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-slate-400">模型</span>
-                  <span className="text-sm text-slate-700">Claude Opus 4.7</span>
-                </div>
               </div>
+              <p className="text-sm text-slate-400 text-center">完整技术详情请点击下方按钮查看</p>
               <button type="button" onClick={() => setTraceOpen(true)} className="w-full flex items-center justify-between rounded-lg bg-indigo-50 border border-indigo-100 px-4 py-2.5 text-sm text-indigo-600 hover:bg-indigo-100">
                 <span className="flex items-center gap-2"><Search size={14} />查看完整链路与技术细节</span>
                 <ChevronRight size={14} />
@@ -512,6 +548,14 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
               <div className="flex justify-between"><span className="text-slate-400">审核结果</span><span className="text-emerald-600">通过</span></div>
               <div className="flex justify-between"><span className="text-slate-400">风险等级</span><StatusBadge status="低风险" /></div>
               <div><span className="text-sm text-slate-400 block mb-1">命中规则</span><p>无敏感词命中</p></div>
+            </div>
+          </div>
+          <div className="rounded-xl border border-slate-200 p-4">
+            <h4 className="text-sm font-semibold text-slate-700 mb-3 flex items-center gap-2"><Database size={14} className="text-slate-500" />知识库检索信息</h4>
+            <div className="space-y-2 text-sm">
+              <div className="flex justify-between"><span className="text-slate-400">粗召回数量</span><span>8 条</span></div>
+              <div className="flex justify-between"><span className="text-slate-400">重排序数量</span><span>5 条</span></div>
+              <div className="flex justify-between"><span className="text-slate-400">最高分片相似度</span><span className="text-emerald-600">0.92</span></div>
             </div>
           </div>
         </div>

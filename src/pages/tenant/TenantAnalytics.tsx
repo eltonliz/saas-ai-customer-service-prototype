@@ -101,6 +101,7 @@ export default function TenantAnalytics({}: PageProps) {
           <p className="text-sm text-emerald-600 mt-2">
             当前 62% <span className="text-slate-400">较上周 +4%</span>
           </p>
+          <p className="mt-2 text-sm text-slate-500">AI解决率=AI独立解决会话数/总会话数，是衡量机器人能力的关键指标。低于50%需排查知识库覆盖度和意图识别准确率，持续下降将增加人工成本。</p>
         </ChartCard>
 
         {/* 2. Answer Source Ratio Pie */}
@@ -131,6 +132,7 @@ export default function TenantAnalytics({}: PageProps) {
               </PieChart>
             </ResponsiveContainer>
           </div>
+          <p className="mt-2 text-sm text-slate-500">回答来源反映AI获取答案的路径结构。FAQ匹配占比下降可能表明标准问题覆盖不足；工具调用占比过高可能增加延迟和成本，建议优化FAQ和知识库。</p>
         </ChartCard>
 
         {/* 3. Hot Topics Top 10 */}
@@ -153,6 +155,7 @@ export default function TenantAnalytics({}: PageProps) {
               </BarChart>
             </ResponsiveContainer>
           </div>
+          <p className="mt-2 text-sm text-slate-500">热门话题反映用户核心关注点。新话题快速上升预示业务变化；某话题持续高位说明相关FAQ和知识库需优先维护。</p>
         </ChartCard>
 
         {/* 4. Knowledge Gap Trend */}
@@ -171,6 +174,7 @@ export default function TenantAnalytics({}: PageProps) {
           <p className="text-sm text-amber-600 mt-2">
             缺口持续收窄 <span className="text-slate-400">较上周 -75%</span>
           </p>
+          <p className="mt-2 text-sm text-slate-500">知识缺口=AI无法回答且用户未解决的问题。缺口收窄说明知识库持续完善；缺口回升需排查近期业务变更或新上线的商品/活动。</p>
         </ChartCard>
 
         {/* 5. Agent Workload */}
@@ -188,6 +192,7 @@ export default function TenantAnalytics({}: PageProps) {
               </BarChart>
             </ResponsiveContainer>
           </div>
+          <p className="mt-2 text-sm text-slate-500">坐席工作量反映人工客服负载分布。个别坐席会话数远超均值可能导致服务质量下降；需关注负载均衡和排班优化。</p>
         </ChartCard>
 
         {/* 6. Channel Source Pie */}
@@ -218,6 +223,7 @@ export default function TenantAnalytics({}: PageProps) {
               </PieChart>
             </ResponsiveContainer>
           </div>
+          <p className="mt-2 text-sm text-slate-500">渠道分布反映用户触点偏好。某渠道占比突增可能为营销引流效果；渠道异常下降需排查接入服务可用性。</p>
         </ChartCard>
 
         {/* 7. Average Handling Time Trend */}
@@ -236,6 +242,7 @@ export default function TenantAnalytics({}: PageProps) {
           <p className="text-sm text-violet-600 mt-2">
             当前 6.8 min <span className="text-slate-400">较上周 -20%</span>
           </p>
+          <p className="mt-2 text-sm text-slate-500">平均处理时长(AHT)反映客服效率。持续上升可能因知识库不足或系统延迟；骤降需确认是否跳过了必要的服务步骤。</p>
         </ChartCard>
 
         {/* 8. Satisfaction Distribution */}
@@ -255,6 +262,7 @@ export default function TenantAnalytics({}: PageProps) {
               </BarChart>
             </ResponsiveContainer>
           </div>
+          <p className="mt-2 text-sm text-slate-500">满意度是用户对服务的综合评价。4-5星占比低于75%需关注差评原因；1-2星占比突增可能为系统性服务问题，建议结合差评标签分析。</p>
         </ChartCard>
 
       </div>

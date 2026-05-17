@@ -29,6 +29,13 @@ import QualityInspection from "./pages/tenant/QualityInspection";
 import TenantAnalytics from "./pages/tenant/TenantAnalytics";
 import CustomerServiceTeam from "./pages/tenant/CustomerServiceTeam";
 import TenantSettings from "./pages/tenant/TenantSettings";
+import CourseMaterials from "./pages/tenant/CourseMaterials";
+import StoreServiceMaterials from "./pages/tenant/StoreServiceMaterials";
+import ServicePolicy from "./pages/tenant/ServicePolicy";
+import LiveScript from "./pages/tenant/LiveScript";
+import TenantChannelConfig from "./pages/tenant/TenantChannelConfig";
+import TenantRolePermission from "./pages/tenant/TenantRolePermission";
+import TenantAuditLog from "./pages/tenant/TenantAuditLog";
 
 // Platform pages
 import PlatformDashboard from "./pages/platform/PlatformDashboard";
@@ -44,6 +51,12 @@ import PlatformServiceWorkbench from "./pages/platform/PlatformServiceWorkbench"
 import EvaluationCenter from "./pages/platform/EvaluationCenter";
 import OpsMonitor from "./pages/platform/OpsMonitor";
 import PlatformSettings from "./pages/platform/PlatformSettings";
+import PlatformAuditLog from "./pages/platform/PlatformAuditLog";
+import RateLimitRules from "./pages/platform/RateLimitRules";
+import DataRetention from "./pages/platform/DataRetention";
+import PlatformRolePermission from "./pages/platform/PlatformRolePermission";
+import PlatformChannelConfig from "./pages/platform/PlatformChannelConfig";
+import GlobalParams from "./pages/platform/GlobalParams";
 
 const appMenus: MenuItem[] = [
   { id: "app-home", label: "首页" },
@@ -78,7 +91,11 @@ const tenantSidebarCategories: SidebarCategory[] = [
   {
     id: "cat-materials", label: "业务资料中心", iconName: "FolderOpen",
     children: [
-      { id: "service-materials", label: "商品/课程/门店客服资料" },
+      { id: "service-materials", label: "商品客服资料" },
+      { id: "course-materials", label: "课程客服资料" },
+      { id: "store-service-materials", label: "门店客服资料" },
+      { id: "service-policy", label: "售后政策" },
+      { id: "live-script", label: "直播话术" },
     ],
   },
   {
@@ -94,7 +111,12 @@ const tenantSidebarCategories: SidebarCategory[] = [
   },
   {
     id: "cat-settings", label: "系统设置", iconName: "Settings",
-    children: [{ id: "tenant-settings", label: "租户设置" }],
+    children: [
+      { id: "tenant-settings", label: "租户设置" },
+      { id: "tenant-channel-config", label: "渠道配置" },
+      { id: "tenant-role-permission", label: "角色权限" },
+      { id: "tenant-audit-log", label: "操作日志" },
+    ],
   },
 ];
 
@@ -133,11 +155,21 @@ const platformSidebarCategories: SidebarCategory[] = [
   },
   {
     id: "cat-ops", label: "运维与安全", iconName: "MonitorCog",
-    children: [{ id: "ops-monitor", label: "运维监控" }],
+    children: [
+      { id: "ops-monitor", label: "运维监控" },
+      { id: "platform-audit-log", label: "审计日志" },
+      { id: "rate-limit-rules", label: "限流规则" },
+      { id: "data-retention", label: "数据保留策略" },
+    ],
   },
   {
     id: "cat-platform-settings", label: "系统设置", iconName: "Settings",
-    children: [{ id: "platform-settings", label: "系统设置" }],
+    children: [
+      { id: "platform-settings", label: "系统设置" },
+      { id: "platform-role-permission", label: "平台角色权限" },
+      { id: "platform-channel-config", label: "渠道配置" },
+      { id: "global-params", label: "全局参数配置" },
+    ],
   },
 ];
 
@@ -179,6 +211,13 @@ const tenantPages: Record<string, React.ComponentType<PageProps>> = {
   "tenant-analytics": TenantAnalytics,
   "customer-service-team": CustomerServiceTeam,
   "tenant-settings": TenantSettings,
+  "course-materials": CourseMaterials,
+  "store-service-materials": StoreServiceMaterials,
+  "service-policy": ServicePolicy,
+  "live-script": LiveScript,
+  "tenant-channel-config": TenantChannelConfig,
+  "tenant-role-permission": TenantRolePermission,
+  "tenant-audit-log": TenantAuditLog,
 };
 
 const platformPages: Record<string, React.ComponentType<PageProps>> = {
@@ -195,6 +234,12 @@ const platformPages: Record<string, React.ComponentType<PageProps>> = {
   "evaluation-center": EvaluationCenter,
   "ops-monitor": OpsMonitor,
   "platform-settings": PlatformSettings,
+  "platform-audit-log": PlatformAuditLog,
+  "rate-limit-rules": RateLimitRules,
+  "data-retention": DataRetention,
+  "platform-role-permission": PlatformRolePermission,
+  "platform-channel-config": PlatformChannelConfig,
+  "global-params": GlobalParams,
 };
 
 const pageMap: Record<Portal, Record<string, React.ComponentType<PageProps>>> = {
