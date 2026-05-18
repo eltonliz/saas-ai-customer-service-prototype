@@ -19,7 +19,7 @@ export default function PlatformChannelConfig({}: PageProps) {
   const [editName, setEditName] = useState("");
   const [editType, setEditType] = useState("");
   const [editScope, setEditScope] = useState("");
-  const pageReqs = reqs.PlatformChannelConfig.find(r => r.badgeLabel === "platform-channel")?.reqs;
+  const allReqs = reqs.PlatformChannelConfig.flatMap(r => r.reqs);
   const editingChannel = channels.find((c) => c.id === editOpen);
 
   function openEdit(id: string) {
@@ -57,7 +57,7 @@ export default function PlatformChannelConfig({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50">
             <Radio size={20} className="text-sky-600" />

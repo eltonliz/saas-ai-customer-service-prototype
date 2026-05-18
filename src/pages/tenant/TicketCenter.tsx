@@ -77,11 +77,11 @@ export default function TicketCenter({ context }: PageProps) {
 
   function resetFilters() { setFilters({ status: "", type: "", priority: "", responsibleParty: "" }); }
 
-  const ticketReqs = reqs.TicketCenter.find(r => r.badgeLabel === "ticket-center")?.reqs;
+  const allReqs = reqs.TicketCenter.flatMap(r => r.reqs);
 
   return (
     <div className="relative">
-      {ticketReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">工单中心</h2>
         <button type="button" onClick={() => setModal("分配")} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新建工单</button>

@@ -12,11 +12,11 @@ export default function AppOrders({ context, goPage }: PageProps) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selected = selectedId ? myOrders.find((o) => o.id === selectedId) : null;
 
-  const orderReqs = reqs.AppOrders.find(r => r.badgeLabel === "order-rules")?.reqs;
+  const allReqs = reqs.AppOrders.flatMap(r => r.reqs);
 
   return (
     <div className="p-4 relative">
-      {orderReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">我的订单</h2>
       {!selected ? (
         <div className="space-y-3">

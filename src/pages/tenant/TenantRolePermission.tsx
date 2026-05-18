@@ -17,14 +17,14 @@ export default function TenantRolePermission({}: PageProps) {
   const [roles] = useState(defaultRoles);
   const [editOpen, setEditOpen] = useState<string | null>(null);
   const [membersOpen, setMembersOpen] = useState<string | null>(null);
-  const pageReqs = reqs.TenantRolePermission.find(r => r.badgeLabel === "role-permission")?.reqs;
+  const allReqs = reqs.TenantRolePermission.flatMap(r => r.reqs);
   const editingRole = roles.find((r) => r.id === editOpen);
   const viewingRole = roles.find((r) => r.id === membersOpen);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50">
             <Shield size={20} className="text-indigo-600" />

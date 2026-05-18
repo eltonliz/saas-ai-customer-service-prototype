@@ -18,7 +18,7 @@ export default function QualityInspection({ context, goPage }: PageProps) {
   const store = useAppStore();
   const [items, setItems] = useState(inspections);
   const [addedToGapPool, setAddedToGapPool] = useState<Set<string>>(new Set());
-  const pageReqs = reqs.QualityInspection.find(r => r.badgeLabel === "quality-check")?.reqs;
+  const allReqs = reqs.QualityInspection.flatMap(r => r.reqs);
 
   function markCorrect(id: string) {
     setItems((prev) => prev.map((i) => i.id === id ? { ...i, correct: true, needGap: false } : i));
@@ -48,7 +48,7 @@ export default function QualityInspection({ context, goPage }: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <h2 className="text-2xl font-bold text-slate-900">质检中心</h2>
         <button
           type="button"

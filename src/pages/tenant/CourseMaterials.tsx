@@ -15,13 +15,13 @@ const defaultCourses = [
 export default function CourseMaterials({}: PageProps) {
   const [courses] = useState(defaultCourses);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
-  const pageReqs = reqs.CourseMaterials.find(r => r.badgeLabel === "course-material")?.reqs;
+  const allReqs = reqs.CourseMaterials.flatMap(r => r.reqs);
   const selected = courses.find((c) => c.id === detailOpen);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50">
             <GraduationCap size={20} className="text-violet-600" />

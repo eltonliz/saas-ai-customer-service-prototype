@@ -94,11 +94,11 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
     sendMessage(chip);
   }
 
-  const sdkReqs = reqs.AppWebSdkPreview.find(r => r.badgeLabel === "sdk-embed")?.reqs;
+  const allReqs = reqs.AppWebSdkPreview.flatMap(r => r.reqs);
 
   return (
     <div className="flex flex-col h-full bg-slate-100 relative">
-      {sdkReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       {/* ======== Page Switcher ======== */}
       <div className="bg-white border-b border-slate-200 px-4 py-2">
         <div className="flex gap-1 bg-slate-100 rounded-lg p-1">

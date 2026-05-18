@@ -49,7 +49,7 @@ const auditLogs = [
 
 export default function PlatformSettings({}: PageProps) {
   const [tab, setTab] = useState<Tab>("roles");
-  const pageReqs = reqs.PlatformSettings.find(r => r.badgeLabel === "platform-settings")?.reqs;
+  const allReqs = reqs.PlatformSettings.flatMap(r => r.reqs);
 
   // Roles
   const [roles, setRoles] = useState<RoleItem[]>([
@@ -216,7 +216,7 @@ export default function PlatformSettings({}: PageProps) {
       <h2 className="text-2xl font-bold text-slate-900 mb-4">系统设置</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit overflow-x-auto">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         {([
           { id: "roles" as Tab, label: "角色权限", icon: <Users size={12} /> },
           { id: "channels" as Tab, label: "渠道配置", icon: <Globe size={12} /> },

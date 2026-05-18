@@ -147,11 +147,11 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
     setModal(null);
   }
 
-  const wbReqs = reqs.CustomerServiceWorkbench.find(r => r.badgeLabel === "workbench")?.reqs;
+  const allReqs = reqs.CustomerServiceWorkbench.flatMap(r => r.reqs);
 
   return (
     <div className="flex h-[calc(100vh-160px)] gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white relative">
-      {wbReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       {/* Left: Queue Panel */}
       <div className="w-[300px] shrink-0 border-r border-slate-200 flex flex-col bg-slate-50/30">
         <div className="p-4 border-b border-slate-200">

@@ -33,7 +33,7 @@ interface RiskTemplate {
 }
 
 export default function GlobalRiskControl({}: PageProps) {
-  const grcReqs = reqs.GlobalRiskControl.find(r => r.badgeLabel === "global-risk")?.reqs;
+  const allReqs = reqs.GlobalRiskControl.flatMap(r => r.reqs);
   const [tab, setTab] = useState<Tab>("words");
   const [dispatchModal, setDispatchModal] = useState(false);
   const [selectedTpl, setSelectedTpl] = useState<string | null>(null);
@@ -189,7 +189,7 @@ export default function GlobalRiskControl({}: PageProps) {
 
   return (
     <div className="relative">
-      {grcReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">全局风控中心</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">

@@ -20,7 +20,7 @@ export default function RateLimitRules({}: PageProps) {
   const [editScope, setEditScope] = useState("");
   const [editLimit, setEditLimit] = useState("");
   const [editBurst, setEditBurst] = useState("");
-  const pageReqs = reqs.RateLimitRules.find(r => r.badgeLabel === "rate-limit")?.reqs;
+  const allReqs = reqs.RateLimitRules.flatMap(r => r.reqs);
   const editingRule = rules.find((r) => r.id === editOpen);
 
   function openEdit(id: string) {
@@ -60,7 +60,7 @@ export default function RateLimitRules({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50">
             <Gauge size={20} className="text-orange-600" />

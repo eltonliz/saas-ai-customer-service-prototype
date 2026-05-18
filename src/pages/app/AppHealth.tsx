@@ -31,11 +31,11 @@ const articles = [
 ];
 
 export default function AppHealth({ goPage }: PageProps) {
-  const healthReqs = reqs.AppHealth.find(r => r.badgeLabel === "health-rules")?.reqs;
+  const allReqs = reqs.AppHealth.flatMap(r => r.reqs);
 
   return (
     <div className="p-4 relative">
-      {healthReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
 
       {/* ========== 1. 合规警示横幅 — MORE PROMINENT ========== */}
       <div className="mb-5 rounded-2xl border-2 border-rose-300 bg-rose-50 p-4">

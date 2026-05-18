@@ -125,11 +125,11 @@ export default function TenantRiskControl({ context }: PageProps) {
     );
   }
 
-  const riskReqs = reqs.TenantRiskControl.find(r => r.badgeLabel === "risk-control")?.reqs;
+  const allReqs = reqs.TenantRiskControl.flatMap(r => r.reqs);
 
   return (
     <div className="relative">
-      {riskReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">风控与大健康合规</h2>
 
       {/* Tab bar - wrapping for many tabs */}

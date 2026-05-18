@@ -18,14 +18,14 @@ export default function TenantAuditLog({}: PageProps) {
   const [logs] = useState(mockLogs);
   const [search, setSearch] = useState("");
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
-  const pageReqs = reqs.TenantAuditLog.find(r => r.badgeLabel === "audit-log")?.reqs;
+  const allReqs = reqs.TenantAuditLog.flatMap(r => r.reqs);
   const filtered = logs.filter((l) => !search || l.operator.includes(search) || l.action.includes(search));
   const selected = logs.find((l) => l.id === detailOpen);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <ScrollText size={20} className="text-slate-600" />

@@ -15,7 +15,7 @@ const defaultChannels = [
 export default function TenantChannelConfig({}: PageProps) {
   const [channels, setChannels] = useState(defaultChannels);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
-  const pageReqs = reqs.TenantChannelConfig.find(r => r.badgeLabel === "channel-config")?.reqs;
+  const allReqs = reqs.TenantChannelConfig.flatMap(r => r.reqs);
   const selected = channels.find((c) => c.id === detailOpen);
 
   function toggleStatus(id: string) {
@@ -25,7 +25,7 @@ export default function TenantChannelConfig({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50">
             <Smartphone size={20} className="text-blue-600" />

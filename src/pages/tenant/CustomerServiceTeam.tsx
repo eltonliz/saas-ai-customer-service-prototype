@@ -12,7 +12,7 @@ export default function CustomerServiceTeam({ context }: PageProps) {
   const [agentModal, setAgentModal] = useState<{ open: boolean; editingId: string | null }>({ open: false, editingId: null });
   const [scheduleModal, setScheduleModal] = useState<{ open: boolean; agent: CustomerServiceAgent | null }>({ open: false, agent: null });
   const [agentForm, setAgentForm] = useState({ name: "", skillGroups: "", serviceHours: "09:00-18:00", maxSessions: 5, schedule: "周一至周五" });
-  const pageReqs = reqs.CustomerServiceTeam.find(r => r.badgeLabel === "cs-team")?.reqs;
+  const allReqs = reqs.CustomerServiceTeam.flatMap(r => r.reqs);
 
   function cycleStatus(id: string) {
     const order: AgentStatus[] = ["在线", "忙碌", "小休", "离线", "会议中"];
@@ -83,7 +83,7 @@ export default function CustomerServiceTeam({ context }: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <h2 className="text-2xl font-bold text-slate-900">客服团队管理</h2>
         <button type="button" onClick={openAddModal} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700">
           <Plus size={14} />新增客服

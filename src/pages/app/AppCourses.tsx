@@ -16,11 +16,11 @@ export default function AppCourses({ goPage }: PageProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const course = selected ? courses.find((c) => c.id === selected) : null;
 
-  const courseReqs = reqs.AppCourses.find(r => r.badgeLabel === "course-rules")?.reqs;
+  const allReqs = reqs.AppCourses.flatMap(r => r.reqs);
 
   return (
     <div className="p-4 relative">
-      {courseReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">课程学习</h2>
       {!course ? (
         <div className="space-y-3">
