@@ -215,10 +215,17 @@ export interface Faq {
   scope: "平台" | "租户" | "商家" | "门店";
   category: string;
   question: string;
+  similarQuestions: string[];
   answer: string;
+  priority: number;
+  riskLevel: RiskLevel;
+  auditStatus: "草稿" | "待审核" | "已发布" | "已驳回" | "已下线";
+  effectiveFrom?: string;
+  effectiveTo?: string;
+  businessLine: BusinessLine;
+  channels: Channel[];
   hitRate: number;
   references: number;
-  businessLine: BusinessLine;
 }
 
 export interface KnowledgeDocument {
@@ -229,6 +236,11 @@ export interface KnowledgeDocument {
   type: string;
   status: KnowledgeStatus;
   businessLine: BusinessLine;
+  tags: string[];
+  version: string;
+  isLatestVersion: boolean;
+  effectiveFrom?: string;
+  effectiveTo?: string;
   references: number;
   hitRate: number;
   chunks: number;
@@ -354,15 +366,23 @@ export interface CustomerServiceAgent {
   schedule?: string;
 }
 
+export type OwnershipLevel = "平台" | "租户" | "商家" | "门店";
+
 export interface RobotConfig {
   id: string;
   tenantId: string;
   name: string;
   status: "启用" | "停用";
+  ownershipLevel: OwnershipLevel;
+  businessLines: BusinessLine[];
   channels: Channel[];
   knowledgeBases: string[];
+  availableTools: string[];
   welcome: string;
+  quickQuestions: string[];
   style: string;
+  maxFollowUpRounds: number;
+  lowConfidenceThreshold: number;
   humanRule: string;
   riskPolicy: string;
   model: string;

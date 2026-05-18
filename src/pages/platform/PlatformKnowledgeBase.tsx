@@ -66,6 +66,11 @@ export default function PlatformKnowledgeBase({}: PageProps) {
           hitRate: 0,
           references: 0,
           businessLine: "直播",
+          similarQuestions: [],
+          priority: 0,
+          riskLevel: "低风险",
+          auditStatus: "待审核",
+          channels: [],
         },
       ]);
     }

@@ -15,6 +15,7 @@ import type {
   PromptVersion,
   RagChunk,
   RagTrace,
+  RiskLevel,
   RobotConfig,
   ServiceRecord,
   Store,
@@ -284,7 +285,14 @@ export const faqs: Faq[] = Array.from({ length: 20 }, (_, index) => {
     scope: (index % 4 === 0 ? "平台" : index % 3 === 0 ? "租户" : "商家") as Faq["scope"],
     category: categories[index % 6],
     question: questions[index % 6],
+    similarQuestions: [questions[(index + 1) % 6], questions[(index + 2) % 6]].filter((q, i, arr) => arr.indexOf(q) === i),
     answer: answers[index % 6],
+    priority: 50 + (index % 5) * 10,
+    riskLevel: (index % 7 === 0 ? "高风险" : index % 3 === 0 ? "中风险" : "低风险") as RiskLevel,
+    auditStatus: (["已发布", "已发布", "已发布", "已发布", "待审核", "草稿"] as const)[index % 6],
+    effectiveFrom: index % 3 === 0 ? "2026-05-01" : undefined,
+    effectiveTo: index % 5 === 0 ? "2026-12-31" : undefined,
+    channels: [channels[index % channels.length]],
     hitRate: 62 + (index % 8) * 4,
     references: 18 + index * 7,
     businessLine: line,
@@ -299,6 +307,7 @@ export const knowledgeDocuments: KnowledgeDocument[] = Array.from({ length: 10 }
   ];
   const titles = ["直播活动客服手册", "商城售后政策V2", "门店核销规则", "课程权益说明", "大健康科普边界规范"];
   const types = ["FAQ文档", "政策文档", "商品资料", "课程资料", "大健康科普"];
+  const tagsList = [["直播", "客服"], ["售后", "退款"], ["门店", "核销"], ["课程", "权益"], ["健康", "科普"]];
   return {
     id: `doc-${index + 1}`,
     tenantId: merchant.tenantId,
@@ -307,6 +316,11 @@ export const knowledgeDocuments: KnowledgeDocument[] = Array.from({ length: 10 }
     type: types[index % 5],
     status: statuses[index],
     businessLine: businessLines[index % businessLines.length],
+    tags: tagsList[index % 5],
+    version: `v1.${index}`,
+    isLatestVersion: index > 7,
+    effectiveFrom: index % 3 === 0 ? "2026-05-01" : undefined,
+    effectiveTo: index % 4 === 0 ? "2026-12-31" : undefined,
     references: 30 + index * 11,
     hitRate: 55 + index * 3,
     chunks: 12 + index * 4,
@@ -757,11 +771,11 @@ export const customerServiceAgents: CustomerServiceAgent[] = [
 
 // ============ 机器人配置 ============
 export const robotConfigs: RobotConfig[] = [
-  { id: "robot-1", tenantId: "tenant-1", name: "星选直播客服机器人", status: "启用", channels: ["APP", "小程序", "H5"], knowledgeBases: ["商品知识", "售后政策", "直播规则"], welcome: "您好，欢迎咨询星选直播！我可以帮您查询商品、订单和售后问题。", style: "专业友好", humanRule: "AI置信度低于70%或用户明确要求转人工时自动转接", riskPolicy: "大健康/投诉/退款金额超过500元自动转人工", model: "Claude Opus 4.7", promptVersion: "v2.3" },
-  { id: "robot-2", tenantId: "tenant-1", name: "星选商城客服机器人", status: "启用", channels: ["H5", "商家后台"], knowledgeBases: ["商城规则", "商品资料", "售后政策"], welcome: "您好，星选商城为您服务！有什么可以帮助您的？", style: "简洁高效", humanRule: "AI未解决问题或用户要求转人工时转接", riskPolicy: "标准风控策略", model: "Claude Sonnet 4.6", promptVersion: "v2.2" },
-  { id: "robot-3", tenantId: "tenant-2", name: "同城门店联盟客服机器人", status: "启用", channels: ["小程序", "公众号/微信客服"], knowledgeBases: ["门店规则", "核销流程", "预约说明"], welcome: "您好，欢迎咨询同城门店联盟！可以帮您预约、核销和门店咨询服务。", style: "亲切温和", humanRule: "核销失败或预约异常时自动转人工", riskPolicy: "标准风控策略", model: "Claude Opus 4.7", promptVersion: "v2.2" },
-  { id: "robot-4", tenantId: "tenant-3", name: "知养课堂客服机器人", status: "启用", channels: ["APP", "H5"], knowledgeBases: ["课程知识", "课程权益", "大健康科普"], welcome: "您好，知养健康课堂为您服务！课程咨询和健康科普都可以问我。", style: "专业严谨", humanRule: "健康相关高风险问题自动转人工", riskPolicy: "大健康强化风控策略", model: "Claude Opus 4.7", promptVersion: "v2.3" },
-  { id: "robot-5", tenantId: "tenant-3", name: "青禾健康服务机器人", status: "停用", channels: ["APP"], knowledgeBases: ["大健康科普", "产品说明"], welcome: "您好，青禾健康为您服务！", style: "专业温和", humanRule: "诊断/治疗/用药类问题必须转人工", riskPolicy: "大健康最高级风控策略", model: "Claude Opus 4.7", promptVersion: "v2.1" },
+  { id: "robot-1", tenantId: "tenant-1", name: "星选直播客服机器人", status: "启用", ownershipLevel: "商家", businessLines: ["直播"], channels: ["APP", "小程序", "H5"], knowledgeBases: ["商品知识", "售后政策", "直播规则"], availableTools: ["商品查询", "活动查询", "订单查询"], welcome: "您好，欢迎咨询星选直播！我可以帮您查询商品、订单和售后问题。", quickQuestions: ["今天有什么优惠？", "这个商品怎么买？", "直播间下单多久发货？"], style: "专业友好", maxFollowUpRounds: 3, lowConfidenceThreshold: 0.65, humanRule: "AI置信度低于70%或用户明确要求转人工时自动转接", riskPolicy: "大健康/投诉/退款金额超过500元自动转人工", model: "Claude Opus 4.7", promptVersion: "v2.3" },
+  { id: "robot-2", tenantId: "tenant-1", name: "星选商城客服机器人", status: "启用", ownershipLevel: "商家", businessLines: ["商城"], channels: ["H5", "商家后台"], knowledgeBases: ["商城规则", "商品资料", "售后政策"], availableTools: ["商品查询", "订单查询", "物流查询", "售后查询", "会员查询"], welcome: "您好，星选商城为您服务！有什么可以帮助您的？", quickQuestions: ["怎么申请退款？", "优惠券怎么用？", "会员有什么权益？"], style: "简洁高效", maxFollowUpRounds: 2, lowConfidenceThreshold: 0.65, humanRule: "AI未解决问题或用户要求转人工时转接", riskPolicy: "标准风控策略", model: "Claude Sonnet 4.6", promptVersion: "v2.2" },
+  { id: "robot-3", tenantId: "tenant-2", name: "同城门店联盟客服机器人", status: "启用", ownershipLevel: "租户", businessLines: ["门店"], channels: ["小程序", "公众号/微信客服"], knowledgeBases: ["门店规则", "核销流程", "预约说明"], availableTools: ["门店查询", "订单查询", "活动查询"], welcome: "您好，欢迎咨询同城门店联盟！可以帮您预约、核销和门店咨询服务。", quickQuestions: ["附近有什么门店？", "怎么预约到店？", "核销码在哪里看？"], style: "亲切温和", maxFollowUpRounds: 3, lowConfidenceThreshold: 0.60, humanRule: "核销失败或预约异常时自动转人工", riskPolicy: "标准风控策略", model: "Claude Opus 4.7", promptVersion: "v2.2" },
+  { id: "robot-4", tenantId: "tenant-3", name: "知养课堂客服机器人", status: "启用", ownershipLevel: "商家", businessLines: ["课程/知识付费", "大健康"], channels: ["APP", "H5"], knowledgeBases: ["课程知识", "课程权益", "大健康科普"], availableTools: ["课程查询", "订单查询", "会员查询", "售后查询"], welcome: "您好，知养健康课堂为您服务！课程咨询和健康科普都可以问我。", quickQuestions: ["课程可以退款吗？", "怎么查看课程回放？", "每天吃什么更健康？"], style: "专业严谨", maxFollowUpRounds: 2, lowConfidenceThreshold: 0.70, humanRule: "健康相关高风险问题自动转人工", riskPolicy: "大健康强化风控策略", model: "Claude Opus 4.7", promptVersion: "v2.3" },
+  { id: "robot-5", tenantId: "tenant-3", name: "青禾健康服务机器人", status: "停用", ownershipLevel: "商家", businessLines: ["大健康"], channels: ["APP"], knowledgeBases: ["大健康科普", "产品说明"], availableTools: ["商品查询", "订单查询"], welcome: "您好，青禾健康为您服务！", quickQuestions: ["这个产品适合我吗？", "日常怎么调理身体？"], style: "专业温和", maxFollowUpRounds: 2, lowConfidenceThreshold: 0.70, humanRule: "诊断/治疗/用药类问题必须转人工", riskPolicy: "大健康最高级风控策略", model: "Claude Opus 4.7", promptVersion: "v2.1" },
 ];
 
 // ============ 模型调用记录 ============

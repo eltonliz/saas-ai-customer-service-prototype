@@ -112,6 +112,9 @@ export default function KnowledgeBase({ context }: PageProps) {
       updatedAt: new Date().toISOString().slice(0, 10),
       content: `【AI候选】基于缺口自动生成：${gap.candidate || "AI自动生成的候选回答"}`,
       reviewComment: "",
+      tags: [],
+      version: "1.0",
+      isLatestVersion: true,
     };
     store.addKnowledgeDoc(doc);
     store.updateKnowledgeGap(id, { status: "已生成候选知识", candidate: gap.candidate || "AI已生成候选知识，等待人工审核。" });
@@ -140,6 +143,9 @@ export default function KnowledgeBase({ context }: PageProps) {
       updatedAt: new Date().toISOString().slice(0, 10),
       content: gap.candidate || "审核通过的候选知识",
       reviewComment: reviewComment || "审核通过",
+      tags: [],
+      version: "1.0",
+      isLatestVersion: true,
     };
     store.addKnowledgeDoc(doc);
     store.updateKnowledgeGap(id, {
@@ -256,8 +262,10 @@ export default function KnowledgeBase({ context }: PageProps) {
             { key: "question", header: "问题", render: (r) => <span className="text-base font-medium">{r.question}</span> },
             { key: "category", header: "分类", render: (r) => <span className="text-base">{r.category}</span> },
             { key: "scope", header: "范围", render: (r) => <span className="text-base">{r.scope}</span> },
+            { key: "risk", header: "风险等级", render: (r) => <StatusBadge status={r.riskLevel} /> },
+            { key: "audit", header: "审核状态", render: (r) => <StatusBadge status={r.auditStatus} /> },
+            { key: "priority", header: "优先级", render: (r) => <span className="text-base">{r.priority}</span> },
             { key: "hitRate", header: "命中率", render: (r) => <span className="text-base">{r.hitRate}%</span> },
-            { key: "references", header: "引用次数", render: (r) => <span className="text-base">{r.references}次</span> },
           ]}
         />
       )}
@@ -270,9 +278,9 @@ export default function KnowledgeBase({ context }: PageProps) {
           columns={[
             { key: "title", header: "文档名称", render: (r) => <span className="text-base font-medium">{r.title}</span> },
             { key: "type", header: "类型", render: (r) => <span className="text-base">{r.type}</span> },
+            { key: "version", header: "版本", render: (r) => <span className="text-base">{r.version ?? "-"}</span> },
             { key: "status", header: "状态", render: (r) => <StatusBadge status={r.status} /> },
-            { key: "businessLine", header: "业务线", render: (r) => <span className="text-base">{r.businessLine}</span> },
-            { key: "references", header: "引用次数", render: (r) => <span className="text-base">{r.references}次</span> },
+            { key: "tags", header: "标签", render: (r) => <span className="text-base">{r.tags?.join("、") ?? "-"}</span> },
             { key: "hitRate", header: "命中率", render: (r) => <span className="text-base">{r.hitRate}%</span> },
             { key: "action", header: "操作", render: (r) => (
               <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
