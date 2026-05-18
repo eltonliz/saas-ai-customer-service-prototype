@@ -160,7 +160,7 @@ export default function PlatformDashboard({}: PageProps) {
       </div>
 
       {/* Charts Row 1 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-4" data-annotation-target="platform-dashboard-charts-row1">
         {/* Platform AI Call Trend */}
         <div className="rounded-xl border border-slate-200 bg-white p-8">
           <h3 className="text-base font-semibold text-slate-700 mb-4 flex items-center gap-2">
@@ -228,7 +228,7 @@ export default function PlatformDashboard({}: PageProps) {
       </div>
 
       {/* Charts Row 2 */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4" data-annotation-target="platform-dashboard-charts-row2">
         {/* Model Success Rate */}
         <div className="rounded-xl border border-slate-200 bg-white p-8">
           <h3 className="text-base font-semibold text-slate-700 mb-4 flex items-center gap-2">

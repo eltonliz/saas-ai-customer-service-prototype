@@ -76,13 +76,13 @@ export default function TicketCenter({ context }: PageProps) {
   function resetFilters() { setFilters({ status: "", type: "", priority: "", responsibleParty: "" }); }
 
   return (
-    <div>
+    <div data-annotation-target="tenant-ticket-list">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">工单中心</h2>
         <button type="button" onClick={() => setModal("分配")} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新建工单</button>
       </div>
 
-      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3">
+      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3" data-annotation-target="tenant-ticket-filters">
         <Filter size={14} className="text-slate-400" />
         <select value={filters.status} onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))} className="rounded-lg border border-slate-200 px-2 py-1 text-base text-slate-600 outline-none">
           <option value="">全部状态</option>
@@ -100,7 +100,8 @@ export default function TicketCenter({ context }: PageProps) {
         <span className="text-base text-slate-400 ml-auto">共 {filtered.length} 条</span>
       </div>
 
-      <DataTable
+      <div data-annotation-target="tenant-ticket-table">
+        <DataTable
         data={filtered}
         rowKey={(r) => r.id}
         onRowClick={viewDetail}
@@ -115,8 +116,9 @@ export default function TicketCenter({ context }: PageProps) {
           { key: "action", header: "", render: () => <Eye size={14} className="text-slate-300" /> },
         ]}
       />
+      </div>
 
-      <Drawer open={drawerOpen} title="工单详情" onClose={() => setDrawerOpen(false)}>
+      <Drawer open={drawerOpen} title="工单详情" onClose={() => setDrawerOpen(false)} data-annotation-target="tenant-ticket-detail">
         {selected && (
           <div className="space-y-4 text-base">
             <div className="grid grid-cols-2 gap-3">
@@ -150,7 +152,7 @@ export default function TicketCenter({ context }: PageProps) {
       </Drawer>
 
       {/* Modals for actions */}
-      <Modal open={modal === "分配"} title="分配负责人" onClose={() => setModal(null)} size="sm">
+      <Modal open={modal === "分配"} title="分配负责人" onClose={() => setModal(null)} size="sm" data-annotation-target="tenant-ticket-modals">
         <div>
           <label className="block text-base font-medium text-slate-500 mb-1">负责人</label>
           <input type="text" value={assignOwner} onChange={(e) => setAssignOwner(e.target.value)} placeholder="输入负责人姓名" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />

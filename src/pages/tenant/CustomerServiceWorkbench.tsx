@@ -148,7 +148,7 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
   return (
     <div className="flex h-[calc(100vh-160px)] gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white" data-annotation-target="tenant-workbench-main">
       {/* Left: Queue Panel */}
-      <div className="w-[300px] shrink-0 border-r border-slate-200 flex flex-col bg-slate-50/30">
+      <div className="w-[300px] shrink-0 border-r border-slate-200 flex flex-col bg-slate-50/30" data-annotation-target="tenant-workbench-queue">
         <div className="p-4 border-b border-slate-200">
           <h3 className="text-base font-semibold text-slate-700 mb-3">会话队列</h3>
           <div className="space-y-0.5">
@@ -201,7 +201,7 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
       </div>
 
       {/* Center: Chat Area */}
-      <div className="flex flex-1 flex-col min-w-0">
+      <div className="flex flex-1 flex-col min-w-0" data-annotation-target="tenant-workbench-chat">
         <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3 bg-white">
           <div>
             <h3 className="text-base font-semibold text-slate-800">{selected?.title ?? "选择会话"}</h3>
@@ -238,7 +238,7 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
       </div>
 
       {/* Right: Info Panel with Tabs */}
-      <div className="w-[420px] shrink-0 border-l border-slate-200 bg-white flex flex-col">
+      <div className="w-[420px] shrink-0 border-l border-slate-200 bg-white flex flex-col" data-annotation-target="tenant-workbench-right-panel">
         <div className="border-b border-slate-200 px-2 sticky top-0 z-10 bg-white">
           <div className="flex gap-0 overflow-x-auto">
             {rightTabs.map((tab) => {

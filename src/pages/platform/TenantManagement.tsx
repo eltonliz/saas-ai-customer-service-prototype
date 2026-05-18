@@ -72,8 +72,8 @@ export default function TenantManagement({}: PageProps) {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
+    <div data-annotation-target="platform-tenant-list">
+      <div className="flex items-center justify-between mb-4" data-annotation-target="platform-tenant-filters">
         <h2 className="text-2xl font-bold text-slate-900">租户管理</h2>
         <button
           type="button"
@@ -83,7 +83,8 @@ export default function TenantManagement({}: PageProps) {
           <Plus size={14} />新增租户
         </button>
       </div>
-      <DataTable
+      <div data-annotation-target="platform-tenant-table">
+        <DataTable
         data={list}
         rowKey={(r) => r.id}
         onRowClick={(r) => {
@@ -146,9 +147,10 @@ export default function TenantManagement({}: PageProps) {
           },
         ]}
       />
+      </div>
 
       {/* Create Modal */}
-      <Modal open={createModal} title="新增租户" onClose={() => setCreateModal(false)} size="md">
+      <Modal open={createModal} title="新增租户" onClose={() => setCreateModal(false)} size="md" data-annotation-target="platform-tenant-modals">
         <div className="space-y-3 text-base">
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">租户名称</label>

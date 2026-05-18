@@ -245,7 +245,7 @@ export default function TenantDashboard({ context }: PageProps) {
       {/* ================================================================ */}
       {/* Metric cards row (5 cards)                                       */}
       {/* ================================================================ */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" data-annotation-target="tenant-dashboard-metrics-row1">
         <MetricCard
           label="今日咨询量"
           value={filteredConvs.length}
@@ -297,7 +297,7 @@ export default function TenantDashboard({ context }: PageProps) {
       {/* Charts grid (2x2)                                                */}
       {/* ================================================================ */}
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8" data-annotation-target="tenant-dashboard-charts">
         {/* ---------------------------------------------------------------- */}
         {/* Top-left: Consultation trend line chart                          */}
         {/* ---------------------------------------------------------------- */}
@@ -500,7 +500,7 @@ export default function TenantDashboard({ context }: PageProps) {
       {/* ================================================================ */}
       {/* Bottom row: Hot topics + Knowledge gaps + Risk alerts             */}
       {/* ================================================================ */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8" data-annotation-target="tenant-dashboard-bottom">
         {/* ---- Hot topics Top 10 ---- */}
         <div className="rounded-xl border border-slate-200 bg-white p-8">
           <h3 className="text-base font-semibold text-slate-800 mb-4 flex items-center gap-2">
