@@ -85,7 +85,7 @@ export default function PromptManagement({}: PageProps) {
   const detail = list.find((p) => p.id === selected);
 
   return (
-    <div className="relative">
+    <div className="relative prompt-page">
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">全局Prompt管理</h2>

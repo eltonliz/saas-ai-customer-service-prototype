@@ -29,7 +29,7 @@ export default function LiveScript({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="live-script-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

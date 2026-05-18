@@ -38,7 +38,7 @@ export default function AppHealth({ goPage }: PageProps) {
 );
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4 relative health-page">
       {allBadges}
 
       {/* ========== 1. 合规警示横幅 — MORE PROMINENT ========== */}

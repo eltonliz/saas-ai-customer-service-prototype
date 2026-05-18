@@ -192,7 +192,7 @@ export default function GlobalRiskControl({}: PageProps) {
   const sample = healthRiskSamples.find((s) => s.id === viewSample);
 
   return (
-    <div className="relative">
+    <div className="relative global-risk-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">全局风控中心</h2>
 

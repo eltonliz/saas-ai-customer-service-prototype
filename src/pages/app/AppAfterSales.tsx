@@ -45,7 +45,7 @@ export default function AppAfterSales({ context, goPage }: PageProps) {
   }
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4 relative aftersale-page">
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">售后服务</h2>

@@ -37,7 +37,7 @@ export default function EvaluationCenter({}: PageProps) {
   const errorDetail = errorSamples.find((e) => e.id === selectedId);
 
   return (
-    <div className="relative">
+    <div className="relative eval-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">质检与评测中心</h2>
 

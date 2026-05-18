@@ -84,7 +84,7 @@ export default function TicketCenter({ context }: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative ticket-page">
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">工单中心</h2>

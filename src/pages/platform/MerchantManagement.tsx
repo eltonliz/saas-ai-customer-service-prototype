@@ -81,7 +81,7 @@ export default function MerchantManagement({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="merchant-page">
       <div className="flex items-center justify-between mb-4">
       {allBadges}
         <h2 className="text-2xl font-bold text-slate-900">商家管理</h2>

@@ -22,7 +22,7 @@ export default function StoreServiceMaterials({}: PageProps) {
   const selectedStore = stores.find((s) => s.id === detailOpen);
 
   return (
-    <div>
+    <div className="store-materials-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

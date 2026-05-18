@@ -47,7 +47,7 @@ export default function AppHome({ context, goPage }: PageProps) {
   }
 
   return (
-    <div className="pb-4 relative">
+    <div className="pb-4 relative app-home-page">
       {allBadges}
       {/* ========== 1. Search Bar ========== */}
       <div className="px-4 pt-4 pb-2">

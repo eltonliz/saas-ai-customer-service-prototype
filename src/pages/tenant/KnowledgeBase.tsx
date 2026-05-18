@@ -247,7 +247,7 @@ export default function KnowledgeBase({ context }: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative kb-page">
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">知识库管理</h2>

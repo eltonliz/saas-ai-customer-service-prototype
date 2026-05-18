@@ -85,7 +85,7 @@ export default function CustomerServiceTeam({ context }: PageProps) {
   }
 
   return (
-    <div>
+    <div className="team-page">
       <div className="flex items-center justify-between mb-4">
       {allBadges}
         <h2 className="text-2xl font-bold text-slate-900">客服团队管理</h2>

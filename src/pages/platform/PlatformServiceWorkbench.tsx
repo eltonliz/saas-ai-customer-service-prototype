@@ -75,7 +75,7 @@ export default function PlatformServiceWorkbench({}: PageProps) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative platform-workbench">
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">平台客服工作台</h2>

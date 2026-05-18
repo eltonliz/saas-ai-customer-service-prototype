@@ -23,7 +23,7 @@ export default function AppCourses({ goPage }: PageProps) {
 );
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4 relative course-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">课程学习</h2>
       {!course ? (

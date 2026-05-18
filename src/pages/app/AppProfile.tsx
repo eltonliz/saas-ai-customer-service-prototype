@@ -28,7 +28,7 @@ export default function AppProfile({ context, goPage }: PageProps) {
   ];
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4 relative profile-page">
       {allBadges}
       {/* User Card */}
       <div className="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 mb-4">

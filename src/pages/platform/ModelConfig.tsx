@@ -157,7 +157,7 @@ export default function ModelConfig({}: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative model-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">模型配置</h2>
 

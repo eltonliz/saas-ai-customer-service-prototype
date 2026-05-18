@@ -102,7 +102,7 @@ export default function TenantAnalytics({}: PageProps) {
   ))
 );
   return (
-    <div className="relative">
+    <div className="relative analytics-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-5">数据分析</h2>
 

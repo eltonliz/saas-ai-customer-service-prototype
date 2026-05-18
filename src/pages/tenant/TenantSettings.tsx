@@ -70,7 +70,7 @@ export default function TenantSettings({ context }: PageProps) {
   }
 
   return (
-    <div>
+    <div className="tenant-settings-page">
       <h2 className="text-2xl font-bold text-slate-900 mb-4">租户设置</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

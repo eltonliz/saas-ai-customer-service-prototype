@@ -19,7 +19,7 @@ export default function AppOrders({ context, goPage }: PageProps) {
 );
 
   return (
-    <div className="p-4 relative">
+    <div className="p-4 relative order-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">我的订单</h2>
       {!selected ? (

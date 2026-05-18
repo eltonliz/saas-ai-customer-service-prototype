@@ -66,7 +66,7 @@ export default function RagVectorMonitor({}: PageProps) {
   }));
 
   return (
-    <div className="relative">
+    <div className="relative rag-monitor-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">RAG与向量库监控</h2>
 

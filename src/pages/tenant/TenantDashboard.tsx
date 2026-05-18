@@ -124,7 +124,7 @@ function TrendTooltip({ active, payload, label }: {
 }) {
   if (!active || !payload || payload.length === 0) return null;
   return (
-    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg">
+    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 shadow-lg dashboard-page">
       <p className="text-base font-semibold text-slate-500 mb-1">{label}</p>
       {payload.map((entry, idx) => (
         <p key={idx} className="text-base" style={{ color: entry.color }}>

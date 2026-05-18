@@ -144,7 +144,7 @@ export default function TenantRagTrace({ context }: PageProps) {
         <div className="w-80 flex-shrink-0 flex flex-col">
           <div className="rounded-xl border border-slate-200 bg-white flex flex-col h-full overflow-hidden">
             <div className="p-3 border-b border-slate-100">
-              <div className="relative">
+              <div className="relative trace-page">
                 <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
                 <input
                   type="text"

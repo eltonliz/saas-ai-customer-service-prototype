@@ -146,7 +146,7 @@ export default function PlatformDashboard({}: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative platform-dashboard">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-6">平台总览</h2>
 

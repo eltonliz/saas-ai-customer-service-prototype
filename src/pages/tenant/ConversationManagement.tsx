@@ -61,7 +61,7 @@ export default function ConversationManagement({ context }: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative conv-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">会话管理</h2>
 

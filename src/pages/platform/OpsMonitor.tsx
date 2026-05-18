@@ -64,7 +64,7 @@ export default function OpsMonitor({}: PageProps) {
   }));
 
   return (
-    <div className="relative">
+    <div className="relative ops-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">运维监控</h2>
 

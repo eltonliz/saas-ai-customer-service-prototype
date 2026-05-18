@@ -62,7 +62,7 @@ export default function RateLimitRules({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="rate-limit-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

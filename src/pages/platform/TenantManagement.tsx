@@ -80,7 +80,7 @@ export default function TenantManagement({}: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative tenant-page">
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">租户管理</h2>

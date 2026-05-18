@@ -24,7 +24,7 @@ export default function PlatformAuditLog({}: PageProps) {
   const filtered = logs.filter((l) => !search || l.operator.includes(search) || l.action.includes(search) || l.target.includes(search));
 
   return (
-    <div>
+    <div className="platform-audit-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

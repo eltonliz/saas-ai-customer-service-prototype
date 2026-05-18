@@ -97,7 +97,7 @@ export default function ServiceMaterials({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="service-materials-page">
       <h2 className="text-2xl font-bold text-slate-900 mb-4">商品/课程/门店客服资料</h2>
       <div className="mb-4 flex flex-wrap gap-2">
       {allBadges}

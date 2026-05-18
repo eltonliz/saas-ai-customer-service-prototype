@@ -27,7 +27,7 @@ export default function TenantAuditLog({}: PageProps) {
   const selected = logs.find((l) => l.id === detailOpen);
 
   return (
-    <div>
+    <div className="audit-log-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

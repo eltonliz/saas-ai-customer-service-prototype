@@ -132,7 +132,7 @@ export default function TenantRiskControl({ context }: PageProps) {
 );
 
   return (
-    <div className="relative">
+    <div className="relative risk-page">
       {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">风控与大健康合规</h2>
 

@@ -26,7 +26,7 @@ export default function TenantRolePermission({}: PageProps) {
   const viewingRole = roles.find((r) => r.id === membersOpen);
 
   return (
-    <div>
+    <div className="role-permission-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

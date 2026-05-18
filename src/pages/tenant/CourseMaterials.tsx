@@ -23,7 +23,7 @@ export default function CourseMaterials({}: PageProps) {
   const selected = courses.find((c) => c.id === detailOpen);
 
   return (
-    <div>
+    <div className="course-materials-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">

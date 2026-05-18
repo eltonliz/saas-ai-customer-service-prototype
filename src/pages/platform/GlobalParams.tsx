@@ -36,7 +36,7 @@ export default function GlobalParams({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="global-params-page">
       <div className="flex items-center justify-between mb-6">
       {allBadges}
         <div className="flex items-center gap-3">
