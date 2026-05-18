@@ -96,8 +96,8 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
         onMouseEnter={handleMouseEnter}
         title={`需求 ${req.id}: ${req.title}`}
       >
-        <span className="inline-flex items-center gap-1 rounded-md bg-orange-500 px-2.5 py-1 text-sm font-bold text-white shadow-md cursor-pointer hover:bg-orange-600 transition-colors">
-          [{req.id}]
+        <span className="inline-flex items-center gap-1.5 rounded-lg bg-orange-500 px-3 py-1.5 text-sm font-bold text-white shadow-lg cursor-pointer hover:bg-orange-600 transition-colors border-2 border-orange-600">
+          [{req.id}] {req.title.slice(0, 12)}{req.title.length > 12 ? "..." : ""}
         </span>
       </div>
 
