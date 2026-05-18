@@ -20,7 +20,7 @@ interface RequirementBadgeProps {
 
 export function RequirementBadge({ req, anchorRef, offset, index = 0, className = "" }: RequirementBadgeProps) {
   const [open, setOpen] = useState(false);
-  const badgeRef = useRef<HTMLSpanElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{ dragging: boolean; startX: number; startY: number; posX: number; posY: number }>({
     dragging: false, startX: 0, startY: 0, posX: 0, posY: 0,
@@ -80,95 +80,49 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
     document.addEventListener("mouseup", onUp);
   };
 
-  const badgeStyle: React.CSSProperties = anchorRef
-    ? {
-        position: "absolute",
-        top: offset?.top ?? -8,
-        right: offset?.right ?? -4,
-        backgroundColor: "rgb(250, 173, 20)",
-        color: "#fff",
-        fontSize: "10px",
-        fontWeight: 700,
-        lineHeight: "14px",
-        padding: "0px 4px",
-        borderRadius: "2px",
-        border: "none",
-        cursor: "pointer",
-        zIndex: 9990,
-      }
-    : {
-        position: "fixed",
-        top: 8 + index * 28,
-        right: 12,
-        backgroundColor: "rgb(250, 173, 20)",
-        color: "#fff",
-        fontSize: "11px",
-        fontWeight: 700,
-        lineHeight: "15px",
-        padding: "1px 5px",
-        borderRadius: "2px",
-        border: "none",
-        cursor: "pointer",
-        zIndex: 9990,
-        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
-      };
+  const topOffset = anchorRef ? (offset?.top ?? -8) : 8 + index * 30;
 
   return (
     <>
-      <span
+      <div
         ref={badgeRef}
-        style={badgeStyle}
         className={className}
+        style={{
+          position: anchorRef ? "absolute" : "fixed",
+          top: topOffset,
+          right: anchorRef ? (offset?.right ?? -4) : 16,
+          zIndex: 9990,
+        }}
         onMouseEnter={handleMouseEnter}
         title={`需求 ${req.id}: ${req.title}`}
       >
-        {req.id}
-      </span>
+        <span className="inline-flex items-center gap-1 rounded-md bg-orange-500 px-2.5 py-1 text-sm font-bold text-white shadow-md cursor-pointer hover:bg-orange-600 transition-colors">
+          [{req.id}]
+        </span>
+      </div>
 
       {open && (
         <div
           ref={tooltipRef}
           onMouseDown={handleMouseDown}
           onClick={(e) => e.stopPropagation()}
+          className="fixed rounded-lg overflow-y-auto"
           style={{
-            position: "fixed",
-            right: anchorRef ? "auto" : 12,
-            left: anchorRef ? "auto" : "auto",
-            top: anchorRef ? "auto" : (badgeRef.current ? badgeRef.current.getBoundingClientRect().bottom + 8 : 8 + (index + 1) * 28 + 8),
+            right: 16,
+            top: (badgeRef.current?.getBoundingClientRect().bottom ?? topOffset + 24) + 8,
             width: 450,
             maxHeight: "70vh",
-            overflowY: "auto",
             backgroundColor: "#f0efef",
-            borderRadius: 4,
             boxShadow: "0 8px 30px rgba(0,0,0,0.18)",
             zIndex: 9999,
             fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
             cursor: "default",
           }}
         >
-          {/* If anchorRef is set, position relative to it */}
-          {anchorRef && (
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `/* anchor positioning */`,
-              }}
-            />
-          )}
           {/* Header */}
           <div style={{ padding: "14px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span
-                style={{
-                  display: "inline-block",
-                  backgroundColor: "rgb(250, 173, 20)",
-                  color: "#fff",
-                  fontSize: "10px",
-                  fontWeight: 700,
-                  lineHeight: "14px",
-                  padding: "0px 4px",
-                  borderRadius: "2px",
-                }}
-              >
+              <span className="inline-flex items-center rounded-md bg-orange-500 px-2 py-0.5 text-xs font-bold text-white">
                 {req.id}
               </span>
               <span style={{ fontSize: 14, fontWeight: 600, color: "#1e293b" }}>
