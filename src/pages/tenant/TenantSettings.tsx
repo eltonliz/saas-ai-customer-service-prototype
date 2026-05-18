@@ -3,12 +3,15 @@ import type { PageProps, Channel } from "../../types";
 import { tenants } from "../../data/mockData";
 import { Modal } from "../../components/Modal";
 import { Settings, Shield, Zap, Key, FileText, Edit3 } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const allChannels: Channel[] = ["APP", "小程序", "H5", "商家后台", "企业微信", "公众号/微信客服"];
 
 export default function TenantSettings({ context }: PageProps) {
   const initialTenant = tenants.find((t) => t.id === context.currentTenantId);
   const [tenant, setTenant] = useState(initialTenant);
+  const pageReqs = reqs.TenantSettings.find(r => r.badgeLabel === "tenant-settings")?.reqs;
 
   const [editModal, setEditModal] = useState<"basic" | "channels" | "roles" | null>(null);
   const [editForm, setEditForm] = useState({ name: "", industry: "" });
@@ -67,6 +70,7 @@ export default function TenantSettings({ context }: PageProps) {
       <h2 className="text-2xl font-bold text-slate-900 mb-4">租户设置</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="rounded-xl border border-slate-200 bg-white p-8">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-base font-semibold text-slate-700 flex items-center gap-2"><Settings size={16} className="text-blue-500" />基础信息</h3>

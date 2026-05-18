@@ -3,6 +3,8 @@ import type { PageProps } from "../../types";
 import { useAppStore } from "../../data/AppStore";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Check, X, BookOpen, ExternalLink } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const inspections = [
   { id: "ins-1", question: "直播间那款营养套装还有库存吗？", aiAnswer: "当前库存充足，售价199元...", score: 5, correct: true, needGap: false, risk: "低风险" },
@@ -16,6 +18,7 @@ export default function QualityInspection({ context, goPage }: PageProps) {
   const store = useAppStore();
   const [items, setItems] = useState(inspections);
   const [addedToGapPool, setAddedToGapPool] = useState<Set<string>>(new Set());
+  const pageReqs = reqs.QualityInspection.find(r => r.badgeLabel === "quality-check")?.reqs;
 
   function markCorrect(id: string) {
     setItems((prev) => prev.map((i) => i.id === id ? { ...i, correct: true, needGap: false } : i));
@@ -45,6 +48,7 @@ export default function QualityInspection({ context, goPage }: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <h2 className="text-2xl font-bold text-slate-900">质检中心</h2>
         <button
           type="button"

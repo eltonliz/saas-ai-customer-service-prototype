@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Store } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";
 
 const defaultStores = [
@@ -12,11 +14,13 @@ const defaultStores = [
 export default function StoreServiceMaterials({}: PageProps) {
   const [stores] = useState(defaultStores);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
+  const pageReqs = reqs.StoreServiceMaterials.find(r => r.badgeLabel === "store-material")?.reqs;
   const selectedStore = stores.find((s) => s.id === detailOpen);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50">
             <Store size={20} className="text-emerald-600" />

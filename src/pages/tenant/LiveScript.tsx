@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Mic } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";
 
 const defaultScripts = [
@@ -14,6 +16,7 @@ export default function LiveScript({}: PageProps) {
   const [scripts, setScripts] = useState(defaultScripts);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState<string | null>(null);
+  const pageReqs = reqs.LiveScript.find(r => r.badgeLabel === "live-script")?.reqs;
   const selectedScript = scripts.find((s) => s.id === detailOpen);
   const previewScript = scripts.find((s) => s.id === previewOpen);
 
@@ -24,6 +27,7 @@ export default function LiveScript({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50">
             <Mic size={20} className="text-rose-600" />

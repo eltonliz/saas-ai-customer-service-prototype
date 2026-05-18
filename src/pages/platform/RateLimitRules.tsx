@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Gauge } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";
 
 const defaultRules = [
@@ -18,6 +20,7 @@ export default function RateLimitRules({}: PageProps) {
   const [editScope, setEditScope] = useState("");
   const [editLimit, setEditLimit] = useState("");
   const [editBurst, setEditBurst] = useState("");
+  const pageReqs = reqs.RateLimitRules.find(r => r.badgeLabel === "rate-limit")?.reqs;
   const editingRule = rules.find((r) => r.id === editOpen);
 
   function openEdit(id: string) {
@@ -57,6 +60,7 @@ export default function RateLimitRules({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-orange-50">
             <Gauge size={20} className="text-orange-600" />

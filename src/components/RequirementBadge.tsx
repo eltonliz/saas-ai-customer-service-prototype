@@ -1,5 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
-import ReactMarkdown from "react-markdown";
+import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
 
 export interface RequirementDef {
   id: number;
@@ -9,33 +8,306 @@ export interface RequirementDef {
 
 interface RequirementBadgeProps {
   req: RequirementDef;
-  /** CSS selector or ref to position relative to. If omitted, badge is position:fixed. */
   anchorRef?: React.RefObject<HTMLElement | null>;
-  /** Offset from anchor's top-right corner. Default: top: -8, right: -4 */
   offset?: { top?: number; right?: number };
-  /** Index for stacking multiple fixed badges vertically */
   index?: number;
   className?: string;
 }
+
+/**
+ * Global registry to ensure only one tooltip per requirement ID is open at a time.
+ */
+const openTooltipRegistry = new Set<number>();
+
+/* ──── Simple Markdown → JSX renderer ──── */
+
+type MdNode =
+  | { type: "h1"; text: string }
+  | { type: "h2"; text: string }
+  | { type: "h3"; text: string }
+  | { type: "p"; children: InlineNode[] }
+  | { type: "ul"; items: InlineNode[][] }
+  | { type: "ol"; items: InlineNode[][] }
+  | { type: "blockquote"; children: InlineNode[] }
+  | { type: "code"; text: string }
+  | { type: "codeblock"; text: string; lang?: string }
+  | { type: "hr" }
+  | { type: "table"; headers: InlineNode[][]; rows: InlineNode[][][] };
+
+type InlineNode =
+  | { type: "text"; text: string }
+  | { type: "bold"; children: InlineNode[] }
+  | { type: "italic"; children: InlineNode[] }
+  | { type: "code"; text: string };
+
+/** Parse inline markdown (bold, italic, code, text) */
+function parseInline(text: string): InlineNode[] {
+  const result: InlineNode[] = [];
+  let i = 0;
+  while (i < text.length) {
+    // Bold: **text**
+    if (text.startsWith("**", i)) {
+      const end = text.indexOf("**", i + 2);
+      if (end !== -1) {
+        result.push({ type: "bold", children: parseInline(text.slice(i + 2, end)) });
+        i = end + 2;
+        continue;
+      }
+    }
+    // Inline code: `text`
+    if (text[i] === "`") {
+      const end = text.indexOf("`", i + 1);
+      if (end !== -1) {
+        result.push({ type: "code", text: text.slice(i + 1, end) });
+        i = end + 1;
+        continue;
+      }
+    }
+    // Italic: *text*
+    if (text[i] === "*" && text[i + 1] !== "*") {
+      const end = text.indexOf("*", i + 1);
+      if (end !== -1 && end > i + 1) {
+        result.push({ type: "italic", children: parseInline(text.slice(i + 1, end)) });
+        i = end + 1;
+        continue;
+      }
+    }
+    // Plain text
+    let j = i;
+    while (j < text.length && text[j] !== "*" && text[j] !== "`") j++;
+    if (j > i) {
+      result.push({ type: "text", text: text.slice(i, j) });
+    }
+    i = j;
+    // If stuck, advance
+    if (j === i) {
+      result.push({ type: "text", text: text[i] });
+      i++;
+    }
+  }
+  return result;
+}
+
+/** Parse full markdown content into block nodes */
+function parseMarkdown(md: string): MdNode[] {
+  const lines = md.split("\n");
+  const nodes: MdNode[] = [];
+  let i = 0;
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Code block
+    if (line.startsWith("```")) {
+      const lang = line.slice(3).trim();
+      const codeLines: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].startsWith("```")) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      i++; // skip closing ```
+      nodes.push({ type: "codeblock", text: codeLines.join("\n"), lang: lang || undefined });
+      continue;
+    }
+
+    // Table
+    if (line.startsWith("|") && i + 1 < lines.length && lines[i + 1].includes("---")) {
+      const headerCells = line.split("|").filter(c => c.trim()).map(c => parseInline(c.trim()));
+      i += 2; // skip header and separator
+      const rows: InlineNode[][][] = [];
+      while (i < lines.length && lines[i].startsWith("|")) {
+        rows.push(
+          lines[i].split("|").filter(c => c.trim()).map(c => parseInline(c.trim()))
+        );
+        i++;
+      }
+      nodes.push({ type: "table", headers: headerCells, rows });
+      continue;
+    }
+
+    // Horizontal rule
+    if (/^[-*_]{3,}\s*$/.test(line)) {
+      nodes.push({ type: "hr" });
+      i++;
+      continue;
+    }
+
+    // Headings
+    if (line.startsWith("### ")) {
+      nodes.push({ type: "h3", text: line.slice(4) });
+      i++;
+      continue;
+    }
+    if (line.startsWith("## ")) {
+      nodes.push({ type: "h2", text: line.slice(3) });
+      i++;
+      continue;
+    }
+    if (line.startsWith("# ")) {
+      nodes.push({ type: "h1", text: line.slice(2) });
+      i++;
+      continue;
+    }
+
+    // Blockquote
+    if (line.startsWith("> ")) {
+      nodes.push({ type: "blockquote", children: parseInline(line.slice(2)) });
+      i++;
+      continue;
+    }
+
+    // Ordered list
+    if (/^\d+\.\s/.test(line)) {
+      const items: InlineNode[][] = [];
+      while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
+        items.push(parseInline(lines[i].replace(/^\d+\.\s/, "")));
+        i++;
+      }
+      nodes.push({ type: "ol", items });
+      continue;
+    }
+
+    // Unordered list
+    if (/^[-*]\s/.test(line)) {
+      const items: InlineNode[][] = [];
+      while (i < lines.length && /^[-*]\s/.test(lines[i])) {
+        items.push(parseInline(lines[i].replace(/^[-*]\s/, "")));
+        i++;
+      }
+      nodes.push({ type: "ul", items });
+      continue;
+    }
+
+    // Empty line -> skip
+    if (line.trim() === "") {
+      i++;
+      continue;
+    }
+
+    // Paragraph: collect consecutive non-empty lines
+    const paraLines: string[] = [];
+    while (i < lines.length && lines[i].trim() !== "" && !lines[i].startsWith("#") && !lines[i].startsWith("|") && !lines[i].startsWith(">") && !/^[-*]\s/.test(lines[i]) && !/^\d+\.\s/.test(lines[i]) && !lines[i].startsWith("```")) {
+      paraLines.push(lines[i]);
+      i++;
+    }
+    if (paraLines.length > 0) {
+      nodes.push({ type: "p", children: parseInline(paraLines.join(" ")) });
+    } else {
+      i++;
+    }
+  }
+
+  return nodes;
+}
+
+/* ──── Render inline nodes to JSX ──── */
+
+function RenderInline({ nodes }: { nodes: InlineNode[] }): ReactNode {
+  return nodes.map((n, i) => {
+    switch (n.type) {
+      case "text":
+        return n.text;
+      case "bold":
+        return <strong key={i} style={{ fontWeight: 600, color: "#0f172a" }}><RenderInline nodes={n.children} /></strong>;
+      case "italic":
+        return <em key={i} style={{ fontStyle: "italic", color: "#475569" }}><RenderInline nodes={n.children} /></em>;
+      case "code":
+        return <code key={i} style={{ backgroundColor: "#e2e8f0", padding: "1px 4px", borderRadius: 3, fontSize: 13, fontFamily: "'SF Mono', 'Fira Code', monospace" }}>{n.text}</code>;
+    }
+  });
+}
+
+/* ──── Render block nodes to JSX ──── */
+
+function RenderMdContent({ content }: { content: string }): ReactNode {
+  const nodes = parseMarkdown(content);
+  return nodes.map((node, i) => {
+    switch (node.type) {
+      case "h1":
+        return <h1 key={i} style={{ fontSize: 16, fontWeight: 700, margin: "0 0 8px 0", color: "#0f172a" }}>{node.text}</h1>;
+      case "h2":
+        return <h2 key={i} style={{ fontSize: 15, fontWeight: 600, margin: "0 0 8px 0", color: "#1e293b" }}>{node.text}</h2>;
+      case "h3":
+        return <h3 key={i} style={{ fontSize: 14, fontWeight: 600, margin: "0 0 6px 0", color: "#334155" }}>{node.text}</h3>;
+      case "p":
+        return <p key={i} style={{ marginBottom: 12, marginTop: 0 }}><RenderInline nodes={node.children} /></p>;
+      case "ul":
+        return (
+          <ul key={i} style={{ marginBottom: 12, paddingLeft: 20 }}>
+            {node.items.map((item, j) => <li key={j} style={{ marginBottom: 4 }}><RenderInline nodes={item} /></li>)}
+          </ul>
+        );
+      case "ol":
+        return (
+          <ol key={i} style={{ marginBottom: 12, paddingLeft: 20 }}>
+            {node.items.map((item, j) => <li key={j} style={{ marginBottom: 4 }}><RenderInline nodes={item} /></li>)}
+          </ol>
+        );
+      case "blockquote":
+        return (
+          <blockquote key={i} style={{ margin: "0 0 12px 0", padding: "6px 12px", borderLeft: "3px solid #cbd5e1", backgroundColor: "#f8fafc", color: "#64748b", fontSize: 13 }}>
+            <RenderInline nodes={node.children} />
+          </blockquote>
+        );
+      case "code":
+        return <code key={i} style={{ display: "block", backgroundColor: "#e2e8f0", padding: "4px 8px", borderRadius: 3, fontSize: 13, fontFamily: "'SF Mono', 'Fira Code', monospace", marginBottom: 12 }}>{node.text}</code>;
+      case "codeblock":
+        return <pre key={i} style={{ backgroundColor: "#1e293b", color: "#e2e8f0", padding: "10px 14px", borderRadius: 4, fontSize: 13, overflowX: "auto", marginBottom: 12, fontFamily: "'SF Mono', 'Fira Code', monospace" }}><code>{node.text}</code></pre>;
+      case "hr":
+        return <hr key={i} style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "12px 0" }} />;
+      case "table":
+        return (
+          <div key={i} style={{ overflowX: "auto", marginBottom: 12 }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+              <thead>
+                <tr>
+                  {node.headers.map((h, j) => (
+                    <th key={j} style={{ border: "1px solid #cbd5e1", padding: "6px 8px", backgroundColor: "#f1f5f9", textAlign: "left", fontWeight: 600 }}>
+                      <RenderInline nodes={h} />
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {node.rows.map((row, j) => (
+                  <tr key={j}>
+                    {row.map((cell, k) => (
+                      <td key={k} style={{ border: "1px solid #e2e8f0", padding: "6px 8px" }}>
+                        <RenderInline nodes={cell} />
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+    }
+  });
+}
+
+/* ──── Main Badge Component ──── */
 
 export function RequirementBadge({ req, anchorRef, offset, index = 0, className = "" }: RequirementBadgeProps) {
   const [open, setOpen] = useState(false);
   const badgeRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{ dragging: boolean; startX: number; startY: number; posX: number; posY: number }>({
-    dragging: false, startX: 0, startY: 0, posX: 0, posY: 0,
+  const dragRef = useRef<{
+    dragging: boolean;
+    startX: number;
+    startY: number;
+    posX: number;
+    posY: number;
+  }>({
+    dragging: false,
+    startX: 0,
+    startY: 0,
+    posX: 0,
+    posY: 0,
   });
 
-  // Close on Escape
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setOpen(false); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open]);
-
-  // Reposition tooltip to avoid viewport overflow
-  const positionTooltip = useCallback(() => {
+  const clampTooltip = useCallback(() => {
     const el = tooltipRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -43,26 +315,47 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
     const vh = window.innerHeight;
     let dx = dragRef.current.posX;
     let dy = dragRef.current.posY;
-    if (rect.right > vw - 8) dx -= (rect.right - vw + 8);
-    if (rect.bottom > vh - 8) dy -= (rect.bottom - vh + 8);
-    if (rect.left < 8) dx += (8 - rect.left);
-    if (rect.top < 8) dy += (8 - rect.top);
+    if (rect.right > vw - 8) dx -= rect.right - vw + 8;
+    if (rect.bottom > vh - 8) dy -= rect.bottom - vh + 8;
+    if (rect.left < 8) dx += 8 - rect.left;
+    if (rect.top < 8) dy += 8 - rect.top;
     el.style.transform = `translate(${dx}px, ${dy}px)`;
   }, []);
 
   useEffect(() => {
     if (!open) return;
-    positionTooltip();
-  }, [open, positionTooltip]);
+    requestAnimationFrame(() => clampTooltip());
+  }, [open, clampTooltip]);
 
-  const handleMouseEnter = () => setOpen(true);
+  const handleMouseEnter = () => {
+    if (!openTooltipRegistry.has(req.id)) {
+      openTooltipRegistry.add(req.id);
+      setOpen(true);
+    }
+  };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
+  const handleClose = () => {
+    openTooltipRegistry.delete(req.id);
+    setOpen(false);
+    dragRef.current.posX = 0;
+    dragRef.current.posY = 0;
+  };
+
+  useEffect(() => {
+    return () => {
+      openTooltipRegistry.delete(req.id);
+    };
+  }, [req.id]);
+
+  const handleTooltipMouseDown = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (!target.closest(".req-tooltip-header")) return;
     e.stopPropagation();
     e.preventDefault();
     dragRef.current.dragging = true;
     dragRef.current.startX = e.clientX - dragRef.current.posX;
     dragRef.current.startY = e.clientY - dragRef.current.posY;
+
     const onMove = (ev: MouseEvent) => {
       if (!dragRef.current.dragging) return;
       dragRef.current.posX = ev.clientX - dragRef.current.startX;
@@ -82,8 +375,20 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
 
   const topOffset = anchorRef ? (offset?.top ?? -8) : 8 + index * 30;
 
+  const getTooltipInitialStyle = useCallback((): React.CSSProperties => {
+    if (!badgeRef.current) {
+      return { right: 0, top: 0 };
+    }
+    const badgeRect = badgeRef.current.getBoundingClientRect();
+    return {
+      right: window.innerWidth - badgeRect.right,
+      top: badgeRect.bottom + 8,
+    };
+  }, []);
+
   return (
     <>
+      {/* Badge */}
       <div
         ref={badgeRef}
         className={className}
@@ -92,37 +397,82 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
           top: topOffset,
           right: anchorRef ? (offset?.right ?? -4) : 16,
           zIndex: 9990,
+          display: "inline-block",
+          verticalAlign: "top",
+          cursor: "pointer",
         }}
         onMouseEnter={handleMouseEnter}
-        title={`需求 ${req.id}: ${req.title}`}
       >
-        <span className="inline-flex items-center gap-1.5 rounded-lg bg-orange-500 px-3 py-1.5 text-sm font-bold text-white shadow-lg cursor-pointer hover:bg-orange-600 transition-colors border-2 border-orange-600">
-          [{req.id}] {req.title.slice(0, 12)}{req.title.length > 12 ? "..." : ""}
+        <span
+          style={{
+            display: "inline-block",
+            verticalAlign: "top",
+            backgroundColor: "rgb(250, 173, 20)",
+            color: "#ffffff",
+            fontSize: "10px",
+            fontWeight: "bold",
+            lineHeight: "14px",
+            padding: "0px 4px",
+            borderRadius: "2px",
+            border: "none",
+            cursor: "pointer",
+            whiteSpace: "nowrap",
+            userSelect: "none",
+          }}
+        >
+          {req.id}
         </span>
       </div>
 
+      {/* Tooltip */}
       {open && (
         <div
           ref={tooltipRef}
-          onMouseDown={handleMouseDown}
+          onMouseDown={handleTooltipMouseDown}
           onClick={(e) => e.stopPropagation()}
-          className="fixed rounded-lg overflow-y-auto"
+          className="fixed"
           style={{
-            right: 16,
-            top: (badgeRef.current?.getBoundingClientRect().bottom ?? topOffset + 24) + 8,
+            ...getTooltipInitialStyle(),
             width: 450,
             maxHeight: "70vh",
+            overflowY: "auto",
             backgroundColor: "#f0efef",
-            boxShadow: "0 8px 30px rgba(0,0,0,0.18)",
+            borderRadius: "4px",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)",
             zIndex: 9999,
-            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif",
             cursor: "default",
+            transform: "translate(0px, 0px)",
           }}
         >
           {/* Header */}
-          <div style={{ padding: "14px 16px 10px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div
+            className="req-tooltip-header"
+            style={{
+              padding: "14px 16px 10px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              cursor: "grab",
+              userSelect: "none",
+            }}
+          >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span className="inline-flex items-center rounded-md bg-orange-500 px-2 py-0.5 text-xs font-bold text-white">
+              <span
+                style={{
+                  display: "inline-block",
+                  verticalAlign: "top",
+                  backgroundColor: "rgb(250, 173, 20)",
+                  color: "#ffffff",
+                  fontSize: "10px",
+                  fontWeight: "bold",
+                  lineHeight: "14px",
+                  padding: "0px 4px",
+                  borderRadius: "2px",
+                  border: "none",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {req.id}
               </span>
               <span style={{ fontSize: 14, fontWeight: 600, color: "#1e293b" }}>
@@ -130,7 +480,7 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
               </span>
             </div>
             <button
-              onClick={() => setOpen(false)}
+              onClick={handleClose}
               style={{
                 background: "none",
                 border: "none",
@@ -139,12 +489,16 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
                 color: "#94a3b8",
                 padding: "0 2px",
                 lineHeight: 1,
+                flexShrink: 0,
               }}
+              title="关闭"
             >
               ✕
             </button>
           </div>
-          <div style={{ margin: "0 16px", height: 1, backgroundColor: "#e2e8f0" }} />
+
+          {/* Divider */}
+          <div style={{ margin: "0 16px", height: 1, backgroundColor: "#d1d5db" }} />
 
           {/* Content */}
           <div
@@ -152,51 +506,7 @@ export function RequirementBadge({ req, anchorRef, offset, index = 0, className 
             onClick={(e) => e.stopPropagation()}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <ReactMarkdown
-              components={{
-                p: ({ children }) => <p style={{ marginBottom: 12, marginTop: 0 }}>{children}</p>,
-                strong: ({ children }) => <strong style={{ fontWeight: 600, color: "#0f172a" }}>{children}</strong>,
-                em: ({ children }) => <em style={{ fontStyle: "italic", color: "#475569" }}>{children}</em>,
-                ul: ({ children }) => <ul style={{ marginBottom: 12, paddingLeft: 20 }}>{children}</ul>,
-                ol: ({ children }) => <ol style={{ marginBottom: 12, paddingLeft: 20 }}>{children}</ol>,
-                li: ({ children }) => <li style={{ marginBottom: 4 }}>{children}</li>,
-                blockquote: ({ children }) => (
-                  <blockquote
-                    style={{
-                      margin: "0 0 12px 0",
-                      padding: "6px 12px",
-                      borderLeft: "3px solid #cbd5e1",
-                      backgroundColor: "#f8fafc",
-                      color: "#64748b",
-                      fontSize: 13,
-                    }}
-                  >
-                    {children}
-                  </blockquote>
-                ),
-                code: ({ children }) => (
-                  <code style={{ backgroundColor: "#e2e8f0", padding: "1px 4px", borderRadius: 3, fontSize: 13 }}>
-                    {children}
-                  </code>
-                ),
-                table: ({ children }) => (
-                  <div style={{ overflowX: "auto", marginBottom: 12 }}>
-                    <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>{children}</table>
-                  </div>
-                ),
-                th: ({ children }) => (
-                  <th style={{ border: "1px solid #cbd5e1", padding: "6px 8px", backgroundColor: "#f1f5f9", textAlign: "left", fontWeight: 600 }}>
-                    {children}
-                  </th>
-                ),
-                td: ({ children }) => (
-                  <td style={{ border: "1px solid #e2e8f0", padding: "6px 8px" }}>{children}</td>
-                ),
-                hr: () => <hr style={{ border: "none", borderTop: "1px solid #e2e8f0", margin: "12px 0" }} />,
-              }}
-            >
-              {req.content}
-            </ReactMarkdown>
+            <RenderMdContent content={req.content} />
           </div>
         </div>
       )}

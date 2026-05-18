@@ -3,6 +3,8 @@ import type { PageProps } from "../../types";
 import { DataTable } from "../../components/DataTable";
 import { Modal } from "../../components/Modal";
 import { Plus, Pencil } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 interface BillingPackage {
   id: string;
@@ -49,6 +51,7 @@ export default function PackageBilling({}: PageProps) {
   const [createModal, setCreateModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [editingPkg, setEditingPkg] = useState<BillingPackage | null>(null);
+  const pageReqs = reqs.PackageBilling.find(r => r.badgeLabel === "billing")?.reqs;
   const [form, setForm] = useState({
     name: "", price: "", seatLimit: 5, tokenLimit: 100000, knowledgeCapacity: 1000, description: "",
   });
@@ -122,6 +125,7 @@ export default function PackageBilling({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <h2 className="text-2xl font-bold text-slate-900">套餐与计费</h2>
         <button
           type="button"

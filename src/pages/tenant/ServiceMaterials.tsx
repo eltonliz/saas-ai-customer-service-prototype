@@ -2,6 +2,8 @@ import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Modal } from "../../components/Modal";
 import { Info, ShoppingBag, BookOpen, MapPin, Wrench, Megaphone, FileText, Plus, Edit3, Trash2 } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type MaterialTab = "product" | "course" | "store" | "afterSale" | "live" | "faq";
 
@@ -51,6 +53,7 @@ export default function ServiceMaterials({}: PageProps) {
   const [materials, setMaterials] = useState(initialMaterials);
   const [materialModal, setMaterialModal] = useState<{ open: boolean; editingIndex: number | null }>({ open: false, editingIndex: null });
   const [materialForm, setMaterialForm] = useState({ name: "", desc: "" });
+  const pageReqs = reqs.ServiceMaterials.find(r => r.badgeLabel === "product-material")?.reqs;
 
   function openAddModal() {
     setMaterialForm({ name: "", desc: "" });
@@ -93,6 +96,7 @@ export default function ServiceMaterials({}: PageProps) {
     <div>
       <h2 className="text-2xl font-bold text-slate-900 mb-4">商品/课程/门店客服资料</h2>
       <div className="mb-4 flex flex-wrap gap-2">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         {tabs.map((t) => (
           <button
             key={t.id}

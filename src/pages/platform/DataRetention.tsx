@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Database } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";
 
 const defaultPolicies = [
@@ -17,6 +19,7 @@ export default function DataRetention({}: PageProps) {
   const [editName, setEditName] = useState("");
   const [editDataType, setEditDataType] = useState("");
   const [editRetentionDays, setEditRetentionDays] = useState("");
+  const pageReqs = reqs.DataRetention.find(r => r.badgeLabel === "data-retention")?.reqs;
   const editingPolicy = policies.find((p) => p.id === editOpen);
 
   function openEdit(id: string) {
@@ -57,6 +60,7 @@ export default function DataRetention({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50">
             <Database size={20} className="text-teal-600" />

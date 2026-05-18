@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Radio } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";
 
 const defaultChannels = [
@@ -17,6 +19,7 @@ export default function PlatformChannelConfig({}: PageProps) {
   const [editName, setEditName] = useState("");
   const [editType, setEditType] = useState("");
   const [editScope, setEditScope] = useState("");
+  const pageReqs = reqs.PlatformChannelConfig.find(r => r.badgeLabel === "platform-channel")?.reqs;
   const editingChannel = channels.find((c) => c.id === editOpen);
 
   function openEdit(id: string) {
@@ -54,6 +57,7 @@ export default function PlatformChannelConfig({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50">
             <Radio size={20} className="text-sky-600" />

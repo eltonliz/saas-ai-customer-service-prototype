@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Shield } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";
 
 const defaultRoles = [
@@ -17,6 +19,7 @@ export default function PlatformRolePermission({}: PageProps) {
   const [membersOpen, setMembersOpen] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editPermissions, setEditPermissions] = useState("");
+  const pageReqs = reqs.PlatformRolePermission.find(r => r.badgeLabel === "platform-roles")?.reqs;
   const editingRole = roles.find((r) => r.id === editOpen);
   const viewingRole = roles.find((r) => r.id === membersOpen);
 
@@ -37,6 +40,7 @@ export default function PlatformRolePermission({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50">
             <Shield size={20} className="text-indigo-600" />

@@ -1,4 +1,6 @@
 import type { PageProps } from "../../types";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
@@ -94,8 +96,10 @@ const satisfactionTrendData: DayRate[] = [
 
 /* ──── Page ──── */
 export default function TenantAnalytics({}: PageProps) {
+  const pageReqs = reqs.TenantAnalytics.find(r => r.badgeLabel === "analytics")?.reqs;
   return (
-    <div>
+    <div className="relative">
+      {pageReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-5">数据分析</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
