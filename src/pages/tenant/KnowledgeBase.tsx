@@ -240,21 +240,40 @@ export default function KnowledgeBase({ context }: PageProps) {
     { id: "gap", label: "知识缺口池", count: myGaps.filter((g) => g.status !== "已关闭" && g.status !== "已驳回").length },
   ];
 
-  const allBadges = reqs.KnowledgeBase.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  // Merge 6 reqs into 2 module-level badges: knowledge prep + management
+  const kbGroup = reqs.KnowledgeBase[0];
+  const prepReqs = kbGroup.reqs.slice(0, 3);  // IDs 28, 29, 30
+  const mgmtReqs = kbGroup.reqs.slice(3);     // IDs 31, 32, 33
+  const allBadges = [
+    <RequirementBadge
+      key={prepReqs[0].id}
+      req={{
+        ...prepReqs[0],
+        content: prepReqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n'),
+      }}
+      sectionSelector=".kb-prep-section"
+      index={0}
+    />,
+    <RequirementBadge
+      key={mgmtReqs[0].id}
+      req={{
+        ...mgmtReqs[0],
+        content: mgmtReqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n'),
+      }}
+      sectionSelector=".kb-mgmt-section"
+      index={0}
+    />,
+  ];
 
   return (
     <div className="relative kb-page">
       {allBadges}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 kb-prep-section">
         <h2 className="text-2xl font-bold text-slate-900">知识库管理</h2>
         <button type="button" onClick={() => setModalUpload(true)} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Upload size={14} />上传文档</button>
       </div>
 
-      <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
+      <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit kb-mgmt-section">
         {tabItems.map((t) => (
           <button key={t.id} type="button" onClick={() => setTab(t.id)} className={`rounded-lg px-4 py-2 text-base font-medium transition-colors ${tab === t.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
             {t.label}

@@ -472,11 +472,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
     <div className="flex flex-col flex-1 min-h-0">
       {/* Header */}
       <div className="bg-blue-600 px-4 py-3 shrink-0 relative">
-        {reqs.AppAiService.flatMap(group =>
-          group.reqs.map((req, i) => (
-            <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-          ))
-        )}
+        {reqs.AppAiService.map(group => {
+          const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+          return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+        })}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-semibold text-white">星选直播旗舰店</h2>

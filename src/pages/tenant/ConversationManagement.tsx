@@ -54,11 +54,10 @@ export default function ConversationManagement({ context }: PageProps) {
   const convMessages = selected ? conversationMessages.filter((m) => m.conversationId === selected.id) : [];
   const selectedUser = selected ? users.find((u) => u.id === selected.userId) : null;
 
-  const allBadges = reqs.ConversationManagement.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const allBadges = reqs.ConversationManagement.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
 
   return (
     <div className="relative conv-page">
