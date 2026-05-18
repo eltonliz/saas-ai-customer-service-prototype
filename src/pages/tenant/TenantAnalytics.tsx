@@ -96,10 +96,14 @@ const satisfactionTrendData: DayRate[] = [
 
 /* ──── Page ──── */
 export default function TenantAnalytics({}: PageProps) {
-  const allReqs = reqs.TenantAnalytics.flatMap(r => r.reqs);
+  const allBadges = reqs.TenantAnalytics.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-5">数据分析</h2>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">

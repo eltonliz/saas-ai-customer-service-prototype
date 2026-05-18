@@ -18,7 +18,11 @@ export default function ServicePolicy({}: PageProps) {
   const [editOpen, setEditOpen] = useState<string | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [editForm, setEditForm] = useState({ title: "", scope: "", content: "" });
-  const allReqs = reqs.ServicePolicy.flatMap(r => r.reqs);
+  const allBadges = reqs.ServicePolicy.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   const selectedPolicy = policies.find((p) => p.id === detailOpen);
   const editingPolicy = policies.find((p) => p.id === editOpen);
@@ -48,7 +52,7 @@ export default function ServicePolicy({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50">
             <Shield size={20} className="text-amber-600" />

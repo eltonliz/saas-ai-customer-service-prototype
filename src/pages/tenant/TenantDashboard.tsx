@@ -197,11 +197,15 @@ export default function TenantDashboard({ context }: PageProps) {
 
   // ---------------------------------------------------------------------------
 
-  const allReqs = reqs.TenantDashboard.flatMap(r => r.reqs);
+  const allBadges = reqs.TenantDashboard.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="space-y-6 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       {/* ================================================================ */}
       {/* Service context bar                                               */}
       {/* ================================================================ */}

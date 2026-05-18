@@ -139,11 +139,15 @@ export default function PlatformDashboard({}: PageProps) {
 
   const renderPieLabel = (props: { name?: string }): string => props.name ?? "";
 
-  const allReqs = reqs.PlatformDashboard.flatMap(r => r.reqs);
+  const allBadges = reqs.PlatformDashboard.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-6">平台总览</h2>
 
       {/* Metric Cards Grid */}

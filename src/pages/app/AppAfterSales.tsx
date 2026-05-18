@@ -10,7 +10,11 @@ import { Wrench, RefreshCw, ArrowLeftRight, RotateCcw, Check } from "lucide-reac
 export default function AppAfterSales({ context, goPage }: PageProps) {
   const store = useAppStore();
   const myAfterSales = store.afterSales.filter((a) => a.userId === context.currentUserId);
-  const allReqs = reqs.AppAfterSales.flatMap(r => r.reqs);
+  const allBadges = reqs.AppAfterSales.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const [selected, setSelected] = useState<AfterSale | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState<"退款申请" | "退货申请" | "换货申请">("退款申请");
@@ -42,7 +46,7 @@ export default function AppAfterSales({ context, goPage }: PageProps) {
 
   return (
     <div className="p-4 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">售后服务</h2>
         <button type="button" onClick={() => setShowForm(true)} className="rounded-xl bg-blue-600 px-4 py-2.5 text-base font-medium text-white hover:bg-blue-700">

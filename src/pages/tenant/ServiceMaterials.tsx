@@ -53,7 +53,11 @@ export default function ServiceMaterials({}: PageProps) {
   const [materials, setMaterials] = useState(initialMaterials);
   const [materialModal, setMaterialModal] = useState<{ open: boolean; editingIndex: number | null }>({ open: false, editingIndex: null });
   const [materialForm, setMaterialForm] = useState({ name: "", desc: "" });
-  const allReqs = reqs.ServiceMaterials.flatMap(r => r.reqs);
+  const allBadges = reqs.ServiceMaterials.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   function openAddModal() {
     setMaterialForm({ name: "", desc: "" });
@@ -96,7 +100,7 @@ export default function ServiceMaterials({}: PageProps) {
     <div>
       <h2 className="text-2xl font-bold text-slate-900 mb-4">商品/课程/门店客服资料</h2>
       <div className="mb-4 flex flex-wrap gap-2">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         {tabs.map((t) => (
           <button
             key={t.id}

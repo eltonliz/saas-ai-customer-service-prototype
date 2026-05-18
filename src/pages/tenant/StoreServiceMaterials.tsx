@@ -14,13 +14,17 @@ const defaultStores = [
 export default function StoreServiceMaterials({}: PageProps) {
   const [stores] = useState(defaultStores);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
-  const allReqs = reqs.StoreServiceMaterials.flatMap(r => r.reqs);
+  const allBadges = reqs.StoreServiceMaterials.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const selectedStore = stores.find((s) => s.id === detailOpen);
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50">
             <Store size={20} className="text-emerald-600" />

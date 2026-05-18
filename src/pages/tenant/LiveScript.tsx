@@ -16,7 +16,11 @@ export default function LiveScript({}: PageProps) {
   const [scripts, setScripts] = useState(defaultScripts);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState<string | null>(null);
-  const allReqs = reqs.LiveScript.flatMap(r => r.reqs);
+  const allBadges = reqs.LiveScript.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const selectedScript = scripts.find((s) => s.id === detailOpen);
   const previewScript = scripts.find((s) => s.id === previewOpen);
 
@@ -27,7 +31,7 @@ export default function LiveScript({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50">
             <Mic size={20} className="text-rose-600" />

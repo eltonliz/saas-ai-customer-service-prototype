@@ -34,7 +34,11 @@ const degradationRecords = [
 ];
 
 export default function OpsMonitor({}: PageProps) {
-  const allReqs = reqs.OpsMonitor.flatMap(r => r.reqs);
+  const allBadges = reqs.OpsMonitor.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const [alertList, setAlertList] = useState(alerts);
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
 
@@ -61,7 +65,7 @@ export default function OpsMonitor({}: PageProps) {
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">运维监控</h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 mb-6">

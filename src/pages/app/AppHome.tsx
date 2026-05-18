@@ -29,7 +29,11 @@ export default function AppHome({ context, goPage }: PageProps) {
   const [searchText, setSearchText] = useState("");
   const user = users.find((u) => u.id === context.currentUserId);
   const myConversations = conversations.filter((c) => c.userId === context.currentUserId);
-  const allReqs = reqs.AppHome.flatMap(r => r.reqs);
+  const allBadges = reqs.AppHome.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   function handleSearch() {
     if (!searchText.trim()) return;
@@ -44,7 +48,7 @@ export default function AppHome({ context, goPage }: PageProps) {
 
   return (
     <div className="pb-4 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       {/* ========== 1. Search Bar ========== */}
       <div className="px-4 pt-4 pb-2">
         <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2.5">

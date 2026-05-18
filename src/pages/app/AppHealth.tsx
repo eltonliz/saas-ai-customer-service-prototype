@@ -31,11 +31,15 @@ const articles = [
 ];
 
 export default function AppHealth({ goPage }: PageProps) {
-  const allReqs = reqs.AppHealth.flatMap(r => r.reqs);
+  const allBadges = reqs.AppHealth.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="p-4 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
 
       {/* ========== 1. 合规警示横幅 — MORE PROMINENT ========== */}
       <div className="mb-5 rounded-2xl border-2 border-rose-300 bg-rose-50 p-4">

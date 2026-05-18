@@ -73,11 +73,15 @@ export default function TenantManagement({}: PageProps) {
     );
   }
 
-  const allReqs = reqs.TenantManagement.flatMap(r => r.reqs);
+  const allBadges = reqs.TenantManagement.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">租户管理</h2>
         <button

@@ -94,11 +94,15 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
     sendMessage(chip);
   }
 
-  const allReqs = reqs.AppWebSdkPreview.flatMap(r => r.reqs);
+  const allBadges = reqs.AppWebSdkPreview.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="flex flex-col h-full bg-slate-100 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       {/* ======== Page Switcher ======== */}
       <div className="bg-white border-b border-slate-200 px-4 py-2">
         <div className="flex gap-1 bg-slate-100 rounded-lg p-1">

@@ -116,11 +116,15 @@ export default function TenantRagTrace({ context }: PageProps) {
     { time: selected.timeline[9] ?? "", title: "日志归档", detail: selected.sampleType, state: "pending" as const },
   ];
 
-  const allReqs = reqs.TenantRagTrace.flatMap(r => r.reqs);
+  const allBadges = reqs.TenantRagTrace.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="flex flex-col h-full relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       {/* Page Header */}
       <div className="flex items-center gap-3 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-50">

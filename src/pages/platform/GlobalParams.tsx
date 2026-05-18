@@ -17,7 +17,11 @@ export default function GlobalParams({}: PageProps) {
   const [params, setParams] = useState(defaultParams);
   const [editOpen, setEditOpen] = useState<string | null>(null);
   const [editValue, setEditValue] = useState("");
-  const allReqs = reqs.GlobalParams.flatMap(r => r.reqs);
+  const allBadges = reqs.GlobalParams.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const editingParam = params.find((p) => p.id === editOpen);
 
   function openEdit(id: string) {
@@ -34,7 +38,7 @@ export default function GlobalParams({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-50">
             <SlidersHorizontal size={20} className="text-purple-600" />

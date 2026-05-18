@@ -19,7 +19,11 @@ export default function DataRetention({}: PageProps) {
   const [editName, setEditName] = useState("");
   const [editDataType, setEditDataType] = useState("");
   const [editRetentionDays, setEditRetentionDays] = useState("");
-  const allReqs = reqs.DataRetention.flatMap(r => r.reqs);
+  const allBadges = reqs.DataRetention.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const editingPolicy = policies.find((p) => p.id === editOpen);
 
   function openEdit(id: string) {
@@ -60,7 +64,7 @@ export default function DataRetention({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50">
             <Database size={20} className="text-teal-600" />

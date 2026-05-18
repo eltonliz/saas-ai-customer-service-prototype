@@ -20,7 +20,11 @@ export default function MerchantManagement({}: PageProps) {
   const [viewingMerchant, setViewingMerchant] = useState<MerchantWithExtras | null>(null);
   const [form, setForm] = useState({ name: "", contact: "", phone: "" });
   const [editForm, setEditForm] = useState({ name: "", contact: "", phone: "" });
-  const allReqs = reqs.MerchantManagement.flatMap(r => r.reqs);
+  const allBadges = reqs.MerchantManagement.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   function handleCreate() {
     if (!form.name.trim()) return;
@@ -79,7 +83,7 @@ export default function MerchantManagement({}: PageProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <h2 className="text-2xl font-bold text-slate-900">商家管理</h2>
         <button
           type="button"

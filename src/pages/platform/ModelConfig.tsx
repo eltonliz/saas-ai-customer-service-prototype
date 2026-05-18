@@ -150,11 +150,15 @@ export default function ModelConfig({}: PageProps) {
     setRoutes((prev) => prev.filter((r) => r.scene !== scene));
   }
 
-  const allReqs = reqs.ModelConfig.flatMap(r => r.reqs);
+  const allBadges = reqs.ModelConfig.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">模型配置</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">

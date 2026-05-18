@@ -25,7 +25,11 @@ const errorSamples = [
 ];
 
 export default function EvaluationCenter({}: PageProps) {
-  const allReqs = reqs.EvaluationCenter.flatMap(r => r.reqs);
+  const allBadges = reqs.EvaluationCenter.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const [tab, setTab] = useState<Tab>("ai");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -34,7 +38,7 @@ export default function EvaluationCenter({}: PageProps) {
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">质检与评测中心</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit overflow-x-auto">

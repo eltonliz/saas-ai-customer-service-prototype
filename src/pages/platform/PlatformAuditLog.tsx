@@ -16,13 +16,17 @@ const mockLogs = [
 export default function PlatformAuditLog({}: PageProps) {
   const [logs] = useState(mockLogs);
   const [search, setSearch] = useState("");
-  const allReqs = reqs.PlatformAuditLog.flatMap(r => r.reqs);
+  const allBadges = reqs.PlatformAuditLog.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const filtered = logs.filter((l) => !search || l.operator.includes(search) || l.action.includes(search) || l.target.includes(search));
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <ScrollText size={20} className="text-slate-600" />

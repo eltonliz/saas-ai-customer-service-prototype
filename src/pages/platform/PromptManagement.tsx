@@ -10,7 +10,11 @@ import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 
 export default function PromptManagement({}: PageProps) {
-  const allReqs = reqs.PromptManagement.flatMap(r => r.reqs);
+  const allBadges = reqs.PromptManagement.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const [list, setList] = useState(promptVersions);
   const [selected, setSelected] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -82,7 +86,7 @@ export default function PromptManagement({}: PageProps) {
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">全局Prompt管理</h2>
         <button

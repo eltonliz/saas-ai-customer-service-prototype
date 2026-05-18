@@ -54,11 +54,15 @@ export default function ConversationManagement({ context }: PageProps) {
   const convMessages = selected ? conversationMessages.filter((m) => m.conversationId === selected.id) : [];
   const selectedUser = selected ? users.find((u) => u.id === selected.userId) : null;
 
-  const allReqs = reqs.ConversationManagement.flatMap(r => r.reqs);
+  const allBadges = reqs.ConversationManagement.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">会话管理</h2>
 
       {/* Filters */}

@@ -16,11 +16,15 @@ export default function AppCourses({ goPage }: PageProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const course = selected ? courses.find((c) => c.id === selected) : null;
 
-  const allReqs = reqs.AppCourses.flatMap(r => r.reqs);
+  const allBadges = reqs.AppCourses.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="p-4 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">课程学习</h2>
       {!course ? (
         <div className="space-y-3">

@@ -11,11 +11,15 @@ export default function AppStores({ context, goPage }: PageProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const store = selected ? myStores.find((s) => s.id === selected) : null;
 
-  const allReqs = reqs.AppStores.flatMap(r => r.reqs);
+  const allBadges = reqs.AppStores.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="p-4 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">门店服务</h2>
       {!store ? (
         <div className="space-y-3">

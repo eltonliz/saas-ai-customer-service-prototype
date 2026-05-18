@@ -240,11 +240,15 @@ export default function KnowledgeBase({ context }: PageProps) {
     { id: "gap", label: "知识缺口池", count: myGaps.filter((g) => g.status !== "已关闭" && g.status !== "已驳回").length },
   ];
 
-  const allReqs = reqs.KnowledgeBase.flatMap(r => r.reqs);
+  const allBadges = reqs.KnowledgeBase.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">知识库管理</h2>
         <button type="button" onClick={() => setModalUpload(true)} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Upload size={14} />上传文档</button>

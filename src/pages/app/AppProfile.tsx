@@ -6,7 +6,11 @@ import { User, Ticket, MessageSquare, Wrench, Settings, ChevronRight, Star, Crow
 
 export default function AppProfile({ context, goPage }: PageProps) {
   const user = users.find((u) => u.id === context.currentUserId);
-  const allReqs = reqs.AppProfile.flatMap(r => r.reqs);
+  const allBadges = reqs.AppProfile.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const myConversations = conversations.filter((c) => c.userId === context.currentUserId);
   const myTickets = tickets.filter((t) => t.userId === context.currentUserId);
   const myAfterSales = afterSales.filter((a) => a.userId === context.currentUserId);
@@ -25,7 +29,7 @@ export default function AppProfile({ context, goPage }: PageProps) {
 
   return (
     <div className="p-4 relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       {/* User Card */}
       <div className="rounded-2xl bg-white p-8 shadow-sm border border-slate-100 mb-4">
         <div className="flex items-center gap-5 mb-4">

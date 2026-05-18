@@ -10,7 +10,11 @@ import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 
 export default function RagVectorMonitor({}: PageProps) {
-  const allReqs = reqs.RagVectorMonitor.flatMap(r => r.reqs);
+  const allBadges = reqs.RagVectorMonitor.flatMap(group =>
+  group.reqs.map((req, i) => (
+    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
+  ))
+);
   const [selectedTenant, setSelectedTenant] = useState<string | null>(null);
 
   const totalDocs = knowledgeDocuments.length;
@@ -63,7 +67,7 @@ export default function RagVectorMonitor({}: PageProps) {
 
   return (
     <div className="relative">
-      {allReqs.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
+      {allBadges}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">RAG与向量库监控</h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
