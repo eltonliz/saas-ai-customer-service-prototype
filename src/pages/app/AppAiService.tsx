@@ -291,12 +291,12 @@ export default function AppAiService({ goPage }: PageProps) {
       )}
 
       {/* Messages */}
-      <div ref={containerRef} className="flex-1 min-h-0 bg-[#F7F9FC]" data-annotation-target="app-ai-chat-window">
+      <div ref={containerRef} className="flex-1 min-h-0 bg-[#F7F9FC]">
         <ChatWindow
           messages={augmentedMessages}
           header={
             showWelcome ? (
-              <div className="pb-2" data-annotation-target="app-ai-quick-chips">
+              <div className="pb-2">
                 <p className="text-base text-slate-400 mb-2">您可以这样问我</p>
                 <div className="grid grid-cols-2 gap-2">
                   {quickChips.map((chip) => {
@@ -381,7 +381,7 @@ export default function AppAiService({ goPage }: PageProps) {
       </div>
 
       {/* Input bar — fixed at bottom */}
-      <div className="border-t border-slate-200 px-4 py-4 bg-white shrink-0" data-annotation-target="app-ai-input-bar">
+      <div className="border-t border-slate-200 px-4 py-4 bg-white shrink-0">
         {transferred && (
           <div className="mb-2 rounded-lg bg-orange-50 border border-orange-100 px-4 py-2.5 text-base text-orange-700">
             已为你转人工，请稍候。如有紧急问题可拨打客服热线 400-800-8888。

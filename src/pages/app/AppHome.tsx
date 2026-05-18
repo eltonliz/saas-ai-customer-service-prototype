@@ -141,7 +141,7 @@ export default function AppHome({ context, goPage }: PageProps) {
       {/* ========== 4. AI客服快捷入口 ========== */}
       <div className="px-4 mb-4">
         <h3 className="text-xl font-semibold text-slate-800 mb-3">AI客服</h3>
-        <div className="grid grid-cols-2 gap-3" data-annotation-target="app-home-entries">
+        <div className="grid grid-cols-2 gap-3">
           <button
             type="button"
             onClick={() => goPage?.("ai-service", { chatPrompt: "订单问题，查物流、改地址" })}

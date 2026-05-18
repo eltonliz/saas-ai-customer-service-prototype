@@ -30,7 +30,7 @@ const articles = [
 
 export default function AppHealth({ goPage }: PageProps) {
   return (
-    <div className="p-4" data-annotation-target="app-health-chat">
+    <div className="p-4">
 
       {/* ========== 1. 合规警示横幅 — MORE PROMINENT ========== */}
       <div className="mb-5 rounded-2xl border-2 border-rose-300 bg-rose-50 p-4">

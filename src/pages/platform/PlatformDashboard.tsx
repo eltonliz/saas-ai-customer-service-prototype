@@ -142,7 +142,7 @@ export default function PlatformDashboard({}: PageProps) {
       <h2 className="text-2xl font-bold text-slate-900 mb-6">平台总览</h2>
 
       {/* Metric Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6" data-annotation-target="platform-dashboard-metrics">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-6">
         {metrics.map((m) => (
           <div key={m.label} className="rounded-xl border border-slate-200 bg-white p-8">
             <div className="flex items-center justify-between mb-3">

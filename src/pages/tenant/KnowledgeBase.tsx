@@ -290,7 +290,7 @@ export default function KnowledgeBase({ context }: PageProps) {
       )}
 
       {tab === "review" && (
-        <div className="space-y-6" data-annotation-target="tenant-kb-list">
+        <div className="space-y-6">
           <div>
             <h3 className="text-base font-semibold text-slate-700 mb-3">待审核文档 ({pendingDocs.length})</h3>
             {pendingDocs.length === 0 ? <p className="text-base text-slate-400">暂无待审核文档</p> : (
