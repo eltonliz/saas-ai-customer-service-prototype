@@ -239,7 +239,7 @@ export default function KnowledgeBase({ context }: PageProps) {
         <button type="button" onClick={() => setModalUpload(true)} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Upload size={14} />上传文档</button>
       </div>
 
-      <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit" data-annotation-target="tenant-kb-tabs">
+      <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">
         {tabItems.map((t) => (
           <button key={t.id} type="button" onClick={() => setTab(t.id)} className={`rounded-lg px-4 py-2 text-base font-medium transition-colors ${tab === t.id ? "bg-white text-slate-800 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
             {t.label}
@@ -291,7 +291,7 @@ export default function KnowledgeBase({ context }: PageProps) {
 
       {tab === "review" && (
         <div className="space-y-6" data-annotation-target="tenant-kb-list">
-          <div data-annotation-target="tenant-kb-review-queue">
+          <div>
             <h3 className="text-base font-semibold text-slate-700 mb-3">待审核文档 ({pendingDocs.length})</h3>
             {pendingDocs.length === 0 ? <p className="text-base text-slate-400">暂无待审核文档</p> : (
               <div className="space-y-2">
@@ -334,7 +334,7 @@ export default function KnowledgeBase({ context }: PageProps) {
       )}
 
       {tab === "gap" && (
-        <div data-annotation-target="tenant-kb-gap-pool">
+        <>
           {/* Process Flow Bar */}
           <div className="rounded-xl border border-slate-200 bg-white p-4 mb-3">
             <p className="text-base font-semibold text-slate-700 mb-3">知识反哺闭环流程</p>
@@ -363,7 +363,7 @@ export default function KnowledgeBase({ context }: PageProps) {
             <p className="text-base text-slate-400 mt-3">当前缺口池中有 {myGaps.filter(g => g.status !== "已关闭" && g.status !== "已驳回").length} 个活跃缺口，{myGaps.filter(g => g.status === "追踪中").length} 个正在追踪效果</p>
           </div>
 
-          <div className="space-y-3" data-annotation-target="tenant-kb-gap-pool-items">
+          <div className="space-y-3">
           {myGaps.length === 0 ? (
             <p className="text-base text-slate-400">暂无知识缺口</p>
           ) : (
@@ -478,7 +478,7 @@ export default function KnowledgeBase({ context }: PageProps) {
             ))
           )}
         </div>
-        </div>
+        </>
       )}
 
       {/* Document Drawer */}
@@ -557,7 +557,7 @@ export default function KnowledgeBase({ context }: PageProps) {
       </Drawer>
 
       {/* Upload Modal */}
-      <Modal open={modalUpload} title="上传文档" onClose={() => setModalUpload(false)} size="md" data-annotation-target="tenant-kb-modals">
+      <Modal open={modalUpload} title="上传文档" onClose={() => setModalUpload(false)} size="md">
         <div className="space-y-3">
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">文档标题</label>

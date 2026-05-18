@@ -7,85 +7,45 @@ interface RequirementBadgeProps {
   onHover: (ann: RequirementAnnotation, rect: DOMRect) => void;
 }
 
-const BADGE_SAFE_OFFSET_X = 8;
-const BADGE_SAFE_OFFSET_Y = 8;
-
-function isInsidePhonePreview(el: Element): boolean {
-  let parent: Element | null = el;
-  while (parent) {
-    if (parent.hasAttribute("data-phone-preview-shell")) return true;
-    parent = parent.parentElement;
-  }
-  return false;
-}
-
 export function RequirementBadge({ annotation, onHover }: RequirementBadgeProps) {
+  const targetRef = useRef<Element | null>(null);
   const [badgePos, setBadgePos] = useState<{ top: number; left: number } | null>(null);
-  const [mounted, setMounted] = useState(false);
-  const observerRef = useRef<MutationObserver | null>(null);
-  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [usePortal, setUsePortal] = useState(false);
 
   const updatePosition = useCallback(() => {
     const el = document.querySelector(annotation.targetSelector);
     if (!el) return;
+    targetRef.current = el;
 
-    const rect = el.getBoundingClientRect();
-
-    // If target is inside PhonePreview, check if it's in the visible area
-    if (isInsidePhonePreview(el)) {
-      const shell = document.querySelector("[data-phone-preview-shell]");
-      if (shell) {
-        const shellRect = shell.getBoundingClientRect();
-        // Badge position (right edge of target, offset inward)
-        const badgeLeft = rect.right - 6;
-        const badgeTop = rect.top + BADGE_SAFE_OFFSET_Y;
-        if (badgeLeft < shellRect.left + 8 || badgeLeft > shellRect.right - 8 ||
-            badgeTop < shellRect.top + 8 || badgeTop > shellRect.bottom - 8) {
-          setBadgePos(null);
-          setMounted(true);
-          return;
-        }
+    // Check if any parent has overflow hidden/auto/scroll
+    let parent = el.parentElement;
+    let needsPortal = false;
+    while (parent) {
+      const style = window.getComputedStyle(parent);
+      if (style.overflow === "hidden" || style.overflow === "auto" || style.overflow === "scroll" ||
+          style.overflowX === "hidden" || style.overflowX === "auto" || style.overflowX === "scroll" ||
+          style.overflowY === "hidden" || style.overflowY === "auto" || style.overflowY === "scroll") {
+        needsPortal = true;
+        break;
       }
+      parent = parent.parentElement;
     }
+    setUsePortal(needsPortal);
 
-    // position:fixed uses viewport-relative coords. getBoundingClientRect already returns viewport coords.
-    // DO NOT add window.scrollX/scrollY.
-    setBadgePos({
-      top: rect.top + BADGE_SAFE_OFFSET_Y,
-      left: rect.right - 6,
-    });
-    setMounted(true);
+    if (needsPortal) {
+      const rect = el.getBoundingClientRect();
+      setBadgePos({
+        top: rect.top + window.scrollY - 8,
+        left: rect.right + window.scrollX - 4,
+      });
+    }
   }, [annotation.targetSelector]);
 
   useEffect(() => {
     updatePosition();
-
-    // Capture scrolls from any ancestor (including inside PhonePreview)
-    window.addEventListener("scroll", updatePosition, { capture: true, passive: true });
+    window.addEventListener("scroll", updatePosition, true);
     window.addEventListener("resize", updatePosition);
-
-    // Observer for DOM mutations (dynamic content)
-    const el = document.querySelector(annotation.targetSelector);
-    if (el) {
-      observerRef.current = new MutationObserver(updatePosition);
-      observerRef.current.observe(el, { attributes: true, childList: true, subtree: true });
-    } else {
-      // Target doesn't exist yet — poll until it appears
-      pollRef.current = setInterval(() => {
-        const found = document.querySelector(annotation.targetSelector);
-        if (found) {
-          if (pollRef.current) clearInterval(pollRef.current);
-          pollRef.current = null;
-          observerRef.current = new MutationObserver(updatePosition);
-          observerRef.current.observe(found, { attributes: true, childList: true, subtree: true });
-          updatePosition();
-        }
-      }, 500);
-    }
-
     return () => {
-      observerRef.current?.disconnect();
-      if (pollRef.current) clearInterval(pollRef.current);
       window.removeEventListener("scroll", updatePosition, true);
       window.removeEventListener("resize", updatePosition);
     };
@@ -98,19 +58,31 @@ export function RequirementBadge({ annotation, onHover }: RequirementBadgeProps)
     }
   };
 
-  if (!mounted || !badgePos) return null;
+  if (usePortal && badgePos) {
+    return createPortal(
+      <span
+        className="requirement-badge requirement-badge-portal"
+        style={{ top: badgePos.top, left: badgePos.left }}
+        onMouseEnter={handleMouseEnter}
+        onClick={(e) => e.stopPropagation()}
+        title={`需求 [${annotation.id}] ${annotation.moduleName}`}
+      >
+        {annotation.id}
+      </span>,
+      document.body
+    );
+  }
 
-  return createPortal(
+  // Inline render — the target needs position:relative
+  return (
     <span
-      className="requirement-badge requirement-badge-portal"
-      style={{ top: badgePos.top, left: badgePos.left }}
+      className="requirement-badge requirement-badge-static"
       onMouseEnter={handleMouseEnter}
       onClick={(e) => e.stopPropagation()}
       title={`需求 [${annotation.id}] ${annotation.moduleName}`}
     >
       {annotation.id}
-    </span>,
-    document.body,
+    </span>
   );
 }
 

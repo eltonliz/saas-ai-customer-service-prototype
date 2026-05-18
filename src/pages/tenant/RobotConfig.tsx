@@ -105,7 +105,7 @@ export default function RobotConfig({ context }: PageProps) {
         <button type="button" onClick={openNewModal} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新增机器人</button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" data-annotation-target="tenant-robot-list">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {robots.map((r) => (
           <div key={r.id} className="rounded-xl border border-slate-200 bg-white p-8">
             <div className="flex items-center justify-between mb-3">
@@ -140,7 +140,7 @@ export default function RobotConfig({ context }: PageProps) {
       </div>
 
       {/* New Robot Modal */}
-      <Modal open={modal === "new"} title="新增机器人" onClose={() => setModal(null)} size="lg" data-annotation-target="tenant-robot-form">
+      <Modal open={modal === "new"} title="新增机器人" onClose={() => setModal(null)} size="lg">
         <div className="grid grid-cols-2 gap-3 text-base">
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">机器人名称</label>
@@ -176,7 +176,7 @@ export default function RobotConfig({ context }: PageProps) {
       </Modal>
 
       {/* Edit Robot Modal */}
-      <Modal open={modal === "edit"} title="编辑机器人" onClose={() => { setModal(null); setEditingRobotId(null); }} size="lg" data-annotation-target="tenant-robot-config-form">
+      <Modal open={modal === "edit"} title="编辑机器人" onClose={() => { setModal(null); setEditingRobotId(null); }} size="lg">
         <div className="grid grid-cols-2 gap-3 text-base">
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">机器人名称</label>
@@ -235,7 +235,7 @@ export default function RobotConfig({ context }: PageProps) {
       </Modal>
 
       {/* Test Modal */}
-      <Modal open={modal === "test"} title="测试机器人" onClose={() => setModal(null)} size="md" data-annotation-target="tenant-robot-test">
+      <Modal open={modal === "test"} title="测试机器人" onClose={() => setModal(null)} size="md">
         <div className="h-64 overflow-y-auto rounded-xl bg-slate-50 p-3 mb-3">
           {testMessages.map((m, i) => (
             <p key={i} className={`text-base mb-2 ${m.startsWith("用户:") ? "text-blue-600" : "text-slate-600"}`}>{m}</p>

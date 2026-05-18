@@ -10,15 +10,13 @@
   border-radius: 2px;
   border: none;
   cursor: pointer;
-  z-index: 10000;
-  pointer-events: auto;
+  z-index: 9998;
 }
 
 .requirement-badge-static {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  pointer-events: auto;
+  top: -8px;
+  right: -4px;
 }
 
 .requirement-badge-portal {
@@ -29,11 +27,10 @@
 .requirement-tooltip {
   position: fixed;
   width: 450px;
-  max-width: calc(100vw - 16px);
   background: #f0efef;
   border-radius: 4px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  z-index: 10001;
+  z-index: 9999;
   user-select: none;
 }
 

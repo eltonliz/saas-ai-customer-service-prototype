@@ -298,22 +298,17 @@ function AppInner() {
 }
 
 function AnnotationWrapper() {
-  const [path, setPath] = useState(() => window.location.hash.replace("#", "") || "/");
+  const [activeAnnotations, setActiveAnnotations] = useState<RequirementAnnotation[]>([]);
 
   useEffect(() => {
-    const handleHashChange = () => {
-      setPath(window.location.hash.replace("#", "") || "/");
-    };
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
-
-  const activeAnnotations = useMemo(() => {
-    return requirementAnnotations.filter((a) => {
+    const hash = window.location.hash;
+    const path = hash ? hash.replace("#", "") : "/";
+    const matched = requirementAnnotations.filter((a) => {
       if (!a.pagePath) return false;
       return path.includes(a.pagePath) || a.pagePath.includes(path);
     });
-  }, [path]);
+    setActiveAnnotations(matched);
+  }, []);
 
   return (
     <>

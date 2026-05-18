@@ -154,7 +154,7 @@ export default function ModelConfig({}: PageProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">
         {/* Providers */}
-        <div className="rounded-xl border border-slate-200 bg-white p-8" data-annotation-target="platform-model-providers">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-semibold text-slate-700 flex items-center gap-2">
               <Settings size={16} className="text-blue-500" />模型供应商
@@ -212,7 +212,7 @@ export default function ModelConfig({}: PageProps) {
         </div>
 
         {/* Routes */}
-        <div className="rounded-xl border border-slate-200 bg-white p-8" data-annotation-target="platform-model-routes">
+        <div className="rounded-xl border border-slate-200 bg-white p-8">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-base font-semibold text-slate-700 flex items-center gap-2">
               <Route size={16} className="text-indigo-500" />模型路由策略
