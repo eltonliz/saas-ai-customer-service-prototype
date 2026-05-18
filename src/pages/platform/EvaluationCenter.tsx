@@ -4,6 +4,8 @@ import { DataTable } from "../../components/DataTable";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Drawer } from "../../components/Drawer";
 import { CheckCircle, XCircle, BookOpen, Search, Wrench, Shield, FileText } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type Tab = "ai" | "rag" | "faq" | "tool" | "health" | "errors";
 
@@ -23,6 +25,7 @@ const errorSamples = [
 ];
 
 export default function EvaluationCenter({}: PageProps) {
+  const ecReqs = reqs.EvaluationCenter.find(r => r.badgeLabel === "eval-center")?.reqs;
   const [tab, setTab] = useState<Tab>("ai");
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
@@ -30,7 +33,8 @@ export default function EvaluationCenter({}: PageProps) {
   const errorDetail = errorSamples.find((e) => e.id === selectedId);
 
   return (
-    <div>
+    <div className="relative">
+      {ecReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">质检与评测中心</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit overflow-x-auto">

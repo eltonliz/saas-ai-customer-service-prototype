@@ -5,6 +5,8 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { ChatWindow } from "../../components/ChatWindow";
 import { Modal } from "../../components/Modal";
 import { Users, MessageSquare, AlertTriangle, CreditCard, Ban, CheckCircle, XCircle, Send, Ticket } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type Tab = "conversations" | "tickets";
 
@@ -24,6 +26,7 @@ const platformTickets = [
 ];
 
 export default function PlatformServiceWorkbench({}: PageProps) {
+  const pswReqs = reqs.PlatformServiceWorkbench.find(r => r.badgeLabel === "platform-workbench")?.reqs;
   const [tab, setTab] = useState<Tab>("conversations");
   const [selectedConv, setSelectedConv] = useState<string | null>(null);
   const [input, setInput] = useState("");
@@ -68,7 +71,8 @@ export default function PlatformServiceWorkbench({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="relative">
+      {pswReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">平台客服工作台</h2>
         <span className="text-base text-amber-600 bg-amber-50 rounded-lg px-3 py-1">仅处理平台责任和兜底场景，不处理商家私有客服会话</span>

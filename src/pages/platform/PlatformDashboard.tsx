@@ -1,6 +1,8 @@
 import type { PageProps } from "../../types";
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
 import { Building2, Store, MessageCircle, Zap, Database, TrendingUp, AlertTriangle, Activity, Shield, Users, CreditCard, BookOpen, Clock } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const callTrend = [
   { day: "5/11", calls: 4200 }, { day: "5/12", calls: 4800 }, { day: "5/13", calls: 5100 },
@@ -137,8 +139,11 @@ export default function PlatformDashboard({}: PageProps) {
 
   const renderPieLabel = (props: { name?: string }): string => props.name ?? "";
 
+  const pdReqs = reqs.PlatformDashboard.find(r => r.badgeLabel === "platform-overview")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {pdReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-6">平台总览</h2>
 
       {/* Metric Cards Grid */}

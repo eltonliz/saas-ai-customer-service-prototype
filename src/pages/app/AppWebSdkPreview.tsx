@@ -1,16 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import type { Message, PageProps } from "../../types";
 import { ChatWindow } from "../../components/ChatWindow";
-import {
-  Image,
-  MessageCircle,
-  X,
-  ShoppingCart,
-  Send,
-  Package,
-  Truck,
-  MapPin,
-} from "lucide-react";
+import { Image, MessageCircle, X, ShoppingCart, Send, Package, Truck, MapPin } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type SimPage = "product" | "order";
 
@@ -101,8 +94,11 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
     sendMessage(chip);
   }
 
+  const sdkReqs = reqs.AppWebSdkPreview.find(r => r.badgeLabel === "sdk-embed")?.reqs;
+
   return (
     <div className="flex flex-col h-full bg-slate-100 relative">
+      {sdkReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       {/* ======== Page Switcher ======== */}
       <div className="bg-white border-b border-slate-200 px-4 py-2">
         <div className="flex gap-1 bg-slate-100 rounded-lg p-1">

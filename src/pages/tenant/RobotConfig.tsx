@@ -4,6 +4,8 @@ import { robotConfigs } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Bot, Plus, Power, PowerOff, MessageSquare, Play, Edit3, Eye, X } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const allBusinessLines: BusinessLine[] = ["直播", "商城", "门店", "课程/知识付费", "大健康"];
 const allChannels: Channel[] = ["APP", "小程序", "H5", "商家后台", "企业微信", "公众号/微信客服"];
@@ -304,8 +306,11 @@ export default function RobotConfig({ context }: PageProps) {
     );
   }
 
+  const robotReqs = reqs.RobotConfig.find(r => r.badgeLabel === "robot-config")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {robotReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">AI机器人配置</h2>
         <button type="button" onClick={openNewModal} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新增机器人</button>

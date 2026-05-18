@@ -6,8 +6,11 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Drawer } from "../../components/Drawer";
 import { FileText, Play, RotateCcw, Plus, Eye, Pencil } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 export default function PromptManagement({}: PageProps) {
+  const pmReqs = reqs.PromptManagement.find(r => r.badgeLabel === "prompt-eng")?.reqs;
   const [list, setList] = useState(promptVersions);
   const [selected, setSelected] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -78,7 +81,8 @@ export default function PromptManagement({}: PageProps) {
   const detail = list.find((p) => p.id === selected);
 
   return (
-    <div>
+    <div className="relative">
+      {pmReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">全局Prompt管理</h2>
         <button

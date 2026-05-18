@@ -5,6 +5,8 @@ import { DataTable } from "../../components/DataTable";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Settings, Route, BarChart3, Plus, Pencil, Trash2, AlertTriangle } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 interface Provider {
   id: string;
@@ -148,8 +150,11 @@ export default function ModelConfig({}: PageProps) {
     setRoutes((prev) => prev.filter((r) => r.scene !== scene));
   }
 
+  const mcReqs = reqs.ModelConfig.find(r => r.badgeLabel === "model-config")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {mcReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">模型配置</h2>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-6">

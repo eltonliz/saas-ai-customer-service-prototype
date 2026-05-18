@@ -4,6 +4,8 @@ import { healthRiskSamples } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Shield, AlertTriangle, FileText, MessageSquare, Plus, X, Megaphone, DollarSign, ShoppingBag, EyeOff, ThumbsDown } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type Tab = "words" | "templates" | "records" | "compliance" | "ads" | "refund" | "privacy" | "abuse";
 
@@ -123,8 +125,11 @@ export default function TenantRiskControl({ context }: PageProps) {
     );
   }
 
+  const riskReqs = reqs.TenantRiskControl.find(r => r.badgeLabel === "risk-control")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {riskReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">风控与大健康合规</h2>
 
       {/* Tab bar - wrapping for many tabs */}

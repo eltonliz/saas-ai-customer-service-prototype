@@ -5,6 +5,8 @@ import { useAppStore } from "../../data/AppStore";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Timeline } from "../../components/Timeline";
 import { Search, Zap, Layers, Filter, FileText, BarChart3, AlertTriangle, Wrench, MessageSquare, BookOpen, Plus } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 /* ──── Chunk table with fixed column widths to prevent vertical text ──── */
 function ChunkTable({ chunks }: { chunks: RagChunk[] }) {
@@ -114,8 +116,11 @@ export default function TenantRagTrace({ context }: PageProps) {
     { time: selected.timeline[9] ?? "", title: "日志归档", detail: selected.sampleType, state: "pending" as const },
   ];
 
+  const traceReqs = reqs.TenantRagTrace.find(r => r.badgeLabel === "rag-trace")?.reqs;
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full relative">
+      {traceReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       {/* Page Header */}
       <div className="flex items-center gap-3 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-50">

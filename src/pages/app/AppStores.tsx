@@ -3,14 +3,19 @@ import type { PageProps } from "../../types";
 import { useAppStore } from "../../data/AppStore";
 import { stores } from "../../data/mockData";
 import { MapPin, Clock, Phone, Package, Calendar, Headphones } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 export default function AppStores({ context, goPage }: PageProps) {
   const myStores = stores.filter((s) => s.merchantId === context.currentMerchantId);
   const [selected, setSelected] = useState<string | null>(null);
   const store = selected ? myStores.find((s) => s.id === selected) : null;
 
+  const storeReqs = reqs.AppStores.find(r => r.badgeLabel === "store-rules")?.reqs;
+
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
+      {storeReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">门店服务</h2>
       {!store ? (
         <div className="space-y-3">

@@ -4,6 +4,8 @@ import { faqs } from "../../data/mockData";
 import { DataTable } from "../../components/DataTable";
 import { Modal } from "../../components/Modal";
 import { BookOpen, FileText, Shield, Send, Plus, Pencil, Trash2 } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type Tab = "faq" | "help" | "sop" | "template" | "health";
 
@@ -14,6 +16,7 @@ interface TemplateItem {
 }
 
 export default function PlatformKnowledgeBase({}: PageProps) {
+  const pkbReqs = reqs.PlatformKnowledgeBase.find(r => r.badgeLabel === "platform-kb")?.reqs;
   const [tab, setTab] = useState<Tab>("faq");
   const [faqList, setFaqList] = useState<Faq[]>(faqs.filter((f) => f.scope === "平台"));
   const [templateList, setTemplateList] = useState<TemplateItem[]>([
@@ -119,7 +122,8 @@ export default function PlatformKnowledgeBase({}: PageProps) {
   }
 
   return (
-    <div>
+    <div className="relative">
+      {pkbReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">平台知识库</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">

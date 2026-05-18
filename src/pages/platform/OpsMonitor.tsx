@@ -4,6 +4,8 @@ import type { PageProps } from "../../types";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Drawer } from "../../components/Drawer";
 import { Server, AlertTriangle, Clock, Zap, BarChart3, Wifi, Activity, AlertCircle, RefreshCw } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const modelStatuses = [
   { model: "Claude Opus 4.7", status: "正常", latency: "1,850ms", availability: "99.95%", region: "us-east" },
@@ -32,6 +34,7 @@ const degradationRecords = [
 ];
 
 export default function OpsMonitor({}: PageProps) {
+  const omReqs = reqs.OpsMonitor.find(r => r.badgeLabel === "ops-monitor")?.reqs;
   const [alertList, setAlertList] = useState(alerts);
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
 
@@ -57,7 +60,8 @@ export default function OpsMonitor({}: PageProps) {
   }));
 
   return (
-    <div>
+    <div className="relative">
+      {omReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">运维监控</h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 mb-6">

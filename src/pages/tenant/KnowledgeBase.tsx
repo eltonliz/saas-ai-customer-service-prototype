@@ -7,6 +7,8 @@ import { Modal } from "../../components/Modal";
 import { Drawer } from "../../components/Drawer";
 import { faqs } from "../../data/mockData";
 import { Eye, Upload, Check, X, Send, PauseCircle, Edit3, Trash2, BarChart3, TrendingUp, FileText, Plus, AlertTriangle, BookOpen } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type Tab = "faq" | "docs" | "review" | "gap";
 
@@ -238,8 +240,11 @@ export default function KnowledgeBase({ context }: PageProps) {
     { id: "gap", label: "知识缺口池", count: myGaps.filter((g) => g.status !== "已关闭" && g.status !== "已驳回").length },
   ];
 
+  const kbReqs = reqs.KnowledgeBase.find(r => r.badgeLabel === "kb-management")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {kbReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">知识库管理</h2>
         <button type="button" onClick={() => setModalUpload(true)} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Upload size={14} />上传文档</button>

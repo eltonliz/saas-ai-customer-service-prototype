@@ -7,6 +7,8 @@ import { Drawer } from "../../components/Drawer";
 import { ChatWindow } from "../../components/ChatWindow";
 import { users, orders, customerServiceAgents, weComNotifications } from "../../data/mockData";
 import { Send, UserPlus, FilePlus, XCircle, Tag, BookOpen, MessageSquare, ChevronRight, Bot, Search, FileText, Shield, Clock, User, ShoppingBag, Star, AlertTriangle, Info, Database, type LucideIcon } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type QueueGroup = "待接入" | "AI接待中" | "人工接待中" | "等待用户补充" | "已关联工单" | "已关闭";
 type RightTab = "user" | "orders" | "aiSuggestion" | "knowledge" | "records" | "trace";
@@ -145,8 +147,11 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
     setModal(null);
   }
 
+  const wbReqs = reqs.CustomerServiceWorkbench.find(r => r.badgeLabel === "workbench")?.reqs;
+
   return (
-    <div className="flex h-[calc(100vh-160px)] gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <div className="flex h-[calc(100vh-160px)] gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white relative">
+      {wbReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       {/* Left: Queue Panel */}
       <div className="w-[300px] shrink-0 border-r border-slate-200 flex flex-col bg-slate-50/30">
         <div className="p-4 border-b border-slate-200">

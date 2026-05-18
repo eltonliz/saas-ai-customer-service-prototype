@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import type { Message, PageProps, NavigationParams } from "../../types";
 import { ChatWindow } from "../../components/ChatWindow";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { Send, UserPlus, Package, ShoppingCart, RotateCcw, Store, GraduationCap, Heart, ThumbsUp, ThumbsDown, MapPin, BookOpen, Truck, Bot, Shield, Search, Database, Wrench, FileCheck, Image, Star, type LucideIcon } from "lucide-react";
 
 // ========== 入口类型 ==========
@@ -469,7 +471,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       {/* Header */}
-      <div className="bg-blue-600 px-4 py-3 shrink-0">
+      <div className="bg-blue-600 px-4 py-3 shrink-0 relative">
+        {reqs.AppAiService.find(r => r.badgeLabel === "header")?.reqs.map(req => (
+          <RequirementBadge key={req.id} req={req} />
+        ))}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <h2 className="text-lg font-semibold text-white">星选直播旗舰店</h2>
@@ -613,7 +618,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
       </div>
 
       {/* Input bar */}
-      <div className="border-t border-slate-200 px-4 py-4 bg-white shrink-0">
+      <div className="border-t border-slate-200 px-4 py-4 bg-white shrink-0 relative">
+        {reqs.AppAiService.find(r => r.badgeLabel === "transfer-human")?.reqs.map(req => (
+          <RequirementBadge key={req.id} req={req} />
+        ))}
         {transferred && (
           <div className="mb-2 rounded-lg bg-orange-50 border border-orange-100 px-4 py-2.5 text-base text-orange-700">
             已为你转人工，请稍候。如有紧急问题可拨打客服热线 400-800-8888。
@@ -664,7 +672,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
       {/* End-of-conversation satisfaction survey */}
       {showSurvey && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-          <div className="bg-white rounded-2xl shadow-xl p-6 w-[360px] mx-4">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-[360px] mx-4 relative">
+            {reqs.AppAiService.find(r => r.badgeLabel === "rating")?.reqs.map(req => (
+              <RequirementBadge key={req.id} req={req} />
+            ))}
             <div className="flex items-center gap-2 mb-4">
               <Star size={20} className="text-amber-500" />
               <h3 className="text-lg font-semibold text-slate-800">会话评价</h3>

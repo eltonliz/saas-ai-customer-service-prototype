@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
 import { BookOpen, Clock, User, RotateCcw, Headphones, Shield } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const courses = [
   { id: "course-1", title: "私域运营实战课", instructor: "王老师", duration: "12课时", expiry: "365天", desc: "从0到1搭建私域运营体系，覆盖社群运营、朋友圈营销、客户分层等核心模块。", tags: ["已购", "可回放"] },
@@ -14,8 +16,11 @@ export default function AppCourses({ goPage }: PageProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const course = selected ? courses.find((c) => c.id === selected) : null;
 
+  const courseReqs = reqs.AppCourses.find(r => r.badgeLabel === "course-rules")?.reqs;
+
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
+      {courseReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">课程学习</h2>
       {!course ? (
         <div className="space-y-3">

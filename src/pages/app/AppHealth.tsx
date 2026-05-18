@@ -1,5 +1,7 @@
 import type { PageProps } from "../../types";
 import { Shield, AlertTriangle, Heart, MessageCircle, ChevronRight, CircleCheck, CircleX } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 const articles = [
   {
@@ -29,8 +31,11 @@ const articles = [
 ];
 
 export default function AppHealth({ goPage }: PageProps) {
+  const healthReqs = reqs.AppHealth.find(r => r.badgeLabel === "health-rules")?.reqs;
+
   return (
-    <div className="p-4">
+    <div className="p-4 relative">
+      {healthReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
 
       {/* ========== 1. 合规警示横幅 — MORE PROMINENT ========== */}
       <div className="mb-5 rounded-2xl border-2 border-rose-300 bg-rose-50 p-4">

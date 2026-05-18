@@ -6,8 +6,11 @@ import { DataTable } from "../../components/DataTable";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Drawer } from "../../components/Drawer";
 import { BarChart3, Database, Layers, Search, AlertTriangle, TrendingUp } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 export default function RagVectorMonitor({}: PageProps) {
+  const rvmReqs = reqs.RagVectorMonitor.find(r => r.badgeLabel === "rag-monitor")?.reqs;
   const [selectedTenant, setSelectedTenant] = useState<string | null>(null);
 
   const totalDocs = knowledgeDocuments.length;
@@ -59,7 +62,8 @@ export default function RagVectorMonitor({}: PageProps) {
   }));
 
   return (
-    <div>
+    <div className="relative">
+      {rvmReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">RAG与向量库监控</h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-6">

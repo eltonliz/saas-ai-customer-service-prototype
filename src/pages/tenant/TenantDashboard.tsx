@@ -3,10 +3,11 @@ import { useAppStore } from "../../data/AppStore";
 import { MetricCard } from "../../components/MetricCard";
 import { StatusBadge } from "../../components/StatusBadge";
 import { conversations, tickets, customerServiceAgents, knowledgeGaps, tenants, merchants } from "../../data/mockData";
-import {
-  AlertTriangle, TrendingUp, Users, Clock, Activity, Zap, Star, BookOpen,
+import { AlertTriangle, TrendingUp, Users, Clock, Activity, Zap, Star, BookOpen,
   MessageCircle, Bot, Headphones, TicketIcon, Package,
 } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import {
   LineChart, Line, BarChart, Bar, ComposedChart, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
@@ -196,8 +197,11 @@ export default function TenantDashboard({ context }: PageProps) {
 
   // ---------------------------------------------------------------------------
 
+  const dashReqs = reqs.TenantDashboard.find(r => r.badgeLabel === "dashboard")?.reqs;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {dashReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       {/* ================================================================ */}
       {/* Service context bar                                               */}
       {/* ================================================================ */}

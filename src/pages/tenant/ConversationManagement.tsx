@@ -6,6 +6,8 @@ import { StatusBadge } from "../../components/StatusBadge";
 import { Drawer } from "../../components/Drawer";
 import { conversations as allConvs, conversationMessages, users } from "../../data/mockData";
 import { Filter, RotateCcw, Eye } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 type Filters = {
   status: string;
@@ -52,8 +54,11 @@ export default function ConversationManagement({ context }: PageProps) {
   const convMessages = selected ? conversationMessages.filter((m) => m.conversationId === selected.id) : [];
   const selectedUser = selected ? users.find((u) => u.id === selected.userId) : null;
 
+  const convReqs = reqs.ConversationManagement.find(r => r.badgeLabel === "conv-mgmt")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {convReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">会话管理</h2>
 
       {/* Filters */}

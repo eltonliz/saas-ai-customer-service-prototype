@@ -6,6 +6,8 @@ import { DataTable } from "../../components/DataTable";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
 import { Plus, Pencil } from "lucide-react";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 
 export default function TenantManagement({}: PageProps) {
   const [list, setList] = useState(tenants);
@@ -71,8 +73,11 @@ export default function TenantManagement({}: PageProps) {
     );
   }
 
+  const tmReqs = reqs.TenantManagement.find(r => r.badgeLabel === "tenant-mgmt")?.reqs;
+
   return (
-    <div>
+    <div className="relative">
+      {tmReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">租户管理</h2>
         <button
