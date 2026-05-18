@@ -82,7 +82,7 @@ export default function PromptManagement({}: PageProps) {
 
   return (
     <div className="relative">
-      {pmReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {pmReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">全局Prompt管理</h2>
         <button

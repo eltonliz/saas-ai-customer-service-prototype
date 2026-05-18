@@ -201,7 +201,7 @@ export default function TenantDashboard({ context }: PageProps) {
 
   return (
     <div className="space-y-6 relative">
-      {dashReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {dashReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       {/* ================================================================ */}
       {/* Service context bar                                               */}
       {/* ================================================================ */}

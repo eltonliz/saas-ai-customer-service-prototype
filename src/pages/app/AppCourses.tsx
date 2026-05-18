@@ -20,7 +20,7 @@ export default function AppCourses({ goPage }: PageProps) {
 
   return (
     <div className="p-4 relative">
-      {courseReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {courseReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">课程学习</h2>
       {!course ? (
         <div className="space-y-3">

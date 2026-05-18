@@ -9,14 +9,16 @@ export interface RequirementDef {
 
 interface RequirementBadgeProps {
   req: RequirementDef;
-  /** CSS selector or ref to position relative to. If omitted, badge is inline. */
+  /** CSS selector or ref to position relative to. If omitted, badge is position:fixed. */
   anchorRef?: React.RefObject<HTMLElement | null>;
   /** Offset from anchor's top-right corner. Default: top: -8, right: -4 */
   offset?: { top?: number; right?: number };
+  /** Index for stacking multiple fixed badges vertically */
+  index?: number;
   className?: string;
 }
 
-export function RequirementBadge({ req, anchorRef, offset, className = "" }: RequirementBadgeProps) {
+export function RequirementBadge({ req, anchorRef, offset, index = 0, className = "" }: RequirementBadgeProps) {
   const [open, setOpen] = useState(false);
   const badgeRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -78,23 +80,38 @@ export function RequirementBadge({ req, anchorRef, offset, className = "" }: Req
     document.addEventListener("mouseup", onUp);
   };
 
-  const badgeStyle: React.CSSProperties = {
-    display: "inline-block",
-    verticalAlign: "top",
-    backgroundColor: "rgb(250, 173, 20)",
-    color: "#fff",
-    fontSize: "10px",
-    fontWeight: 700,
-    lineHeight: "14px",
-    padding: "0px 4px",
-    borderRadius: "2px",
-    border: "none",
-    cursor: "pointer",
-    position: anchorRef ? "absolute" : "relative",
-    top: anchorRef && offset?.top !== undefined ? offset.top : anchorRef ? -8 : undefined,
-    right: anchorRef && offset?.right !== undefined ? offset.right : anchorRef ? -4 : undefined,
-    zIndex: 9990,
-  };
+  const badgeStyle: React.CSSProperties = anchorRef
+    ? {
+        position: "absolute",
+        top: offset?.top ?? -8,
+        right: offset?.right ?? -4,
+        backgroundColor: "rgb(250, 173, 20)",
+        color: "#fff",
+        fontSize: "10px",
+        fontWeight: 700,
+        lineHeight: "14px",
+        padding: "0px 4px",
+        borderRadius: "2px",
+        border: "none",
+        cursor: "pointer",
+        zIndex: 9990,
+      }
+    : {
+        position: "fixed",
+        top: 8 + index * 28,
+        right: 12,
+        backgroundColor: "rgb(250, 173, 20)",
+        color: "#fff",
+        fontSize: "11px",
+        fontWeight: 700,
+        lineHeight: "15px",
+        padding: "1px 5px",
+        borderRadius: "2px",
+        border: "none",
+        cursor: "pointer",
+        zIndex: 9990,
+        boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
+      };
 
   return (
     <>
@@ -115,8 +132,9 @@ export function RequirementBadge({ req, anchorRef, offset, className = "" }: Req
           onClick={(e) => e.stopPropagation()}
           style={{
             position: "fixed",
-            left: anchorRef ? "auto" : (badgeRef.current?.getBoundingClientRect().left ?? 100),
-            top: anchorRef ? "auto" : (badgeRef.current ? badgeRef.current.getBoundingClientRect().bottom + 8 : 100),
+            right: anchorRef ? "auto" : 12,
+            left: anchorRef ? "auto" : "auto",
+            top: anchorRef ? "auto" : (badgeRef.current ? badgeRef.current.getBoundingClientRect().bottom + 8 : 8 + (index + 1) * 28 + 8),
             width: 450,
             maxHeight: "70vh",
             overflowY: "auto",

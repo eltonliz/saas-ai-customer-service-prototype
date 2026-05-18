@@ -472,8 +472,8 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
     <div className="flex flex-col flex-1 min-h-0">
       {/* Header */}
       <div className="bg-blue-600 px-4 py-3 shrink-0 relative">
-        {reqs.AppAiService.find(r => r.badgeLabel === "header")?.reqs.map(req => (
-          <RequirementBadge key={req.id} req={req} />
+        {reqs.AppAiService.find(r => r.badgeLabel === "header")?.reqs.map((req, i) => (
+          <RequirementBadge key={req.id} req={req} index={i} />
         ))}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -619,8 +619,8 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
 
       {/* Input bar */}
       <div className="border-t border-slate-200 px-4 py-4 bg-white shrink-0 relative">
-        {reqs.AppAiService.find(r => r.badgeLabel === "transfer-human")?.reqs.map(req => (
-          <RequirementBadge key={req.id} req={req} />
+        {reqs.AppAiService.find(r => r.badgeLabel === "transfer-human")?.reqs.map((req, i) => (
+          <RequirementBadge key={req.id} req={req} index={i + 1} />
         ))}
         {transferred && (
           <div className="mb-2 rounded-lg bg-orange-50 border border-orange-100 px-4 py-2.5 text-base text-orange-700">
@@ -673,8 +673,8 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
       {showSurvey && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
           <div className="bg-white rounded-2xl shadow-xl p-6 w-[360px] mx-4 relative">
-            {reqs.AppAiService.find(r => r.badgeLabel === "rating")?.reqs.map(req => (
-              <RequirementBadge key={req.id} req={req} />
+            {reqs.AppAiService.find(r => r.badgeLabel === "rating")?.reqs.map((req, i) => (
+              <RequirementBadge key={req.id} req={req} index={i + 2} />
             ))}
             <div className="flex items-center gap-2 mb-4">
               <Star size={20} className="text-amber-500" />

@@ -310,7 +310,7 @@ export default function RobotConfig({ context }: PageProps) {
 
   return (
     <div className="relative">
-      {robotReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {robotReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">AI机器人配置</h2>
         <button type="button" onClick={openNewModal} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新增机器人</button>

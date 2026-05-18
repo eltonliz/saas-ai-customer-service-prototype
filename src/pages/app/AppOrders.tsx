@@ -16,7 +16,7 @@ export default function AppOrders({ context, goPage }: PageProps) {
 
   return (
     <div className="p-4 relative">
-      {orderReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {orderReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">我的订单</h2>
       {!selected ? (
         <div className="space-y-3">

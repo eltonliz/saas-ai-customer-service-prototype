@@ -72,7 +72,7 @@ export default function PlatformServiceWorkbench({}: PageProps) {
 
   return (
     <div className="relative">
-      {pswReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {pswReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">平台客服工作台</h2>
         <span className="text-base text-amber-600 bg-amber-50 rounded-lg px-3 py-1">仅处理平台责任和兜底场景，不处理商家私有客服会话</span>

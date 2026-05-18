@@ -63,7 +63,7 @@ export default function RagVectorMonitor({}: PageProps) {
 
   return (
     <div className="relative">
-      {rvmReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {rvmReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">RAG与向量库监控</h2>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-6">

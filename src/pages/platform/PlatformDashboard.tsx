@@ -143,7 +143,7 @@ export default function PlatformDashboard({}: PageProps) {
 
   return (
     <div className="relative">
-      {pdReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {pdReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-6">平台总览</h2>
 
       {/* Metric Cards Grid */}

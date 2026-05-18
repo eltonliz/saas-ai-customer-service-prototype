@@ -129,7 +129,7 @@ export default function TenantRiskControl({ context }: PageProps) {
 
   return (
     <div className="relative">
-      {riskReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {riskReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">风控与大健康合规</h2>
 
       {/* Tab bar - wrapping for many tabs */}

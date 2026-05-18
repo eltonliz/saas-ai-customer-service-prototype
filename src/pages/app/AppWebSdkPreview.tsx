@@ -98,7 +98,7 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
 
   return (
     <div className="flex flex-col h-full bg-slate-100 relative">
-      {sdkReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {sdkReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       {/* ======== Page Switcher ======== */}
       <div className="bg-white border-b border-slate-200 px-4 py-2">
         <div className="flex gap-1 bg-slate-100 rounded-lg p-1">

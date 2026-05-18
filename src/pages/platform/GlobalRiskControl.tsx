@@ -189,7 +189,7 @@ export default function GlobalRiskControl({}: PageProps) {
 
   return (
     <div className="relative">
-      {grcReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {grcReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">全局风控中心</h2>
 
       <div className="mb-4 flex gap-1 rounded-xl bg-slate-100 p-1 w-fit">

@@ -58,7 +58,7 @@ export default function ConversationManagement({ context }: PageProps) {
 
   return (
     <div className="relative">
-      {convReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {convReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       <h2 className="text-2xl font-bold text-slate-900 mb-4">会话管理</h2>
 
       {/* Filters */}

@@ -120,7 +120,7 @@ export default function TenantRagTrace({ context }: PageProps) {
 
   return (
     <div className="flex flex-col h-full relative">
-      {traceReqs?.map(req => (<RequirementBadge key={req.id} req={req} />))}
+      {traceReqs?.map((req, i) => (<RequirementBadge key={req.id} req={req} index={i} />))}
       {/* Page Header */}
       <div className="flex items-center gap-3 mb-4">
         <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-violet-50">
