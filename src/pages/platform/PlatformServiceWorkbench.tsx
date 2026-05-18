@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import type { PageProps } from "../../types";
+import { useState, useMemo, useRef } from "react";
+import type { PageProps, Message } from "../../types";
 import { conversations, conversationMessages, tickets } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { ChatWindow } from "../../components/ChatWindow";
@@ -31,15 +31,31 @@ export default function PlatformServiceWorkbench({}: PageProps) {
   const [ticketState, setTicketState] = useState(platformTickets);
   const [createTicketOpen, setCreateTicketOpen] = useState(false);
   const [newTicket, setNewTicket] = useState({ title: "", type: "系统故障", priority: "中", owner: "", sla: "4小时" });
+  const [chatMessages, setChatMessages] = useState<Record<string, Message[]>>({});
+  const msgCounterRef = useRef(0);
 
   const activeConv = convState.find((c) => c.id === selectedConv);
   const msgs = useMemo(() => {
     if (!selectedConv) return [];
-    return conversationMessages.filter((m) => m.conversationId === "conv-1").slice(0, 4);
-  }, [selectedConv]);
+    const sessionMsgs = chatMessages[selectedConv] || [];
+    const baseMsgs = conversationMessages.filter((m) => m.conversationId === selectedConv).slice(0, 4);
+    return [...baseMsgs, ...sessionMsgs];
+  }, [selectedConv, chatMessages]);
 
   function handleSend() {
-    if (!input.trim()) return;
+    if (!input.trim() || !selectedConv) return;
+    const newMsg: Message = {
+      id: `plat-msg-${msgCounterRef.current++}`,
+      conversationId: selectedConv,
+      sender: "人工客服",
+      content: input.trim(),
+      time: new Date().toLocaleTimeString("zh-CN", { hour: "2-digit", minute: "2-digit" }),
+      status: "已读",
+    };
+    setChatMessages((prev) => ({
+      ...prev,
+      [selectedConv]: [...(prev[selectedConv] || []), newMsg],
+    }));
     setInput("");
   }
 

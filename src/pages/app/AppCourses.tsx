@@ -5,6 +5,9 @@ import { BookOpen, Clock, User, RotateCcw, Headphones, Shield } from "lucide-rea
 const courses = [
   { id: "course-1", title: "私域运营实战课", instructor: "王老师", duration: "12课时", expiry: "365天", desc: "从0到1搭建私域运营体系，覆盖社群运营、朋友圈营销、客户分层等核心模块。", tags: ["已购", "可回放"] },
   { id: "course-2", title: "直播带货技巧", instructor: "李老师", duration: "8课时", expiry: "180天", desc: "直播选品、话术与流量转化，从入门到精通。", tags: ["已购", "可回放"] },
+  { id: "course-3", title: "大健康产品知识认证", instructor: "张教授", duration: "16课时", expiry: "365天", desc: "系统学习保健品法规、营养成分、产品功效及合规宣传要点，通过认证考试后可获得平台颁发的健康顾问资格证书。", tags: ["已购", "认证考试"] },
+  { id: "course-4", title: "客户服务沟通艺术", instructor: "陈老师", duration: "6课时", expiry: "90天", desc: "掌握高效沟通技巧、投诉处理策略与情绪管理方法，提升客户满意度和复购率。", tags: ["免费", "可回放"] },
+  { id: "course-5", title: "AI客服配置实操", instructor: "刘老师", duration: "4课时", expiry: "180天", desc: "手把手教你配置FAQ知识库、RAG召回策略、机器人话术及多渠道分发规则。", tags: ["已购", "实操演练"] },
 ];
 
 export default function AppCourses({ goPage }: PageProps) {

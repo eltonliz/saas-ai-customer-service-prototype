@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import type { Message, PageProps, NavigationParams } from "../../types";
 import { ChatWindow } from "../../components/ChatWindow";
-import { Send, UserPlus, Package, ShoppingCart, RotateCcw, Store, GraduationCap, Heart, ThumbsUp, ThumbsDown, MapPin, BookOpen, Truck, Bot, Shield, Search, Database, Wrench, FileCheck, type LucideIcon } from "lucide-react";
+import { Send, UserPlus, Package, ShoppingCart, RotateCcw, Store, GraduationCap, Heart, ThumbsUp, ThumbsDown, MapPin, BookOpen, Truck, Bot, Shield, Search, Database, Wrench, FileCheck, Image, Star, type LucideIcon } from "lucide-react";
 
 // ========== 入口类型 ==========
 type EntryPoint = "通用" | "商品详情页" | "订单页" | "直播间" | "门店页" | "课程详情页" | "SaaS后台帮助";
@@ -45,6 +45,7 @@ interface AIPipeline {
   reply: string;
   cardType?: Message["cardType"];
   cardData?: Record<string, string>;
+  references?: { title: string; source: string; similarity: number }[];
   riskLevel: "低风险" | "中风险" | "高风险";
   riskAction: string;
 }
@@ -66,6 +67,10 @@ const pipelineMap: Record<string, AIPipeline> = {
       { label: "风控复审", detail: "输出审核通过，未包含隐私信息", iconType: "review" },
     ],
     reply: "您的订单当前状态：已发货，物流显示已到达深圳转运中心，预计明天送达。如需售后帮助，可进入售后服务页面。",
+    references: [
+      { title: "订单查询接口", source: "订单中心", similarity: 0.98 },
+      { title: "物流轨迹查询", source: "物流中心", similarity: 0.95 },
+    ],
     cardType: "订单卡片",
     cardData: { orderId: "order-2", status: "运输中", logistics: "已到达深圳转运中心" },
   },
@@ -84,6 +89,10 @@ const pipelineMap: Record<string, AIPipeline> = {
       { label: "风控复审", detail: "输出审核通过", iconType: "review" },
     ],
     reply: "您可以在订单详情页申请售后，支持退款、退货和换货。商家将在24小时内处理您的申请。如已超过7天，可能需要人工审核。",
+    references: [
+      { title: "售后政策FAQ", source: "商家知识库", similarity: 0.92 },
+      { title: "退换货规则文档", source: "售后政策库", similarity: 0.87 },
+    ],
   },
   "问商品库存": {
     intent: "商品咨询",
@@ -148,6 +157,10 @@ const pipelineMap: Record<string, AIPipeline> = {
       { label: "风控复审", detail: "确认无治疗承诺、无诊断结论、无用药建议…通过", iconType: "review" },
     ],
     reply: "作为健康科普建议：保持规律作息、均衡饮食和适量运动有助于改善健康状况。我不能进行疾病诊断或用药建议。如持续不适，建议咨询专业医生。",
+    references: [
+      { title: "健康生活方式指南", source: "大健康科普知识库", similarity: 0.91 },
+      { title: "AI客服大健康合规规则", source: "风控策略库", similarity: 0.99 },
+    ],
   },
   "模型错误": {
     intent: "系统异常",
@@ -288,6 +301,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
   const [typingDetail, setTypingDetail] = useState("");
   const [typingIcon, setTypingIcon] = useState<PipelineStep["iconType"]>("intent");
   const [transferred, setTransferred] = useState(false);
+  const [showSurvey, setShowSurvey] = useState(false);
+  const [conversationEnded, setConversationEnded] = useState(false);
+  const [surveyRating, setSurveyRating] = useState(0);
+  const [surveyText, setSurveyText] = useState("");
   const [ratings, setRatings] = useState<Record<string, "up" | "down" | undefined>>({});
   const [conversationStage, setConversationStage] = useState<ConversationStage>("idle");
   const [selectedOrder, setSelectedOrder] = useState<string>("");
@@ -344,6 +361,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
             content: pipeline.reply,
             cardType: pipeline.cardType,
             cardData: pipeline.cardData,
+            references: pipeline.references,
+            traceId: `trace-${Date.now()}`,
+            confidenceScore: pipeline.confidence,
+            safetyResult: pipeline.riskAction,
           } : m));
           setProcessing(false);
           setStreamingMsgId(null);
@@ -403,6 +424,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
       setTimeout(() => {
         setTransferred(true);
         setMessages((prev) => [...prev, makeMsg("app-chat", "系统", "已为您转人工，请稍候。人工客服将在工作时间内尽快接入。")]);
+        setTimeout(() => { if (!conversationEnded) setShowSurvey(true); }, 2500);
       }, 1500);
     } else {
       simulateProcessing("问商品库存");
@@ -448,12 +470,23 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
     <div className="flex flex-col flex-1 min-h-0">
       {/* Header */}
       <div className="bg-blue-600 px-4 py-3 shrink-0">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold text-white">AI客服</h2>
-          <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-sm text-white">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
-            在线
-          </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg font-semibold text-white">星选直播旗舰店</h2>
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-sm text-white">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300" />
+              在线
+            </span>
+          </div>
+          {!conversationEnded && (
+            <button
+              type="button"
+              onClick={() => setShowSurvey(true)}
+              className="text-sm text-blue-200 hover:text-white transition-colors"
+            >
+              结束会话
+            </button>
+          )}
         </div>
         {/* 入口上下文 */}
         <div className="flex items-center gap-2 mt-1.5">
@@ -491,6 +524,10 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
       <div ref={containerRef} className="flex-1 min-h-0 bg-[#F7F9FC]">
         <ChatWindow
           messages={augmentedMessages}
+          onCardAction={(action, cardData) => {
+            if (action === "after-sales") goPage?.("after-sales", { afterSaleOrderId: cardData?.orderId });
+            else if (action === "trace") goPage?.("ai-service");
+          }}
           header={
             showWelcome ? (
               <div className="pb-2">
@@ -583,6 +620,13 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
           </div>
         )}
         <div className="flex gap-2">
+          <button
+            type="button"
+            className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 hover:text-slate-600 hover:border-slate-300 shrink-0"
+            title="图片上传（即将上线）"
+          >
+            <Image size={20} />
+          </button>
           <input
             type="text"
             value={input}
@@ -606,6 +650,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
               setMessages((prev) => [...prev, makeMsg("app-chat", "系统", "正在为您转接人工客服…")]);
               setTransferred(true);
               setLastPipeline({ intent: "人工服务", confidence: 0, riskLevel: "低风险" });
+              setTimeout(() => { if (!conversationEnded) setShowSurvey(true); }, 2000);
             }}
             disabled={processing || transferred}
             className="flex h-12 items-center gap-1.5 rounded-xl bg-orange-500 px-3 text-white hover:bg-orange-600 disabled:opacity-50 shrink-0 text-base font-medium"
@@ -615,6 +660,59 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
           </button>
         </div>
       </div>
+
+      {/* End-of-conversation satisfaction survey */}
+      {showSurvey && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
+          <div className="bg-white rounded-2xl shadow-xl p-6 w-[360px] mx-4">
+            <div className="flex items-center gap-2 mb-4">
+              <Star size={20} className="text-amber-500" />
+              <h3 className="text-lg font-semibold text-slate-800">会话评价</h3>
+            </div>
+            <p className="text-base text-slate-500 mb-4">请为本次服务评分，帮助我们做得更好</p>
+            <div className="flex justify-center gap-2 mb-4">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={() => setSurveyRating(star)}
+                  className={`flex h-10 w-10 items-center justify-center rounded-full text-xl transition-colors ${
+                    surveyRating >= star ? "bg-amber-100 text-amber-500" : "bg-slate-100 text-slate-300"
+                  }`}
+                >
+                  <Star size={20} fill={surveyRating >= star ? "currentColor" : "none"} />
+                </button>
+              ))}
+            </div>
+            <textarea
+              value={surveyText}
+              onChange={(e) => setSurveyText(e.target.value)}
+              placeholder="补充您的意见（可选）"
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 mb-4 h-20 resize-none"
+            />
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSurvey(false);
+                  setConversationEnded(true);
+                  setMessages((prev) => [...prev, makeMsg("app-chat", "系统", "感谢您的评价！如有其他问题，随时联系我们。")]);
+                }}
+                className="flex-1 h-11 rounded-xl bg-blue-600 text-white font-medium text-base hover:bg-blue-700"
+              >
+                提交评价
+              </button>
+              <button
+                type="button"
+                onClick={() => { setShowSurvey(false); setConversationEnded(true); }}
+                className="flex-1 h-11 rounded-xl border border-slate-200 bg-white text-slate-500 font-medium text-base hover:bg-slate-50"
+              >
+                跳过
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

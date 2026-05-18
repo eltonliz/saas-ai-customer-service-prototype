@@ -1,17 +1,23 @@
+import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Shield } from "lucide-react";
-import { useState } from "react";
+import { Modal } from "../../components/Modal";
 
-const mockRoles = [
-  { id: "r-1", name: "超级管理员", members: 1, permissions: "全部权限", status: "已启用" },
-  { id: "r-2", name: "客服主管", members: 3, permissions: "客服中心、质检、数据查看", status: "已启用" },
-  { id: "r-3", name: "一线客服", members: 12, permissions: "工作台、会话管理、工单", status: "已启用" },
-  { id: "r-4", name: "AI运营", members: 2, permissions: "机器人配置、知识库、RAG链路", status: "已启用" },
-  { id: "r-5", name: "质检专员", members: 1, permissions: "质检中心、风控查看", status: "已停用" },
+const defaultRoles = [
+  { id: "r-1", name: "超级管理员", members: 1, permissions: "全部权限", status: "已启用", membersList: ["admin@example.com"] },
+  { id: "r-2", name: "客服主管", members: 3, permissions: "客服中心、质检、数据查看", status: "已启用", membersList: ["zhang@example.com", "li@example.com", "wang@example.com"] },
+  { id: "r-3", name: "一线客服", members: 12, permissions: "工作台、会话管理、工单", status: "已启用", membersList: ["agent1@example.com", "agent2@example.com", "..."] },
+  { id: "r-4", name: "AI运营", members: 2, permissions: "机器人配置、知识库、RAG链路", status: "已启用", membersList: ["aiops1@example.com", "aiops2@example.com"] },
+  { id: "r-5", name: "质检专员", members: 1, permissions: "质检中心、风控查看", status: "已停用", membersList: ["qc@example.com"] },
 ];
 
 export default function TenantRolePermission({}: PageProps) {
-  const [roles] = useState(mockRoles);
+  const [roles] = useState(defaultRoles);
+  const [editOpen, setEditOpen] = useState<string | null>(null);
+  const [membersOpen, setMembersOpen] = useState<string | null>(null);
+  const editingRole = roles.find((r) => r.id === editOpen);
+  const viewingRole = roles.find((r) => r.id === membersOpen);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -49,14 +55,35 @@ export default function TenantRolePermission({}: PageProps) {
                   <span className={`inline-flex rounded-full px-2.5 py-0.5 text-sm font-medium ${r.status === "已启用" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{r.status}</span>
                 </td>
                 <td className="px-5 py-3">
-                  <button className="text-base text-blue-600 hover:text-blue-800 mr-3">编辑权限</button>
-                  <button className="text-base text-slate-400 hover:text-slate-600">查看成员</button>
+                  <button onClick={() => setEditOpen(r.id)} className="text-base text-blue-600 hover:text-blue-800 mr-3">编辑权限</button>
+                  <button onClick={() => setMembersOpen(r.id)} className="text-base text-slate-400 hover:text-slate-600">查看成员</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Modal open={!!editOpen} title="编辑权限" onClose={() => setEditOpen(null)}>
+        {editingRole && (
+          <div className="space-y-4">
+            <div><label className="text-base font-medium text-slate-700">角色名称</label><input defaultValue={editingRole.name} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">权限范围（用逗号分隔）</label><textarea defaultValue={editingRole.permissions} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-24 resize-none" /></div>
+            <div className="flex justify-end gap-3"><button onClick={() => setEditOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => setEditOpen(null)} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
+          </div>
+        )}
+      </Modal>
+
+      <Modal open={!!membersOpen} title="成员列表" onClose={() => setMembersOpen(null)}>
+        {viewingRole && (
+          <div className="space-y-2 text-base">
+            <p className="text-slate-500 mb-2">角色：<span className="font-medium text-slate-800">{viewingRole.name}</span>（共 {viewingRole.members} 人）</p>
+            {viewingRole.membersList.map((m, i) => (
+              <div key={i} className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-slate-600">{m}</div>
+            ))}
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

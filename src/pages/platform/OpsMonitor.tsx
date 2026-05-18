@@ -32,9 +32,14 @@ const degradationRecords = [
 ];
 
 export default function OpsMonitor({}: PageProps) {
+  const [alertList, setAlertList] = useState(alerts);
   const [selectedAlert, setSelectedAlert] = useState<string | null>(null);
 
-  const alert = alerts.find((a) => a.id === selectedAlert);
+  const alert = alertList.find((a) => a.id === selectedAlert);
+
+  function acknowledgeAlert(id: string) {
+    setAlertList((prev) => prev.map((a) => a.id === id ? { ...a, acknowledged: true } : a));
+  }
 
   const latencyData = [
     { date: "5/11", value: 1280 },
@@ -62,7 +67,7 @@ export default function OpsMonitor({}: PageProps) {
           { icon: <Clock size={16} className="text-indigo-500" />, label: "平均响应时间", value: "1,250ms", sub: "含模型生成时间", color: "bg-indigo-50" },
           { icon: <Wifi size={16} className="text-emerald-500" />, label: "SSE连接", value: "1,880", sub: "上限 2,000", color: "bg-amber-50" },
           { icon: <Zap size={16} className="text-blue-500" />, label: "工具调用成功率", value: "98.2%", sub: "近1小时", color: "bg-blue-50" },
-          { icon: <AlertCircle size={16} className="text-rose-500" />, label: "活跃告警", value: alerts.filter((a) => !a.acknowledged).length, sub: `共${alerts.length}条`, color: "bg-rose-50" },
+          { icon: <AlertCircle size={16} className="text-rose-500" />, label: "活跃告警", value: alertList.filter((a) => !a.acknowledged).length, sub: `共${alertList.length}条`, color: "bg-rose-50" },
         ].map((card) => (
           <div key={card.label} className="rounded-2xl border border-slate-200 bg-white p-4">
             <div className="flex items-center gap-2 mb-2">
@@ -176,7 +181,7 @@ export default function OpsMonitor({}: PageProps) {
         <div className="rounded-2xl border border-slate-200 bg-white p-8">
           <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2"><AlertTriangle size={16} className="text-rose-500" />告警列表</h3>
           <div className="space-y-2">
-            {alerts.map((a) => (
+            {alertList.map((a) => (
               <div key={a.id} onClick={() => setSelectedAlert(a.id)} className="rounded-lg border border-slate-100 p-3 cursor-pointer hover:bg-slate-50">
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-2">
@@ -214,7 +219,7 @@ export default function OpsMonitor({}: PageProps) {
               <p className={alert.acknowledged ? "text-emerald-600" : "text-amber-600"}>{alert.acknowledged ? "已确认" : "待确认"}</p>
             </div>
             {!alert.acknowledged && (
-              <button type="button" className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">确认告警</button>
+              <button type="button" onClick={() => { acknowledgeAlert(alert.id); }} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">确认告警</button>
             )}
           </div>
         )}

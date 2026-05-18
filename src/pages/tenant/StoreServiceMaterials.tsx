@@ -1,13 +1,19 @@
+import { useState } from "react";
 import type { PageProps } from "../../types";
 import { Store } from "lucide-react";
+import { Modal } from "../../components/Modal";
 
-const mockStores = [
-  { id: "s-1", name: "星选旗舰店", city: "杭州", address: "西湖区文三路 478 号", inventory: 1250, status: "营业中" },
-  { id: "s-2", name: "会员社区店", city: "杭州", address: "余杭区五常街道", inventory: 430, status: "营业中" },
-  { id: "s-3", name: "城西体验店", city: "上海", address: "徐汇区漕溪北路", inventory: 680, status: "装修中" },
+const defaultStores = [
+  { id: "s-1", name: "星选旗舰店", city: "杭州", address: "西湖区文三路 478 号", inventory: 1250, phone: "0571-88001234", hours: "10:00-21:00", status: "营业中" },
+  { id: "s-2", name: "会员社区店", city: "杭州", address: "余杭区五常街道", inventory: 430, phone: "0571-89005678", hours: "09:30-20:30", status: "营业中" },
+  { id: "s-3", name: "城西体验店", city: "上海", address: "徐汇区漕溪北路", inventory: 680, phone: "021-54001234", hours: "10:00-22:00", status: "装修中" },
 ];
 
-export default function StoreServiceMaterials({ goPage }: PageProps) {
+export default function StoreServiceMaterials({}: PageProps) {
+  const [stores] = useState(defaultStores);
+  const [detailOpen, setDetailOpen] = useState<string | null>(null);
+  const selectedStore = stores.find((s) => s.id === detailOpen);
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -37,7 +43,7 @@ export default function StoreServiceMaterials({ goPage }: PageProps) {
             </tr>
           </thead>
           <tbody>
-            {mockStores.map((s) => (
+            {stores.map((s) => (
               <tr key={s.id} className="border-b border-slate-100 hover:bg-slate-50" style={{ minHeight: 56 }}>
                 <td className="px-5 py-3 text-base font-medium text-slate-800">{s.name}</td>
                 <td className="px-5 py-3 text-base text-slate-600">{s.city}</td>
@@ -48,13 +54,27 @@ export default function StoreServiceMaterials({ goPage }: PageProps) {
                 </td>
                 <td className="px-5 py-3">
                   <button className="text-base text-blue-600 hover:text-blue-800 mr-3">编辑</button>
-                  <button className="text-base text-slate-400 hover:text-slate-600">详情</button>
+                  <button onClick={() => setDetailOpen(s.id)} className="text-base text-slate-400 hover:text-slate-600">详情</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Modal open={!!detailOpen} title="门店详情" onClose={() => setDetailOpen(null)}>
+        {selectedStore && (
+          <div className="space-y-3 text-base">
+            <div><span className="text-slate-400">门店名称：</span><span className="font-medium">{selectedStore.name}</span></div>
+            <div><span className="text-slate-400">城市：</span>{selectedStore.city}</div>
+            <div><span className="text-slate-400">地址：</span>{selectedStore.address}</div>
+            <div><span className="text-slate-400">电话：</span>{selectedStore.phone}</div>
+            <div><span className="text-slate-400">营业时间：</span>{selectedStore.hours}</div>
+            <div><span className="text-slate-400">在售商品数：</span>{selectedStore.inventory}</div>
+            <div><span className="text-slate-400">状态：</span>{selectedStore.status}</div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

@@ -179,6 +179,13 @@ export function AdminHelpWidget({
             </div>
             <button
               type="button"
+              onClick={() => {
+                setMessages((prev) => [
+                  ...prev,
+                  makeHelpMsg("用户", "转人工客服"),
+                  makeHelpMsg("AI客服", "已为您转接平台人工客服，请稍候。如遇紧急问题，可拨打客服热线 400-800-8888。"),
+                ]);
+              }}
               className="flex h-11 min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-amber-300 bg-white text-amber-600 font-medium text-base hover:bg-amber-50 transition-colors"
             >
               <UserPlus size={18} />

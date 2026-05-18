@@ -1,8 +1,9 @@
+import { useState } from "react";
 import type { PageProps } from "../../types";
 import { SlidersHorizontal } from "lucide-react";
-import { useState } from "react";
+import { Modal } from "../../components/Modal";
 
-const mockParams = [
+const defaultParams = [
   { id: "gp-1", key: "session_timeout", value: "1800", unit: "秒", description: "会话超时自动关闭时间", status: "已启用" },
   { id: "gp-2", key: "max_ticket_per_user", value: "10", unit: "个", description: "单个用户同时打开的工单上限", status: "已启用" },
   { id: "gp-3", key: "rag_recall_topk", value: "20", unit: "条", description: "RAG粗召回默认Top-K", status: "已启用" },
@@ -11,7 +12,22 @@ const mockParams = [
 ];
 
 export default function GlobalParams({}: PageProps) {
-  const [params] = useState(mockParams);
+  const [params, setParams] = useState(defaultParams);
+  const [editOpen, setEditOpen] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState("");
+  const editingParam = params.find((p) => p.id === editOpen);
+
+  function openEdit(id: string) {
+    const p = params.find((p) => p.id === id);
+    if (p) setEditValue(p.value);
+    setEditOpen(id);
+  }
+
+  function saveEdit() {
+    setParams((prev) => prev.map((p) => p.id === editOpen ? { ...p, value: editValue } : p));
+    setEditOpen(null);
+  }
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -48,13 +64,24 @@ export default function GlobalParams({}: PageProps) {
                   <span className={`inline-flex rounded-full px-2.5 py-0.5 text-sm font-medium ${p.status === "已启用" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{p.status}</span>
                 </td>
                 <td className="px-5 py-3">
-                  <button className="text-base text-blue-600 hover:text-blue-800">编辑</button>
+                  <button onClick={() => openEdit(p.id)} className="text-base text-blue-600 hover:text-blue-800">编辑</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      <Modal open={!!editOpen} title="编辑参数" onClose={() => setEditOpen(null)}>
+        {editingParam && (
+          <div className="space-y-4">
+            <div><label className="text-base font-medium text-slate-700">参数键</label><p className="mt-1 text-base text-slate-500 font-mono">{editingParam.key}</p></div>
+            <div><label className="text-base font-medium text-slate-700">参数值</label><input value={editValue} onChange={(e) => setEditValue(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">描述</label><p className="mt-1 text-base text-slate-500">{editingParam.description}</p></div>
+            <div className="flex justify-end gap-3"><button onClick={() => setEditOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={saveEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }

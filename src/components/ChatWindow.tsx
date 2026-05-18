@@ -1,10 +1,11 @@
 import type { Message } from "../types";
-import { User, Bot, UserCheck, Package, FileText, Ticket } from "lucide-react";
+import { User, Bot, UserCheck, Package, FileText, Ticket, BookOpen } from "lucide-react";
 
 interface ChatWindowProps {
   messages: Message[];
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  onCardAction?: (action: string, cardData?: Record<string, string>) => void;
 }
 
 const cardIcons: Record<string, typeof Package> = {
@@ -17,7 +18,7 @@ const cardIcons: Record<string, typeof Package> = {
   "物流查询结果": FileText,
 };
 
-function ChatBubble({ msg }: { msg: Message }) {
+function ChatBubble({ msg, onCardAction }: { msg: Message; onCardAction?: (action: string, cardData?: Record<string, string>) => void }) {
   const isUser = msg.sender === "用户";
   const isSystem = msg.sender === "系统";
 
@@ -60,7 +61,7 @@ function ChatBubble({ msg }: { msg: Message }) {
             {cardData.logistics && <p>物流: {cardData.logistics}</p>}
             {cardData.amount && <p>金额: <span className="font-semibold text-slate-800">￥{cardData.amount}</span></p>}
           </div>
-          <button type="button" className="mt-2 text-base text-blue-600 font-medium hover:text-blue-800">查看售后入口 →</button>
+          <button type="button" onClick={() => onCardAction?.("after-sales", cardData)} className="mt-2 text-base text-blue-600 font-medium hover:text-blue-800">查看售后入口 →</button>
         </div>
       );
     }
@@ -75,7 +76,7 @@ function ChatBubble({ msg }: { msg: Message }) {
           {cardData.spec && <p className="text-base text-slate-600 mb-1">规格: {cardData.spec}</p>}
           {cardData.price && <p className="text-base text-slate-600 mb-2">价格: ￥{cardData.price}</p>}
           {cardData.queryMethod && <p className="text-base text-slate-400 mb-2">查询方式: {cardData.queryMethod}</p>}
-          <button type="button" className="text-base text-emerald-600 font-medium hover:text-emerald-800">查看链路 →</button>
+          <button type="button" onClick={() => onCardAction?.("trace", cardData)} className="text-base text-emerald-600 font-medium hover:text-emerald-800">查看链路 →</button>
         </div>
       );
     }
@@ -90,7 +91,7 @@ function ChatBubble({ msg }: { msg: Message }) {
           {cardData.location && <p className="text-base text-slate-600 mb-1">最新位置: {cardData.location}</p>}
           {cardData.timeline && <p className="text-base text-slate-500 mb-1">时间线: {cardData.timeline}</p>}
           {cardData.queryTime && <p className="text-base text-slate-400 mb-2">查询时间: {cardData.queryTime}</p>}
-          <button type="button" className="text-base text-cyan-600 font-medium hover:text-cyan-800">查看链路 →</button>
+          <button type="button" onClick={() => onCardAction?.("trace", cardData)} className="text-base text-cyan-600 font-medium hover:text-cyan-800">查看链路 →</button>
         </div>
       );
     }
@@ -128,6 +129,22 @@ function ChatBubble({ msg }: { msg: Message }) {
         <div className={`rounded-2xl px-4 py-2.5 text-base leading-relaxed ${bubbleBg} ${isUser ? "rounded-tr-md" : "rounded-tl-md"}`}>
           {msg.content}
         </div>
+        {msg.references && msg.references.length > 0 && (
+          <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
+            <div className="flex items-center gap-1.5 mb-1">
+              <BookOpen size={12} className="text-slate-400" />
+              <span className="text-sm text-slate-400">参考来源</span>
+            </div>
+            {msg.references.map((ref, i) => (
+              <div key={i} className="text-sm text-slate-500 flex items-center gap-2">
+                <span className="text-slate-300">#{i + 1}</span>
+                <span>{ref.title}</span>
+                <span className="text-slate-300">— {ref.source}</span>
+                <span className="text-slate-300">{(ref.similarity * 100).toFixed(0)}%</span>
+              </div>
+            ))}
+          </div>
+        )}
         {msg.cardType && msg.cardData && <BusinessResultCard cardType={msg.cardType} cardData={msg.cardData} />}
         <p className="text-base text-slate-400 mt-1 px-1">{msg.time}</p>
       </div>
@@ -135,7 +152,7 @@ function ChatBubble({ msg }: { msg: Message }) {
   );
 }
 
-export function ChatWindow({ messages, header, footer }: ChatWindowProps) {
+export function ChatWindow({ messages, header, footer, onCardAction }: ChatWindowProps) {
   return (
     <div className="flex flex-col min-h-0 flex-1">
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
@@ -144,7 +161,7 @@ export function ChatWindow({ messages, header, footer }: ChatWindowProps) {
           <p className="text-center text-base text-slate-400 py-12">暂无消息，开始对话吧</p>
         )}
         {messages.map((msg) => (
-          <ChatBubble key={msg.id} msg={msg} />
+          <ChatBubble key={msg.id} msg={msg} onCardAction={onCardAction} />
         ))}
       </div>
       {footer && <div className="border-t border-slate-200 px-4 py-3">{footer}</div>}

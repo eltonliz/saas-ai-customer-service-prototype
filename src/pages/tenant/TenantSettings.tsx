@@ -14,6 +14,7 @@ export default function TenantSettings({ context }: PageProps) {
   const [editForm, setEditForm] = useState({ name: "", industry: "" });
   const [editChannels, setEditChannels] = useState<Channel[]>([]);
   const [editRoles, setEditRoles] = useState<{ role: string; desc: string }[]>([]);
+  const [auditDetail, setAuditDetail] = useState<{ time: string; text: string; detail: string } | null>(null);
 
   const defaultRoles = [
     { role: "租户管理员", desc: "完全访问" },
@@ -127,13 +128,13 @@ export default function TenantSettings({ context }: PageProps) {
           <h3 className="text-base font-semibold text-slate-700 mb-4 flex items-center gap-2"><FileText size={16} className="text-slate-500" />操作日志</h3>
           <div className="text-base text-slate-500 space-y-1">
             {[
-              "2026-05-17 10:12 管理员修改了机器人配置",
-              "2026-05-17 09:45 客服林客服接入会话 conv-1",
-              "2026-05-17 09:30 知识文档「直播活动客服手册」审核通过",
-              "2026-05-16 18:20 工单 ticket-8 已关闭",
-              "2026-05-16 16:10 知识缺口 gap-3 生成候选知识",
+              { time: "2026-05-17 10:12", text: "管理员修改了机器人配置", detail: "管理员 admin@example.com 修改了AI客服机器人的欢迎语、快捷问题列表和最大追问轮次，新配置已生效。" },
+              { time: "2026-05-17 09:45", text: "客服林客服接入会话 conv-1", detail: "一线客服林客服从待接入队列中领取会话 conv-1，用户咨询商品退换货流程。" },
+              { time: "2026-05-17 09:30", text: "知识文档「直播活动客服手册」审核通过", detail: "AI运营提交的知识文档已通过审核，版本 v2.1，包含最新直播活动FAQ和标准应答话术。" },
+              { time: "2026-05-16 18:20", text: "工单 ticket-8 已关闭", detail: "工单 ticket-8（商品破损换货）已由客服主管确认解决并关闭，用户满意度5分。" },
+              { time: "2026-05-16 16:10", text: "知识缺口 gap-3 生成候选知识", detail: "系统检测到3次未命中查询「胶原蛋白肽服用方法」，自动生成候选知识条目待审核。" },
             ].map((log, i) => (
-              <p key={i} className="py-1">{log}</p>
+              <p key={i} className="py-1 cursor-pointer hover:text-blue-600 hover:bg-slate-50 rounded px-1 -mx-1" onClick={() => { setAuditDetail(log); }}>{log.time} {log.text}</p>
             ))}
           </div>
         </div>
@@ -219,6 +220,17 @@ export default function TenantSettings({ context }: PageProps) {
           <button type="button" onClick={() => setEditModal(null)} className="rounded-lg border px-4 py-2 text-base">取消</button>
           <button type="button" onClick={handleRolesSave} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
+      </Modal>
+
+      {/* Audit Detail Modal */}
+      <Modal open={auditDetail !== null} title="操作详情" onClose={() => setAuditDetail(null)}>
+        {auditDetail && (
+          <div className="space-y-3 text-base">
+            <div><span className="text-slate-400">时间：</span><span className="font-medium">{auditDetail.time}</span></div>
+            <div><span className="text-slate-400">操作：</span><span>{auditDetail.text}</span></div>
+            <div><span className="text-slate-400">详情：</span><p className="mt-1 text-slate-600">{auditDetail.detail}</p></div>
+          </div>
+        )}
       </Modal>
     </div>
   );
