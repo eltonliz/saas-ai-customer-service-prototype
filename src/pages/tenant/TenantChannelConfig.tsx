@@ -45,7 +45,7 @@ export default function TenantChannelConfig({}: PageProps) {
             <p className="text-base text-slate-500 mt-1">管理各接入渠道的参数配置、开关状态及会话分配规则</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
+        <button onClick={() => alert("新增渠道功能开发中")} className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
           + 新增渠道
         </button>
       </div>

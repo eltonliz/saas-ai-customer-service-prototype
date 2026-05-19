@@ -24,9 +24,9 @@ export default function PlatformAuditLog({}: PageProps) {
   const filtered = logs.filter((l) => !search || l.operator.includes(search) || l.action.includes(search) || l.target.includes(search));
 
   return (
-    <div className="platform-audit-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="platform-audit-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <ScrollText size={20} className="text-slate-600" />

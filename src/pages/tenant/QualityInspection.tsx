@@ -51,8 +51,8 @@ export default function QualityInspection({ context, goPage }: PageProps) {
 
   return (
     <div className="quality-page">
-      <div className="flex items-center justify-between mb-4">
       {allBadges}
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">质检中心</h2>
         <button
           type="button"

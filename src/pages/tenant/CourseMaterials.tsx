@@ -24,8 +24,8 @@ export default function CourseMaterials({}: PageProps) {
 
   return (
     <div className="course-materials-page">
-      <div className="flex items-center justify-between mb-6">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50">
             <GraduationCap size={20} className="text-violet-600" />
@@ -35,7 +35,7 @@ export default function CourseMaterials({}: PageProps) {
             <p className="text-base text-slate-500 mt-1">管理课程相关的AI客服话术、FAQ及知识文档</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
+        <button onClick={() => alert("新增课程资料功能开发中")} className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
           + 新增课程资料
         </button>
       </div>

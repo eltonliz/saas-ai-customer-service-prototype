@@ -53,7 +53,7 @@ export default function LiveScript({}: PageProps) {
             <p className="text-base text-slate-500 mt-1">管理直播带货场景下的AI客服推荐话术和标准应答</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
+        <button onClick={() => alert("新增话术功能开发中")} className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
           + 新增话术
         </button>
       </div>

@@ -1,5 +1,7 @@
 import type { PageProps } from "../../types";
 import { useAppStore } from "../../data/AppStore";
+import { RequirementBadge } from "../../components/RequirementBadge";
+import reqs from "../../data/requirementData";
 import { RotateCcw, Store, GraduationCap, Heart, Wrench, Crown, ChevronRight, Smartphone } from "lucide-react";
 
 export default function AppServiceHub({ context, goPage }: PageProps) {
@@ -72,9 +74,17 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
     },
   ];
 
+  const allBadges = reqs.AppServiceHub.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}
+
+${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
+
   return (
-    <div className="p-4">
+    <div className="p-4 relative service-hub-page">
       <h1 className="text-3xl font-bold text-slate-800 mb-4">我的服务</h1>
+      {allBadges}
       <div className="grid grid-cols-2 gap-3">
         {services.map((svc) => {
           const Icon = svc.icon;

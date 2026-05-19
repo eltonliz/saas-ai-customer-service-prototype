@@ -36,9 +36,9 @@ export default function GlobalParams({}: PageProps) {
   }
 
   return (
-    <div className="global-params-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="global-params-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-purple-50">
             <SlidersHorizontal size={20} className="text-purple-600" />

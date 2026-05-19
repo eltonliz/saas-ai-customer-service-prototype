@@ -87,7 +87,7 @@ export default function TicketCenter({ context }: PageProps) {
       {allBadges}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">工单中心</h2>
-        <button type="button" onClick={() => setModal("分配")} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新建工单</button>
+        <button type="button" onClick={() => alert("新建工单功能开发中")} className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700"><Plus size={14} />新建工单</button>
       </div>
 
       <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-slate-200 bg-white p-3">

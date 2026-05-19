@@ -51,8 +51,8 @@ export default function ServicePolicy({}: PageProps) {
 
   return (
     <div className="policy-page">
-      <div className="flex items-center justify-between mb-6">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50">
             <Shield size={20} className="text-amber-600" />

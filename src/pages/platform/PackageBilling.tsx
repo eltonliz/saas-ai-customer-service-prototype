@@ -127,9 +127,9 @@ export default function PackageBilling({}: PageProps) {
   }
 
   return (
-    <div className="billing-page">
-      <div className="flex items-center justify-between mb-4">
+    <div className="billing-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold text-slate-900">套餐与计费</h2>
         <button
           type="button"

@@ -23,8 +23,8 @@ export default function StoreServiceMaterials({}: PageProps) {
 
   return (
     <div className="store-materials-page">
-      <div className="flex items-center justify-between mb-6">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50">
             <Store size={20} className="text-emerald-600" />
@@ -34,7 +34,7 @@ export default function StoreServiceMaterials({}: PageProps) {
             <p className="text-base text-slate-500 mt-1">管理门店相关的服务信息、库存数据及客服话术</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
+        <button onClick={() => alert("新增门店资料功能开发中")} className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
           + 新增门店资料
         </button>
       </div>

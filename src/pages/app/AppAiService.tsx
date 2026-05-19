@@ -471,7 +471,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
   return (
     <div className="flex flex-col flex-1 min-h-0">
       {/* Header */}
-      <div className="bg-blue-600 px-4 py-3 shrink-0 relative">
+      <div className="chat-header bg-blue-600 px-4 py-3 shrink-0 relative">
         {reqs.AppAiService.map(group => {
           const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
           return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
@@ -510,7 +510,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
 
       {/* 处理状态指示器 —— 展示完整AI链路步骤 */}
       {processing && typingText && (
-        <div className={`border-b shrink-0 px-4 py-2.5 flex items-center gap-2.5 ${stepColors[typingIcon].split(" ")[1] || "bg-blue-50"} ${stepColors[typingIcon].split(" ")[0] || "text-blue-600"}`}>
+        <div className={`ai-pipeline-status border-b shrink-0 px-4 py-2.5 flex items-center gap-2.5 ${stepColors[typingIcon].split(" ")[1] || "bg-blue-50"} ${stepColors[typingIcon].split(" ")[0] || "text-blue-600"}`}>
           <div className="flex items-center gap-1.5">
             <span className="flex gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 animate-bounce" style={{ animationDelay: "0ms" }} />
@@ -527,7 +527,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
       )}
 
       {/* Messages */}
-      <div ref={containerRef} className="flex-1 min-h-0 bg-[#F7F9FC]">
+      <div ref={containerRef} className="chat-messages flex-1 min-h-0 bg-[#F7F9FC]">
         <ChatWindow
           messages={augmentedMessages}
           onCardAction={(action, cardData) => {
@@ -628,6 +628,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
         <div className="flex gap-2">
           <button
             type="button"
+            onClick={() => alert("图片上传功能即将上线")}
             className="flex h-12 w-12 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-400 hover:text-slate-600 hover:border-slate-300 shrink-0"
             title="图片上传（即将上线）"
           >
@@ -652,6 +653,7 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
           </button>
           <button
             type="button"
+            className="transfer-button flex h-12 items-center gap-1.5 rounded-xl bg-orange-500 px-3 text-white hover:bg-orange-600 disabled:opacity-50 shrink-0 text-base font-medium"
             onClick={() => {
               setMessages((prev) => [...prev, makeMsg("app-chat", "系统", "正在为您转接人工客服…")]);
               setTransferred(true);
@@ -659,7 +661,6 @@ export default function AppAiService({ goPage, navigationParams }: PageProps) {
               setTimeout(() => { if (!conversationEnded) setShowSurvey(true); }, 2000);
             }}
             disabled={processing || transferred}
-            className="flex h-12 items-center gap-1.5 rounded-xl bg-orange-500 px-3 text-white hover:bg-orange-600 disabled:opacity-50 shrink-0 text-base font-medium"
           >
             <UserPlus size={16} />
             转人工

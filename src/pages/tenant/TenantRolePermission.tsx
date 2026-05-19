@@ -44,7 +44,7 @@ export default function TenantRolePermission({}: PageProps) {
             <p className="text-base text-slate-500 mt-1">管理租户内的角色定义、成员分配及功能权限矩阵</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
+        <button onClick={() => alert("新增角色功能开发中")} className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
           + 新增角色
         </button>
       </div>
@@ -83,7 +83,7 @@ export default function TenantRolePermission({}: PageProps) {
           <div className="space-y-4">
             <div><label className="text-base font-medium text-slate-700">角色名称</label><input value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
             <div><label className="text-base font-medium text-slate-700">权限范围（用逗号分隔）</label><textarea value={editForm.permissions} onChange={(e) => setEditForm({ ...editForm, permissions: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-24 resize-none" /></div>
-            <div className="flex justify-end gap-3"><button onClick={() => setEditOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => { setRoles(roles.map(r => r.id === editOpen ? { ...r, name: editForm.name, permissions: editForm.permissions } : r)); setEditOpen(null); }} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
+            <div className="flex justify-end gap-3"><button onClick={() => setEditOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => { setRoles(prev => prev.map(r => r.id === editOpen ? { ...r, name: editForm.name, permissions: editForm.permissions } : r)); setEditOpen(null); }} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
           </div>
         )}
       </Modal>

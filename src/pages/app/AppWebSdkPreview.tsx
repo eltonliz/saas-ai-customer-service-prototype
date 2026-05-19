@@ -260,6 +260,7 @@ function ProductDetailPage() {
       <div className="px-4 py-4 flex gap-3">
         <button
           type="button"
+          onClick={() => alert("已加入购物车")}
           className="flex-1 h-11 min-h-[44px] rounded-xl bg-amber-500 text-white font-medium text-base hover:bg-amber-600 transition-colors flex items-center justify-center gap-2"
         >
           <ShoppingCart size={18} />
@@ -267,6 +268,7 @@ function ProductDetailPage() {
         </button>
         <button
           type="button"
+          onClick={() => alert("请选择购买数量")}
           className="flex-1 h-11 min-h-[44px] rounded-xl bg-blue-600 text-white font-medium text-base hover:bg-blue-700 transition-colors"
         >
           立即购买

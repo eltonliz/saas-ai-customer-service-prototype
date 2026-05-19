@@ -235,6 +235,7 @@ export default function PlatformKnowledgeBase({}: PageProps) {
                   <span className="rounded-md bg-blue-50 px-2 py-0.5 text-base text-blue-600">{t.industry}</span>
                   <button
                     type="button"
+                    onClick={() => alert("发布功能开发中")}
                     className="flex items-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1 text-base text-blue-600 hover:bg-blue-100"
                   >
                     <Send size={12} />发布到租户模板
@@ -283,6 +284,7 @@ export default function PlatformKnowledgeBase({}: PageProps) {
             </div>
             <button
               type="button"
+              onClick={() => alert("发布功能开发中")}
               className="flex items-center gap-1 rounded-lg bg-blue-600 px-4 py-2 text-base text-white hover:bg-blue-700"
             >
               <Send size={12} />发布至全部租户

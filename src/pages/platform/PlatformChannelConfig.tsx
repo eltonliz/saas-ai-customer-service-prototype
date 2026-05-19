@@ -59,9 +59,9 @@ export default function PlatformChannelConfig({}: PageProps) {
   }
 
   return (
-    <div className="platform-channel-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="platform-channel-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50">
             <Radio size={20} className="text-sky-600" />

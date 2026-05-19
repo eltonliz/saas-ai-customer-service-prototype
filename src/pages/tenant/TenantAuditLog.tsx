@@ -28,8 +28,8 @@ export default function TenantAuditLog({}: PageProps) {
 
   return (
     <div className="audit-log-page">
-      <div className="flex items-center justify-between mb-6">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100">
             <ScrollText size={20} className="text-slate-600" />

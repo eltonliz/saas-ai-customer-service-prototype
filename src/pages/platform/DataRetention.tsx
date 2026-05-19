@@ -62,9 +62,9 @@ export default function DataRetention({}: PageProps) {
   }
 
   return (
-    <div className="data-retention-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="data-retention-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-teal-50">
             <Database size={20} className="text-teal-600" />
