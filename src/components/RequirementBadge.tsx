@@ -577,9 +577,16 @@ export function RequirementBadge({
     []
   );
 
-  /* ── Initialize position when tooltip opens ── */
+  /* ── Initialize position when tooltip first opens (once per open, not per resize) ── */
+  const hasInitializedRef = useRef(false);
   useEffect(() => {
-    if (!open || tooltipW <= 0 || tooltipH <= 0) return;
+    if (!open) {
+      hasInitializedRef.current = false;
+      return;
+    }
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
+
     const raf = requestAnimationFrame(() => {
       const cached = tooltipStateCache.get(req.id);
       if (cached && cached.posX !== undefined && cached.posY !== undefined) {
@@ -588,7 +595,9 @@ export function RequirementBadge({
         setTooltipX(cached.posX);
         setTooltipY(cached.posY);
       } else {
-        const init = computeInitialPosition(tooltipW, tooltipH);
+        const w = sizeRef.current.w;
+        const h = sizeRef.current.h;
+        const init = computeInitialPosition(w, h);
         dragRef.current.posX = init.x;
         dragRef.current.posY = init.y;
         setTooltipX(init.x);
@@ -597,7 +606,8 @@ export function RequirementBadge({
       setReady(true);
     });
     return () => cancelAnimationFrame(raf);
-  }, [open, req.id, tooltipW, tooltipH, computeInitialPosition]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   /* ── Mouse enter → open tooltip ── */
   const handleMouseEnter = () => {
@@ -622,17 +632,17 @@ export function RequirementBadge({
     setReady(false);
   }, [req.id, tooltipW, tooltipH]);
 
-  /* ── Keep dimension ref in sync for unmount cleanup ── */
-  const dimSnapshotRef = useRef({ w: tooltipW, h: tooltipH });
-  dimSnapshotRef.current = { w: tooltipW, h: tooltipH };
+  /* ── Size refs for useCallback stability (avoid re-triggering effects on resize) ── */
+  const sizeRef = useRef({ w: tooltipW, h: tooltipH });
+  sizeRef.current = { w: tooltipW, h: tooltipH };
 
   /* ── Save on unmount ── */
   useEffect(() => {
     return () => {
       if (hasClaimedRef.current) {
         tooltipStateCache.set(req.id, {
-          width: dimSnapshotRef.current.w,
-          height: dimSnapshotRef.current.h,
+          width: sizeRef.current.w,
+          height: sizeRef.current.h,
           posX: dragRef.current.posX,
           posY: dragRef.current.posY,
         });
@@ -643,19 +653,19 @@ export function RequirementBadge({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* ── Clamp to viewport ── (skip during drag/resize to avoid fighting user interaction) */
+  /* ── Clamp to viewport ── (reads sizeRef to avoid re-running on every resize step) */
   const clampTooltip = useCallback(() => {
-    if (dragRef.current.dragging || resizeRef.current.resizing) return;
     const el = tooltipRef.current;
     if (!el) return;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
+    const { w, h } = sizeRef.current;
     let dx = dragRef.current.posX;
     let dy = dragRef.current.posY;
 
     // Clamp right & bottom edges
-    const right = dx + tooltipW;
-    const bottom = dy + tooltipH;
+    const right = dx + w;
+    const bottom = dy + h;
     if (right > vw - VIEWPORT_MARGIN) dx -= right - vw + VIEWPORT_MARGIN;
     if (bottom > vh - VIEWPORT_MARGIN) dy -= bottom - vh + VIEWPORT_MARGIN;
     // Clamp left & top edges
@@ -668,13 +678,14 @@ export function RequirementBadge({
       setTooltipX(dx);
       setTooltipY(dy);
     }
-  }, [tooltipW, tooltipH]);
+  }, []);
 
   useEffect(() => {
     if (!open || !ready) return;
     const raf = requestAnimationFrame(() => clampTooltip());
     return () => cancelAnimationFrame(raf);
-  }, [open, ready, clampTooltip]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, ready]);
 
   /* ── Drag handler (title bar only) ── */
   const handleTooltipMouseDown = useCallback((e: React.MouseEvent) => {
@@ -698,10 +709,12 @@ export function RequirementBadge({
       dragRef.current.dragging = false;
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onUp);
+      // Clamp after drag to keep tooltip within viewport
+      requestAnimationFrame(() => clampTooltip());
     };
     document.addEventListener("mousemove", onMove);
     document.addEventListener("mouseup", onUp);
-  }, []);
+  }, [clampTooltip]);
 
   /* ── Resize handler (bottom-right handle) ── */
   const handleResizeMouseDown = useCallback(
@@ -741,11 +754,13 @@ export function RequirementBadge({
         resizeRef.current.resizing = false;
         document.removeEventListener("mousemove", onMove);
         document.removeEventListener("mouseup", onUp);
+        // Clamp after resize to keep tooltip within viewport
+        requestAnimationFrame(() => clampTooltip());
       };
       document.addEventListener("mousemove", onMove);
       document.addEventListener("mouseup", onUp);
     },
-    [tooltipW, tooltipH]
+    [tooltipW, tooltipH, clampTooltip]
   );
 
   /* ── Badge styling ── */
