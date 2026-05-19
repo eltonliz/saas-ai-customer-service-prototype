@@ -280,7 +280,7 @@ export default function ModelConfig({}: PageProps) {
       {/* 降级策略配置 */}
       <div className="rounded-xl border border-slate-200 bg-white p-8 mb-6">
         <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
-          <AlertTriangle size={16} className="text-amber-500" />降级策略配置
+          <AlertTriangle size={16} className="text-amber-500" />降级策略配置<button type="button" onClick={() => setDegradeModal(true)} className="ml-auto rounded-lg border border-amber-200 px-3 py-1 text-base text-amber-600 hover:bg-amber-50">配置</button>
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -572,6 +572,55 @@ export default function ModelConfig({}: PageProps) {
           <button type="button" onClick={handleEditRoute} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>
+      {/* 降级策略配置 Modal */}
+      <Modal open={degradeModal} title="降级策略配置" onClose={() => setDegradeModal(false)} size="md">
+        <div className="space-y-3 text-base">
+          <div>
+            <label className="block text-base font-medium text-slate-500 mb-1">最大重试次数</label>
+            <input
+              type="number"
+              value={degradeConfig.maxRetries}
+              onChange={(e) => setDegradeConfig(d => ({ ...d, maxRetries: +e.target.value }))}
+              min={0} max={5}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-base font-medium text-slate-500 mb-1">超时降级阈值 (ms)</label>
+            <input
+              type="number"
+              value={degradeConfig.timeoutThreshold}
+              onChange={(e) => setDegradeConfig(d => ({ ...d, timeoutThreshold: +e.target.value }))}
+              min={1000} step={1000}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
+            />
+          </div>
+          <div>
+            <label className="block text-base font-medium text-slate-500 mb-1">降级策略</label>
+            <select
+              value={degradeConfig.strategy}
+              onChange={(e) => setDegradeConfig(d => ({ ...d, strategy: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
+            >
+              <option>超时降级</option><option>错误率降级</option><option>手动降级</option><option>按优先级降级</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-base font-medium text-slate-500 mb-1">降级模型</label>
+            <select
+              value={degradeConfig.fallbackModel}
+              onChange={(e) => setDegradeConfig(d => ({ ...d, fallbackModel: e.target.value }))}
+              className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none"
+            >
+              <option>Claude Opus 4.7</option><option>Claude Sonnet 4.6</option>
+            </select>
+          </div>
+        </div>
+        <div className="flex justify-end gap-3 mt-4">
+          <button type="button" onClick={() => setDegradeModal(false)} className="rounded-lg border px-4 py-2 text-base">关闭</button>
+        </div>
+      </Modal>
+
     </div>
   );
 }

@@ -19,10 +19,11 @@ export default function PlatformRolePermission({}: PageProps) {
   const [membersOpen, setMembersOpen] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editPermissions, setEditPermissions] = useState("");
-  const allBadges = reqs.PlatformRolePermission.map(group => {
-    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
-    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
-  });
+  const allBadges = reqs.PlatformRolePermission.flatMap(group =>
+    group.reqs.map((req, i) => (
+      <RequirementBadge key={`${req.id}-${i}`} req={req} sectionSelector={group.selector} index={i} />
+    ))
+  );
   const editingRole = roles.find((r) => r.id === editOpen);
   const viewingRole = roles.find((r) => r.id === membersOpen);
 

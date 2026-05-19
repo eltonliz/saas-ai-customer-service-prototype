@@ -1,5 +1,5 @@
 import type { PageProps } from "../../types";
-import { Shield, AlertTriangle, Heart, MessageCircle, ChevronRight, CircleCheck, CircleX } from "lucide-react";
+import { Shield, AlertTriangle, Heart, CircleCheck, CircleX } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 

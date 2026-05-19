@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import type { PageProps } from "../../types";
 import { ragTraces, tenants, knowledgeDocuments, knowledgeGaps } from "../../data/mockData";
 import { DataTable } from "../../components/DataTable";

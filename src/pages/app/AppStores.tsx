@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
-import { useAppStore } from "../../data/AppStore";
 import { stores } from "../../data/mockData";
 import { MapPin, Clock, Phone, Package, Calendar, Headphones } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";

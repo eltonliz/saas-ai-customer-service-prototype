@@ -102,10 +102,11 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
     sendMessage(chip);
   }
 
-  const allBadges = reqs.AppWebSdkPreview.map(group => {
-    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
-    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
-  });
+  const allBadges = reqs.AppWebSdkPreview.flatMap(group =>
+    group.reqs.map((req, i) => (
+      <RequirementBadge key={`${req.id}-${i}`} req={req} sectionSelector={group.selector} index={i} />
+    ))
+  );
 
   return (
     <div className="flex flex-col h-full bg-slate-100 relative sdk-preview">

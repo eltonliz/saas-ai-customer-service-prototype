@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PageProps } from "../../types";
-import { RotateCcw, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 import { Modal } from "../../components/Modal";

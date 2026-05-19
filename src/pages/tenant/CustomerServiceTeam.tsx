@@ -3,7 +3,7 @@ import type { PageProps, AgentStatus, CustomerServiceAgent } from "../../types";
 import { customerServiceAgents } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
-import { Users, Clock, Calendar, Plus, Edit3, Eye } from "lucide-react";
+import { Plus, Edit3, Eye } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 

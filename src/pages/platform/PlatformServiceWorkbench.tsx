@@ -1,10 +1,10 @@
 import { useState, useMemo, useRef } from "react";
 import type { PageProps, Message } from "../../types";
-import { conversations, conversationMessages, tickets } from "../../data/mockData";
+import { conversationMessages } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { ChatWindow } from "../../components/ChatWindow";
 import { Modal } from "../../components/Modal";
-import { Users, MessageSquare, AlertTriangle, CreditCard, Ban, CheckCircle, XCircle, Send, Ticket } from "lucide-react";
+import { Users, AlertTriangle, CheckCircle, XCircle, Send, Ticket } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 

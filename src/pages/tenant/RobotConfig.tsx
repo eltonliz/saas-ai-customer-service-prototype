@@ -3,7 +3,7 @@ import type { PageProps, RobotConfig as RobotConfigType, BusinessLine, Channel, 
 import { robotConfigs } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
-import { Bot, Plus, Power, PowerOff, MessageSquare, Play, Edit3, Eye, X } from "lucide-react";
+import { Bot, Plus, Power, PowerOff, Play, Edit3, Eye, X } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 
@@ -142,6 +142,79 @@ function ChipInput({ chips, onChange, label, placeholder }: { chips: string[]; o
   );
 }
 
+function RobotFormFields({ form, setForm }: { form: RobotForm; setForm: React.Dispatch<React.SetStateAction<RobotForm>> }) {
+  return (
+    <div className="space-y-4 text-base">
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">机器人名称 <span className="text-red-400">*</span></label>
+          <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="如：直播客服、商城客服" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
+        </div>
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">归属层级 <span className="text-red-400">*</span></label>
+          <select value={form.ownershipLevel} onChange={(e) => setForm((f) => ({ ...f, ownershipLevel: e.target.value as OwnershipLevel }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
+            {allOwnershipLevels.map((l) => <option key={l}>{l}</option>)}
+          </select>
+        </div>
+      </div>
+
+      <MultiSelectChips options={allBusinessLines} selected={form.businessLines} onChange={(v) => setForm((f) => ({ ...f, businessLines: v as BusinessLine[] }))} label="适用业务线（多选）" />
+
+      <MultiSelectChips options={allChannels} selected={form.channels} onChange={(v) => setForm((f) => ({ ...f, channels: v as Channel[] }))} label="适用渠道（多选）" />
+
+      <MultiSelectChips options={allTools} selected={form.availableTools} onChange={(v) => setForm((f) => ({ ...f, availableTools: v }))} label="可调用工具（多选）" />
+
+      <div>
+        <label className="block text-base font-medium text-slate-500 mb-1">欢迎语 <span className="text-red-400">*</span></label>
+        <textarea value={form.welcome} onChange={(e) => setForm((f) => ({ ...f, welcome: e.target.value }))} rows={2} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
+      </div>
+
+      <ChipInput chips={form.quickQuestions} onChange={(v) => setForm((f) => ({ ...f, quickQuestions: v }))} label="快捷问题（输入后按回车添加）" placeholder="如：怎么申请退款？" />
+
+      <div className="grid grid-cols-3 gap-3">
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">回答风格</label>
+          <select value={form.style} onChange={(e) => setForm((f) => ({ ...f, style: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
+            {allStyles.map((s) => <option key={s}>{s}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">最大追问轮次</label>
+          <input type="number" min={1} max={5} value={form.maxFollowUpRounds} onChange={(e) => setForm((f) => ({ ...f, maxFollowUpRounds: Number(e.target.value) }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
+        </div>
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">低置信阈值</label>
+          <input type="number" min={0} max={1} step={0.05} value={form.lowConfidenceThreshold} onChange={(e) => setForm((f) => ({ ...f, lowConfidenceThreshold: Number(e.target.value) }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">模型</label>
+          <select value={form.model} onChange={(e) => setForm((f) => ({ ...f, model: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
+            {allModels.map((m) => <option key={m}>{m}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="block text-base font-medium text-slate-500 mb-1">Prompt版本</label>
+          <input value={form.promptVersion} onChange={(e) => setForm((f) => ({ ...f, promptVersion: e.target.value }))} placeholder="如 v2.3" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-base font-medium text-slate-500 mb-1">转人工规则</label>
+        <input value={form.humanRule} onChange={(e) => setForm((f) => ({ ...f, humanRule: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
+      </div>
+
+      <div>
+        <label className="block text-base font-medium text-slate-500 mb-1">风控策略</label>
+        <select value={form.riskPolicy} onChange={(e) => setForm((f) => ({ ...f, riskPolicy: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
+          {["标准风控策略", "大健康强化风控策略", "大健康最高级风控策略"].map((p) => <option key={p}>{p}</option>)}
+        </select>
+      </div>
+    </div>
+  );
+}
 export default function RobotConfig({ context }: PageProps) {
   const [robots, setRobots] = useState<RobotConfigType[]>(robotConfigs.filter((r) => r.tenantId === context.currentTenantId));
   const [modal, setModal] = useState<"new" | "test" | "edit" | "view" | null>(null);
@@ -231,80 +304,6 @@ export default function RobotConfig({ context }: PageProps) {
 
   const viewingRobot = viewingRobotId ? robots.find((r) => r.id === viewingRobotId) : null;
 
-  // 共享的表单内容组件
-  function RobotFormFields() {
-    return (
-      <div className="space-y-4 text-base">
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">机器人名称 <span className="text-red-400">*</span></label>
-            <input value={form.name} onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))} placeholder="如：直播客服、商城客服" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
-          </div>
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">归属层级 <span className="text-red-400">*</span></label>
-            <select value={form.ownershipLevel} onChange={(e) => setForm((f) => ({ ...f, ownershipLevel: e.target.value as OwnershipLevel }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
-              {allOwnershipLevels.map((l) => <option key={l}>{l}</option>)}
-            </select>
-          </div>
-        </div>
-
-        <MultiSelectChips options={allBusinessLines} selected={form.businessLines} onChange={(v) => setForm((f) => ({ ...f, businessLines: v as BusinessLine[] }))} label="适用业务线（多选）" />
-
-        <MultiSelectChips options={allChannels} selected={form.channels} onChange={(v) => setForm((f) => ({ ...f, channels: v as Channel[] }))} label="适用渠道（多选）" />
-
-        <MultiSelectChips options={allTools} selected={form.availableTools} onChange={(v) => setForm((f) => ({ ...f, availableTools: v }))} label="可调用工具（多选）" />
-
-        <div>
-          <label className="block text-base font-medium text-slate-500 mb-1">欢迎语 <span className="text-red-400">*</span></label>
-          <textarea value={form.welcome} onChange={(e) => setForm((f) => ({ ...f, welcome: e.target.value }))} rows={2} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
-        </div>
-
-        <ChipInput chips={form.quickQuestions} onChange={(v) => setForm((f) => ({ ...f, quickQuestions: v }))} label="快捷问题（输入后按回车添加）" placeholder="如：怎么申请退款？" />
-
-        <div className="grid grid-cols-3 gap-3">
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">回答风格</label>
-            <select value={form.style} onChange={(e) => setForm((f) => ({ ...f, style: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
-              {allStyles.map((s) => <option key={s}>{s}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">最大追问轮次</label>
-            <input type="number" min={1} max={5} value={form.maxFollowUpRounds} onChange={(e) => setForm((f) => ({ ...f, maxFollowUpRounds: Number(e.target.value) }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
-          </div>
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">低置信阈值</label>
-            <input type="number" min={0} max={1} step={0.05} value={form.lowConfidenceThreshold} onChange={(e) => setForm((f) => ({ ...f, lowConfidenceThreshold: Number(e.target.value) }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">模型</label>
-            <select value={form.model} onChange={(e) => setForm((f) => ({ ...f, model: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
-              {allModels.map((m) => <option key={m}>{m}</option>)}
-            </select>
-          </div>
-          <div>
-            <label className="block text-base font-medium text-slate-500 mb-1">Prompt版本</label>
-            <input value={form.promptVersion} onChange={(e) => setForm((f) => ({ ...f, promptVersion: e.target.value }))} placeholder="如 v2.3" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-base font-medium text-slate-500 mb-1">转人工规则</label>
-          <input value={form.humanRule} onChange={(e) => setForm((f) => ({ ...f, humanRule: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" />
-        </div>
-
-        <div>
-          <label className="block text-base font-medium text-slate-500 mb-1">风控策略</label>
-          <select value={form.riskPolicy} onChange={(e) => setForm((f) => ({ ...f, riskPolicy: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
-            {["标准风控策略", "大健康强化风控策略", "大健康最高级风控策略"].map((p) => <option key={p}>{p}</option>)}
-          </select>
-        </div>
-      </div>
-    );
-  }
 
   const allBadges = reqs.RobotConfig.map(group => {
     const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
@@ -354,7 +353,7 @@ export default function RobotConfig({ context }: PageProps) {
 
       {/* New Robot Modal */}
       <Modal open={modal === "new"} title="新增机器人" onClose={() => setModal(null)} size="lg">
-        <RobotFormFields />
+        <RobotFormFields form={form} setForm={setForm} />
         <div className="flex justify-end gap-3 mt-6">
           <button type="button" onClick={() => setModal(null)} className="rounded-lg border px-4 py-2 text-base">取消</button>
           <button type="button" onClick={handleCreate} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">创建</button>
@@ -363,7 +362,7 @@ export default function RobotConfig({ context }: PageProps) {
 
       {/* Edit Robot Modal */}
       <Modal open={modal === "edit"} title="编辑机器人" onClose={() => { setModal(null); setEditingRobotId(null); }} size="lg">
-        <RobotFormFields />
+        <RobotFormFields form={form} setForm={setForm} />
         <div className="flex justify-end gap-3 mt-6">
           <button type="button" onClick={() => { setModal(null); setEditingRobotId(null); }} className="rounded-lg border px-4 py-2 text-base">取消</button>
           <button type="button" onClick={handleEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>

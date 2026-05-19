@@ -6,7 +6,7 @@ import { Modal } from "../../components/Modal";
 import { Drawer } from "../../components/Drawer";
 import { ChatWindow } from "../../components/ChatWindow";
 import { users, orders, customerServiceAgents, weComNotifications } from "../../data/mockData";
-import { Send, UserPlus, FilePlus, XCircle, Tag, BookOpen, MessageSquare, ChevronRight, Bot, Search, FileText, Shield, Clock, User, ShoppingBag, Star, AlertTriangle, Info, Database, type LucideIcon } from "lucide-react";
+import { Send, UserPlus, FilePlus, XCircle, Tag, BookOpen, MessageSquare, ChevronRight, Bot, Search, FileText, Shield, Clock, User, ShoppingBag, Star, AlertTriangle, Database, type LucideIcon } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 
@@ -171,10 +171,11 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
     setModal(null);
   }
 
-  const allBadges = reqs.CustomerServiceWorkbench.map(group => {
-    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
-    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
-  });
+  const allBadges = reqs.CustomerServiceWorkbench.flatMap(group =>
+    group.reqs.map((req, i) => (
+      <RequirementBadge key={`${req.id}-${i}`} req={req} sectionSelector={group.selector} index={i} />
+    ))
+  );
 
   return (
     <div className="flex h-[calc(100vh-160px)] gap-0 overflow-hidden rounded-xl border border-slate-200 bg-white relative workbench-layout">
@@ -298,6 +299,11 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto p-4">
+          {filtered.length === 0 ? (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-base text-slate-400">当前队列无会话</p>
+            </div>
+          ) : (<>
           {/* Tab: User Info */}
           {rightTab === "user" && (
             <div className="space-y-4">
@@ -538,6 +544,8 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
                 <ChevronRight size={14} />
               </button>
             </div>
+          )}
+            </>
           )}
         </div>
       </div>

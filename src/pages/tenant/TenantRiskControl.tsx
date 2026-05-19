@@ -3,7 +3,7 @@ import type { PageProps } from "../../types";
 import { healthRiskSamples } from "../../data/mockData";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Modal } from "../../components/Modal";
-import { Shield, AlertTriangle, FileText, MessageSquare, Plus, X, Megaphone, DollarSign, ShoppingBag, EyeOff, ThumbsDown } from "lucide-react";
+import { Shield, AlertTriangle, FileText, MessageSquare, Plus, X, Megaphone, DollarSign, EyeOff, ThumbsDown } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
 

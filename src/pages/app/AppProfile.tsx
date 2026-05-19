@@ -3,15 +3,16 @@ import { users } from "../../data/mockData";
 import { useAppStore } from "../../data/AppStore";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";
-import { User, Ticket, MessageSquare, Wrench, Settings, ChevronRight, Star, Crown, ShoppingBag, MapPin, Heart, HelpCircle, Info } from "lucide-react";
+import { User, Ticket, MessageSquare, Wrench, Settings, ChevronRight, Crown, ShoppingBag, MapPin, Heart, HelpCircle, Info } from "lucide-react";
 
 export default function AppProfile({ context, goPage }: PageProps) {
   const store = useAppStore();
   const user = users.find((u) => u.id === context.currentUserId);
-  const allBadges = reqs.AppProfile.map(group => {
-    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
-    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
-  });
+  const allBadges = reqs.AppProfile.flatMap(group =>
+    group.reqs.map((req, i) => (
+      <RequirementBadge key={`${req.id}-${i}`} req={req} sectionSelector={group.selector} index={i} />
+    ))
+  );
   const myConversations = store.conversations.filter((c) => c.userId === context.currentUserId);
   const myTickets = store.tickets.filter((t) => t.userId === context.currentUserId);
   const myAfterSales = store.afterSales.filter((a) => a.userId === context.currentUserId);

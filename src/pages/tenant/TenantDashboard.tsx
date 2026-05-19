@@ -1,10 +1,9 @@
 import type { PageProps } from "../../types";
-import { useAppStore } from "../../data/AppStore";
 import { MetricCard } from "../../components/MetricCard";
 import { StatusBadge } from "../../components/StatusBadge";
 import { conversations, tickets, customerServiceAgents, knowledgeGaps, tenants, merchants } from "../../data/mockData";
-import { AlertTriangle, TrendingUp, Users, Clock, Activity, Zap, Star, BookOpen,
-  MessageCircle, Bot, Headphones, TicketIcon, Package,
+import { AlertTriangle, TrendingUp, Users, Clock, Activity, Star, BookOpen,
+  MessageCircle, TicketIcon, Package,
 } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
 import reqs from "../../data/requirementData";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from "recharts";
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import type { PageProps } from "../../types";
 import { StatusBadge } from "../../components/StatusBadge";
 import { Drawer } from "../../components/Drawer";

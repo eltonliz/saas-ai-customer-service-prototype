@@ -30,7 +30,7 @@ export default function KnowledgeBase({ context }: PageProps) {
   const [gapDrawerOpen, setGapDrawerOpen] = useState(false);
   const [modalUpload, setModalUpload] = useState(false);
   const [uploadTitle, setUploadTitle] = useState("");
-  const [reviewComment, setReviewComment] = useState("");
+  const [reviewComments, setReviewComments] = useState<Record<string, string>>({});
 
   // Deleted doc IDs (local tracking since store has no delete method)
   const [deletedDocIds, setDeletedDocIds] = useState<Set<string>>(new Set());
@@ -77,17 +77,17 @@ export default function KnowledgeBase({ context }: PageProps) {
   }
 
   function handleApprove(id: string) {
-    store.updateKnowledgeDoc(id, { status: "索引中", reviewComment: reviewComment || "审核通过" });
+    store.updateKnowledgeDoc(id, { status: "索引中", reviewComment: reviewComments[id] || "审核通过" });
     setTimeout(() => {
       store.updateKnowledgeDoc(id, { status: "已发布" });
       alert("知识已同步至向量索引，发布完成");
     }, 1500);
-    setReviewComment("");
+    setReviewComments(prev => { const next = { ...prev }; delete next[id]; return next; });
   }
 
   function handleReject(id: string) {
-    store.updateKnowledgeDoc(id, { status: "已驳回", reviewComment: reviewComment || "内容不符" });
-    setReviewComment("");
+    store.updateKnowledgeDoc(id, { status: "已驳回", reviewComment: reviewComments[id] || "内容不符" });
+    setReviewComments(prev => { const next = { ...prev }; delete next[id]; return next; });
   }
 
   function handlePublish(id: string) {
@@ -147,7 +147,7 @@ export default function KnowledgeBase({ context }: PageProps) {
       chunks: 0,
       updatedAt: new Date().toISOString().slice(0, 10),
       content: gap.candidate || "审核通过的候选知识",
-      reviewComment: reviewComment || "审核通过",
+      reviewComment: reviewComments[id] || "审核通过",
       tags: [],
       version: "1.0",
       isLatestVersion: true,
@@ -160,13 +160,13 @@ export default function KnowledgeBase({ context }: PageProps) {
       publishedResolutionRate: 0,
       negativeFeedbackRate: 0,
     });
-    setReviewComment("");
+    setReviewComments(prev => { const next = { ...prev }; delete next[id]; return next; });
     alert("已发布上线");
   }
 
   function handleGapReject(id: string) {
-    store.updateKnowledgeGap(id, { status: "已驳回", candidate: `审核驳回原因: ${reviewComment || "内容不符合平台规范"}` });
-    setReviewComment("");
+    store.updateKnowledgeGap(id, { status: "已驳回", candidate: `审核驳回原因: ${reviewComments[id] || "内容不符合平台规范"}` });
+    setReviewComments(prev => { const next = { ...prev }; delete next[id]; return next; });
   }
 
   function handleGapTrack(id: string) {
@@ -341,7 +341,7 @@ export default function KnowledgeBase({ context }: PageProps) {
                       <p className="text-base text-slate-400">{d.type} · {d.businessLine} · {d.updatedAt}</p>
                     </div>
                     <div className="flex gap-2">
-                      <input value={reviewComment} onChange={(e) => setReviewComment(e.target.value)} placeholder="审核意见" className="rounded-lg border border-slate-200 px-2 py-1 text-base outline-none w-32" />
+                      <input value={reviewComments[d.id] || ""} onChange={(e) => setReviewComments(prev => ({ ...prev, [d.id]: e.target.value }))} placeholder="审核意见" className="rounded-lg border border-slate-200 px-2 py-1 text-base outline-none w-32" />
                       <button type="button" onClick={() => handleApprove(d.id)} className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-base text-white hover:bg-emerald-600"><Check size={12} />通过</button>
                       <button type="button" onClick={() => handleReject(d.id)} className="flex items-center gap-1 rounded-lg bg-red-500 px-3 py-1.5 text-base text-white hover:bg-red-600"><X size={12} />驳回</button>
                     </div>
@@ -454,8 +454,8 @@ export default function KnowledgeBase({ context }: PageProps) {
                     {gap.status === "待审核" && (
                       <div className="flex items-center gap-2">
                         <input
-                          value={reviewComment}
-                          onChange={(e) => setReviewComment(e.target.value)}
+                          value={reviewComments[gap.id] || ""}
+                          onChange={(e) => setReviewComments(prev => ({ ...prev, [gap.id]: e.target.value }))}
                           placeholder="审核意见"
                           className="rounded-lg border border-slate-200 px-2 py-1.5 text-base outline-none w-28 h-10"
                         />
