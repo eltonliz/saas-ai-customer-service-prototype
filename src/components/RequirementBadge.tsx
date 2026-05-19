@@ -643,8 +643,9 @@ export function RequirementBadge({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  /* ── Clamp to viewport ‒─ */
+  /* ── Clamp to viewport ── (skip during drag/resize to avoid fighting user interaction) */
   const clampTooltip = useCallback(() => {
+    if (dragRef.current.dragging || resizeRef.current.resizing) return;
     const el = tooltipRef.current;
     if (!el) return;
     const vw = window.innerWidth;
