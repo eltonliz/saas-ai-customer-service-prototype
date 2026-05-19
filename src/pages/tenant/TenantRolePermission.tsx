@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { PageProps } from "../../types";
 import { Shield } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
@@ -14,21 +14,27 @@ const defaultRoles = [
 ];
 
 export default function TenantRolePermission({}: PageProps) {
-  const [roles] = useState(defaultRoles);
+  const [roles, setRoles] = useState(defaultRoles);
   const [editOpen, setEditOpen] = useState<string | null>(null);
   const [membersOpen, setMembersOpen] = useState<string | null>(null);
-  const allBadges = reqs.TenantRolePermission.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const [editForm, setEditForm] = useState({ name: '', permissions: '' });
+  useEffect(() => {
+    if (editOpen) {
+      const role = roles.find(r => r.id === editOpen);
+      if (role) setEditForm({ name: role.name, permissions: role.permissions });
+    }
+  }, [editOpen]);
+  const allBadges = reqs.TenantRolePermission.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
   const editingRole = roles.find((r) => r.id === editOpen);
   const viewingRole = roles.find((r) => r.id === membersOpen);
 
   return (
-    <div className="role-permission-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="role-permission-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50">
             <Shield size={20} className="text-indigo-600" />
@@ -75,9 +81,9 @@ export default function TenantRolePermission({}: PageProps) {
       <Modal open={!!editOpen} title="编辑权限" onClose={() => setEditOpen(null)}>
         {editingRole && (
           <div className="space-y-4">
-            <div><label className="text-base font-medium text-slate-700">角色名称</label><input defaultValue={editingRole.name} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
-            <div><label className="text-base font-medium text-slate-700">权限范围（用逗号分隔）</label><textarea defaultValue={editingRole.permissions} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-24 resize-none" /></div>
-            <div className="flex justify-end gap-3"><button onClick={() => setEditOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => setEditOpen(null)} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
+            <div><label className="text-base font-medium text-slate-700">角色名称</label><input value={editForm.name} onChange={(e) => setEditForm({ ...editForm, name: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">权限范围（用逗号分隔）</label><textarea value={editForm.permissions} onChange={(e) => setEditForm({ ...editForm, permissions: e.target.value })} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-24 resize-none" /></div>
+            <div className="flex justify-end gap-3"><button onClick={() => setEditOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => { setRoles(roles.map(r => r.id === editOpen ? { ...r, name: editForm.name, permissions: editForm.permissions } : r)); setEditOpen(null); }} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
           </div>
         )}
       </Modal>

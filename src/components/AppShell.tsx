@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import type { MenuItem } from "../types";
 import type { LucideIcon } from "lucide-react";
 import { Header } from "./Header";
 import { PhonePreview } from "./PhonePreview";
@@ -7,7 +6,6 @@ import { Home, MessageCircle, Package, LayoutGrid, User } from "lucide-react";
 
 interface AppShellProps {
   pageId: string;
-  menus: MenuItem[];
   onPageChange: (pageId: string) => void;
   onPortalChange: (portal: "app" | "tenant" | "platform") => void;
   children: ReactNode;
@@ -29,7 +27,7 @@ const navItems: { id: string; label: string; badge?: number }[] = [
   { id: "profile", label: "我的" },
 ];
 
-export function AppShell({ pageId, menus, onPageChange, onPortalChange, children }: AppShellProps) {
+export function AppShell({ pageId, onPageChange, onPortalChange, children }: AppShellProps) {
   return (
     <div className="min-h-screen bg-slate-100">
       <Header portal="app" onPortalChange={onPortalChange} />

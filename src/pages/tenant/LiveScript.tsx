@@ -16,11 +16,12 @@ export default function LiveScript({}: PageProps) {
   const [scripts, setScripts] = useState(defaultScripts);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState<string | null>(null);
-  const allBadges = reqs.LiveScript.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const [editForm, setEditForm] = useState({ title: "", product: "", content: "" });
+
+  const allBadges = reqs.LiveScript.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
   const selectedScript = scripts.find((s) => s.id === detailOpen);
   const previewScript = scripts.find((s) => s.id === previewOpen);
 
@@ -28,10 +29,21 @@ export default function LiveScript({}: PageProps) {
     setScripts((prev) => prev.map((s) => s.id === id ? { ...s, status: s.status === "已启用" ? "草稿" : "已启用" } : s));
   }
 
+  function openEdit(script: typeof scripts[number]) {
+    setEditForm({ title: script.title, product: script.product, content: script.content });
+    setDetailOpen(script.id);
+  }
+
+  function saveEdit() {
+    if (!detailOpen) return;
+    setScripts((prev) => prev.map((s) => s.id === detailOpen ? { ...s, title: editForm.title, product: editForm.product, content: editForm.content, words: editForm.content.length } : s));
+    setDetailOpen(null);
+  }
+
   return (
-    <div className="live-script-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="live-script-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50">
             <Mic size={20} className="text-rose-600" />
@@ -68,7 +80,7 @@ export default function LiveScript({}: PageProps) {
                   <span className={`inline-flex rounded-full px-2.5 py-0.5 text-sm font-medium ${s.status === "已启用" ? "bg-emerald-50 text-emerald-700" : "bg-slate-100 text-slate-600"}`}>{s.status}</span>
                 </td>
                 <td className="px-5 py-3">
-                  <button onClick={() => setDetailOpen(s.id)} className="text-base text-blue-600 hover:text-blue-800 mr-3">编辑</button>
+                  <button onClick={() => openEdit(s)} className="text-base text-blue-600 hover:text-blue-800 mr-3">编辑</button>
                   <button onClick={() => setPreviewOpen(s.id)} className="text-base text-slate-400 hover:text-slate-600 mr-3">预览</button>
                   <button onClick={() => toggleStatus(s.id)} className={`text-base ${s.status === "已启用" ? "text-amber-600 hover:text-amber-800" : "text-emerald-600 hover:text-emerald-800"}`}>{s.status === "已启用" ? "停用" : "启用"}</button>
                 </td>
@@ -81,10 +93,10 @@ export default function LiveScript({}: PageProps) {
       <Modal open={!!detailOpen} title="编辑话术" onClose={() => setDetailOpen(null)}>
         {selectedScript && (
           <div className="space-y-3 text-base">
-            <div><label className="text-base font-medium text-slate-700">标题</label><input defaultValue={selectedScript.title} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
-            <div><label className="text-base font-medium text-slate-700">关联商品</label><input defaultValue={selectedScript.product} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
-            <div><label className="text-base font-medium text-slate-700">话术内容</label><textarea defaultValue={selectedScript.content} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-32 resize-none" /></div>
-            <div className="flex justify-end gap-3"><button onClick={() => setDetailOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => setDetailOpen(null)} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
+            <div><label className="text-base font-medium text-slate-700">标题</label><input value={editForm.title} onChange={(e) => setEditForm(f => ({ ...f, title: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">关联商品</label><input value={editForm.product} onChange={(e) => setEditForm(f => ({ ...f, product: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">话术内容</label><textarea value={editForm.content} onChange={(e) => setEditForm(f => ({ ...f, content: e.target.value }))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-32 resize-none" /></div>
+            <div className="flex justify-end gap-3"><button onClick={() => setDetailOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={saveEdit} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
           </div>
         )}
       </Modal>

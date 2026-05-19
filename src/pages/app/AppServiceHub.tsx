@@ -16,8 +16,7 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-rose-50",
       iconColor: "text-rose-500",
       label: "售后服务",
-      desc: "退款/退货/换货申请，进度查询",
-      detail: "支持退款、退货、换货申请，24小时内商家响应",
+      detail: "退款/退货/换货申请，进度查询",
       count: activeAfterSales.length > 0 ? `${activeAfterSales.length}个进行中` : undefined,
     },
     {
@@ -26,7 +25,6 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-blue-50",
       iconColor: "text-blue-500",
       label: "门店服务",
-      desc: "附近门店信息查询，到店预约",
       detail: "查询最近门店，预约到店体验与核销服务",
     },
     {
@@ -35,7 +33,6 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-violet-50",
       iconColor: "text-violet-500",
       label: "课程学习",
-      desc: "已购课程查看，课件回放学习",
       detail: "支持回放、倍速播放和下载，有效期365天",
     },
     {
@@ -44,7 +41,6 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-emerald-50",
       iconColor: "text-emerald-500",
       label: "大健康",
-      desc: "健康科普咨询，产品说明查询",
       detail: "AI健康科普和生活方式建议，非医疗诊断",
     },
     {
@@ -53,7 +49,6 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-amber-50",
       iconColor: "text-amber-500",
       label: "售后进度",
-      desc: "查看售后申请处理状态",
       detail: myAfterSales.length > 0
         ? `共 ${myAfterSales.length} 条售后记录，${activeAfterSales.length} 个处理中`
         : "暂无售后记录",
@@ -65,7 +60,6 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-purple-50",
       iconColor: "text-purple-500",
       label: "会员专属",
-      desc: "查看会员等级权益与福利",
       detail: "黄金会员专属优惠、优先客服、积分兑换等多重权益",
     },
     {
@@ -74,7 +68,6 @@ export default function AppServiceHub({ context, goPage }: PageProps) {
       bgClass: "bg-sky-50",
       iconColor: "text-sky-500",
       label: "H5 SDK预览",
-      desc: "模拟网页嵌入AI客服组件",
       detail: "模拟H5网页嵌入AI客服聊天组件，支持商品详情页和订单详情页切换，查看SDK集成效果",
     },
   ];

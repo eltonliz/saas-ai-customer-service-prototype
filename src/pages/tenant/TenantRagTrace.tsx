@@ -62,16 +62,18 @@ function ChunkTable({ chunks }: { chunks: RagChunk[] }) {
 export default function TenantRagTrace({ context }: PageProps) {
   const store = useAppStore();
   const myTraces = ragTraces.filter((t) => t.tenantId === context.currentTenantId);
-  const [selected, setSelected] = useState<RagTrace>(myTraces[0] ?? ragTraces[0]);
+  const [selected, setSelected] = useState<RagTrace | undefined>(myTraces[0] ?? ragTraces[0]);
   const [searchQuery, setSearchQuery] = useState("");
   const [addedToGapPool, setAddedToGapPool] = useState<Set<string>>(new Set());
 
-  const showGapButton =
-    selected.enteredKnowledgeGap ||
-    selected.confidence < 0.7 ||
-    (selected.feedback && selected.feedback.length > 0);
+  const showGapButton = selected
+    ? selected.enteredKnowledgeGap ||
+      selected.confidence < 0.7 ||
+      (selected.feedback && selected.feedback.length > 0)
+    : false;
 
   function handleAddToGapPool() {
+    if (!selected) return;
     const gap = {
       id: `gap-${Date.now()}`,
       tenantId: context.currentTenantId,
@@ -103,7 +105,7 @@ export default function TenantRagTrace({ context }: PageProps) {
       )
     : myTraces;
 
-  const timelineSteps = [
+  const timelineSteps = selected ? [
     { time: selected.timeline[0] ?? "", title: "接收用户问题", detail: selected.question, state: "done" as const },
     { time: selected.timeline[1] ?? "", title: "改写检索问题", detail: selected.rewrittenQuestion, state: "done" as const },
     { time: selected.timeline[2] ?? "", title: "向量化", state: "done" as const },
@@ -114,13 +116,12 @@ export default function TenantRagTrace({ context }: PageProps) {
     { time: selected.timeline[7] ?? "", title: "风控审核", detail: selected.riskPassed ? "通过" : `拦截-${selected.riskLevel}`, state: selected.riskPassed ? "done" as const : "error" as const },
     { time: selected.timeline[8] ?? "", title: "返回用户", state: "done" as const },
     { time: selected.timeline[9] ?? "", title: "日志归档", detail: selected.sampleType, state: "pending" as const },
-  ];
+  ] : [];
 
-  const allBadges = reqs.TenantRagTrace.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const allBadges = reqs.TenantRagTrace.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
 
   return (
     <div className="flex flex-col h-full relative">
@@ -167,7 +168,7 @@ export default function TenantRagTrace({ context }: PageProps) {
 
             <div className="flex-1 overflow-y-auto p-2 space-y-1.5">
               {filteredTraces.map((t) => {
-                const isActive = selected.id === t.id;
+                const isActive = selected?.id === t.id;
                 return (
                   <button
                     key={t.id}
@@ -216,14 +217,14 @@ export default function TenantRagTrace({ context }: PageProps) {
               </div>
               处理链路
             </h3>
-            <Timeline items={timelineSteps} />
+            {selected ? <Timeline items={timelineSteps} /> : <p className="text-base text-slate-400 text-center py-8">请选择一条链路记录</p>}
           </div>
         </div>
 
         {/* ======== RIGHT COLUMN: 12 Info Cards ======== */}
         <div className="w-[420px] flex-shrink-0 overflow-y-auto space-y-3">
 
-          {showGapButton && !addedToGapPool.has(selected.id) && (
+          {selected && showGapButton && !addedToGapPool.has(selected.id) && (
             <div className="rounded-xl border-2 border-amber-300 bg-amber-50 p-4 flex items-start gap-3">
               <AlertTriangle size={18} className="text-amber-500 flex-shrink-0 mt-0.5" />
               <div className="flex-1">
@@ -243,6 +244,13 @@ export default function TenantRagTrace({ context }: PageProps) {
             </div>
           )}
 
+          {!selected && (
+            <div className="rounded-xl border border-slate-200 bg-white p-8 text-center">
+              <p className="text-base text-slate-400">请从左侧列表选择一条链路记录查看详情</p>
+            </div>
+          )}
+
+          {selected && (<>
           {/* 1. 基础信息 */}
           <div className="rounded-xl border border-slate-200 bg-white p-4">
             <h3 className="text-base font-semibold text-slate-700 mb-3 flex items-center gap-2">
@@ -487,6 +495,7 @@ export default function TenantRagTrace({ context }: PageProps) {
             )}
           </div>
 
+          </>)}
         </div>
       </div>
     </div>

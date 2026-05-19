@@ -64,8 +64,11 @@ export default function KnowledgeBase({ context }: PageProps) {
       hitRate: 0,
       chunks: 0,
       updatedAt: new Date().toISOString().slice(0, 10),
+      tags: [] as string[],
+      version: "1.0",
+      isLatestVersion: true,
     };
-    store.updateKnowledgeDoc(newDoc.id, newDoc);
+    store.addKnowledgeDoc(newDoc);
     setModalUpload(false);
     setUploadTitle("");
     // simulate progress

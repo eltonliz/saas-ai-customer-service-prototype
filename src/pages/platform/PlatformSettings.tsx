@@ -147,7 +147,7 @@ export default function PlatformSettings({}: PageProps) {
     setChannels((prev) =>
       prev.map((c) =>
         c.name === editingChannel.name
-          ? { ...c, status: c.status === "启用" ? "停用" : "启用" }
+          ? { ...c, status: editingChannel.status }
           : c,
       ),
     );

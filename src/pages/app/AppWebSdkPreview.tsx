@@ -40,12 +40,19 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
   ]);
   const [input, setInput] = useState("");
   const chatBodyRef = useRef<HTMLDivElement>(null);
+  const timeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
     }
   }, [messages]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   function sendMessage(text: string) {
     if (!text.trim()) return;
@@ -54,7 +61,8 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
     setInput("");
 
     // Simulate AI response
-    setTimeout(() => {
+    if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => {
       const lower = text.toLowerCase();
       let reply: Message;
       if (lower.includes("商品") || lower.includes("产品")) {
@@ -94,11 +102,10 @@ export default function AppWebSdkPreview({ goPage }: PageProps) {
     sendMessage(chip);
   }
 
-  const allBadges = reqs.AppWebSdkPreview.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const allBadges = reqs.AppWebSdkPreview.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
 
   return (
     <div className="flex flex-col h-full bg-slate-100 relative sdk-preview">

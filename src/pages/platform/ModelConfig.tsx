@@ -46,6 +46,7 @@ export default function ModelConfig({}: PageProps) {
 
   // Provider modals
   const [editModal, setEditModal] = useState(false);
+  const [editParamProviderId, setEditParamProviderId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({ temp: 0.7, topP: 0.9, maxTokens: 4096, costPer1kTokens: 0.015, timeout: 10000, fallback: "Claude Sonnet 4.6" });
   const [createProviderModal, setCreateProviderModal] = useState(false);
   const [providerForm, setProviderForm] = useState({ name: "", apiEndpoint: "", apiKey: "", models: "" });
@@ -59,6 +60,10 @@ export default function ModelConfig({}: PageProps) {
   const [editingRoute, setEditingRoute] = useState<RouteItem | null>(null);
   const [editRouteModal, setEditRouteModal] = useState(false);
   const [editRouteForm, setEditRouteForm] = useState({ scene: "", model: "", priority: "优先" });
+
+  // Degradation strategy config
+  const [degradeConfig, setDegradeConfig] = useState({ maxRetries: 3, timeoutThreshold: 15000, strategy: "超时降级", fallbackModel: "Claude Sonnet 4.6" });
+  const [degradeModal, setDegradeModal] = useState(false);
 
   function handleCreateProvider() {
     if (!providerForm.name.trim()) return;
@@ -150,11 +155,10 @@ export default function ModelConfig({}: PageProps) {
     setRoutes((prev) => prev.filter((r) => r.scene !== scene));
   }
 
-  const allBadges = reqs.ModelConfig.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const allBadges = reqs.ModelConfig.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
 
   return (
     <div className="relative model-page">
@@ -196,7 +200,11 @@ export default function ModelConfig({}: PageProps) {
               <div className="flex gap-2 mt-2">
                 <button
                   type="button"
-                  onClick={() => setEditModal(true)}
+                  onClick={() => {
+                    setEditParamProviderId(p.id);
+                    setEditForm({ temp: p.temp, topP: p.topP, maxTokens: p.maxTokens, costPer1kTokens: p.costPer1kTokens, timeout: p.timeout, fallback: p.fallback });
+                    setEditModal(true);
+                  }}
                   className="rounded-lg border border-blue-200 px-3 py-1 text-base text-blue-600 hover:bg-blue-50"
                 >
                   编辑参数
@@ -259,9 +267,9 @@ export default function ModelConfig({}: PageProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-3 text-base text-slate-400 mt-1">
-                  <span>失败率: {((Math.random() * 5)).toFixed(1)}%</span>
-                  <span>调用: {Math.floor(Math.random() * 500 + 100)}次</span>
-                  <span>成本: ${(Math.random() * 0.5 + 0.1).toFixed(2)}</span>
+                  <span>失败率: {((r.scene.length * 1.3) % 5).toFixed(1)}%</span>
+                  <span>调用: {((r.scene.length * 73 + 100) % 500 + 100)}次</span>
+                  <span>成本: ${((r.scene.length * 0.07 + 0.1) % 0.5 + 0.1).toFixed(2)}</span>
                 </div>
               </div>
             ))}
@@ -277,21 +285,21 @@ export default function ModelConfig({}: PageProps) {
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">最大重试次数</label>
-            <input type="number" defaultValue={3} min={0} max={5} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none" />
+            <input type="number" value={degradeConfig.maxRetries} onChange={(e) => setDegradeConfig(d => ({ ...d, maxRetries: +e.target.value }))} min={0} max={5} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none" />
           </div>
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">超时降级阈值 (ms)</label>
-            <input type="number" defaultValue={15000} min={1000} step={1000} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none" />
+            <input type="number" value={degradeConfig.timeoutThreshold} onChange={(e) => setDegradeConfig(d => ({ ...d, timeoutThreshold: +e.target.value }))} min={1000} step={1000} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none" />
           </div>
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">降级策略</label>
-            <select defaultValue="超时降级" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
+            <select value={degradeConfig.strategy} onChange={(e) => setDegradeConfig(d => ({ ...d, strategy: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
               <option>超时降级</option><option>错误率降级</option><option>手动降级</option><option>按优先级降级</option>
             </select>
           </div>
           <div>
             <label className="block text-base font-medium text-slate-500 mb-1">降级模型</label>
-            <select defaultValue="Claude Sonnet 4.6" className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
+            <select value={degradeConfig.fallbackModel} onChange={(e) => setDegradeConfig(d => ({ ...d, fallbackModel: e.target.value }))} className="w-full rounded-xl border border-slate-200 px-3 py-2 text-base outline-none">
               <option>Claude Opus 4.7</option><option>Claude Sonnet 4.6</option>
             </select>
           </div>
@@ -382,8 +390,10 @@ export default function ModelConfig({}: PageProps) {
         <div className="flex justify-end gap-3 mt-4">
           <button type="button" onClick={() => setEditModal(false)} className="rounded-lg border px-4 py-2 text-base">取消</button>
           <button type="button" onClick={() => {
-            setProviders(prev => prev.map((p, i) => i === 0 ? { ...p, temp: editForm.temp, topP: editForm.topP, maxTokens: editForm.maxTokens, costPer1kTokens: editForm.costPer1kTokens, timeout: editForm.timeout, fallback: editForm.fallback } : p));
+            if (!editParamProviderId) return;
+            setProviders(prev => prev.map((p) => p.id === editParamProviderId ? { ...p, temp: editForm.temp, topP: editForm.topP, maxTokens: editForm.maxTokens, costPer1kTokens: editForm.costPer1kTokens, timeout: editForm.timeout, fallback: editForm.fallback } : p));
             setEditModal(false);
+            setEditParamProviderId(null);
           }} className="rounded-lg bg-blue-600 px-4 py-2 text-base text-white">保存</button>
         </div>
       </Modal>

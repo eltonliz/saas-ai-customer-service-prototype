@@ -168,6 +168,8 @@ export interface Conversation {
   satisfaction?: number;
   tags: string[];
   createdAt: string;
+  lastActivityAt?: string;
+  endedAt?: string;
   summary: string;
 }
 
@@ -180,6 +182,7 @@ export interface Message {
   status: "发送中" | "已送达" | "已读";
   cardType?: "商品卡片" | "订单卡片" | "工单卡片" | "库存查询" | "库存查询结果" | "物流查询" | "物流查询结果";
   cardData?: Record<string, string>;
+  attachments?: { type: "image" | "file" | "video"; url: string; name?: string; size?: number }[];
   references?: { title: string; source: string; similarity: number }[];
   traceId?: string;
   confidenceScore?: number;
@@ -449,6 +452,69 @@ export interface WeComNotification {
   summary: string;
   entry: string;
   records: string[];
+}
+
+export type PermissionAction =
+  | "view"
+  | "create"
+  | "edit"
+  | "delete"
+  | "approve"
+  | "export"
+  | "manage";
+
+export type PermissionResource =
+  | "tenants"
+  | "merchants"
+  | "stores"
+  | "users"
+  | "conversations"
+  | "tickets"
+  | "knowledge"
+  | "robot_config"
+  | "analytics"
+  | "risk_control"
+  | "quality"
+  | "settings"
+  | "billing"
+  | "audit_log";
+
+export type RoleType =
+  | "super_admin"
+  | "platform_admin"
+  | "tenant_admin"
+  | "tenant_operator"
+  | "customer_service_manager"
+  | "customer_service_agent"
+  | "knowledge_manager"
+  | "viewer";
+
+export interface Role {
+  id: string;
+  name: string;
+  type: RoleType;
+  scope: "platform" | "tenant";
+  permissions: Permission[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Permission {
+  resource: PermissionResource;
+  actions: PermissionAction[];
+}
+
+export interface AuditLog {
+  id: string;
+  tenantId?: string;
+  operatorId: string;
+  operatorName: string;
+  action: string;
+  resource: string;
+  resourceId: string;
+  detail: string;
+  ipAddress?: string;
+  createdAt: string;
 }
 
 export interface AppContextValue {

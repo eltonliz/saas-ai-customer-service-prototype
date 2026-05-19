@@ -1,15 +1,15 @@
-import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useMemo, useState, type Dispatch, type ReactNode, type SetStateAction } from "react";
 import type { AppContextValue, BusinessLine, Channel, Conversation, KnowledgeDocument, KnowledgeGap, Message, Ticket, AfterSale } from "../types";
 import * as M from "./mockData";
 
 interface AppStoreState {
   appContext: Omit<AppContextValue, "portal">;
-  setTenantId: (id: string) => void;
-  setMerchantId: (id: string) => void;
-  setStoreId: (id: string) => void;
-  setBusinessLine: (line: BusinessLine) => void;
-  setUserId: (id: string) => void;
-  setChannel: (ch: Channel) => void;
+  setTenantId: Dispatch<SetStateAction<string>>;
+  setMerchantId: Dispatch<SetStateAction<string>>;
+  setStoreId: Dispatch<SetStateAction<string>>;
+  setBusinessLine: Dispatch<SetStateAction<BusinessLine>>;
+  setUserId: Dispatch<SetStateAction<string>>;
+  setChannel: Dispatch<SetStateAction<Channel>>;
   // mutable local state for interactions
   conversations: Conversation[];
   messages: Message[];
@@ -45,12 +45,12 @@ export function AppStoreProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState("user-1");
   const [channel, setChannel] = useState<Channel>("APP");
 
-  const [conversations, setConversations] = useState<Conversation[]>([...M.conversations]);
-  const [messages, setMessages] = useState<Message[]>([...M.conversationMessages]);
-  const [tickets, setTickets] = useState<Ticket[]>([...M.tickets]);
-  const [knowledgeDocs, setKnowledgeDocs] = useState<KnowledgeDocument[]>([...M.knowledgeDocuments]);
-  const [knowledgeGaps, setKnowledgeGaps] = useState<KnowledgeGap[]>([...M.knowledgeGaps]);
-  const [afterSales, setAfterSales] = useState<AfterSale[]>([...M.afterSales]);
+  const [conversations, setConversations] = useState<Conversation[]>(() => structuredClone(M.conversations));
+  const [messages, setMessages] = useState<Message[]>(() => structuredClone(M.conversationMessages));
+  const [tickets, setTickets] = useState<Ticket[]>(() => structuredClone(M.tickets));
+  const [knowledgeDocs, setKnowledgeDocs] = useState<KnowledgeDocument[]>(() => structuredClone(M.knowledgeDocuments));
+  const [knowledgeGaps, setKnowledgeGaps] = useState<KnowledgeGap[]>(() => structuredClone(M.knowledgeGaps));
+  const [afterSales, setAfterSales] = useState<AfterSale[]>(() => structuredClone(M.afterSales));
 
   const state: AppStoreState = useMemo(
     () => ({

@@ -42,7 +42,10 @@ function makeMsg(convId: string, sender: Message["sender"], content: string, car
 export default function CustomerServiceWorkbench({ context }: PageProps) {
   const store = useAppStore();
   const { conversations: allConvs, messages, tickets } = store;
-  const queue = allConvs.filter((c) => c.tenantId === context.currentTenantId && c.merchantId === context.currentMerchantId);
+  const queue = useMemo(
+    () => allConvs.filter((c) => c.tenantId === context.currentTenantId && c.merchantId === context.currentMerchantId),
+    [allConvs, context.currentTenantId, context.currentMerchantId],
+  );
 
   const [activeGroup, setActiveGroup] = useState<QueueGroup>("待接入");
   const [selectedId, setSelectedId] = useState(queue.find((c) => groupOf(c.status) === "待接入")?.id ?? queue[0]?.id ?? "");
@@ -59,15 +62,36 @@ export default function CustomerServiceWorkbench({ context }: PageProps) {
   const [traceOpen, setTraceOpen] = useState(false);
 
   const filtered = useMemo(() => queue.filter((c) => groupOf(c.status) === activeGroup), [activeGroup, queue]);
-  const selected = queue.find((c) => c.id === selectedId) ?? filtered[0] ?? queue[0];
-  const user = users.find((u) => u.id === selected?.userId);
-  const currentOrder = orders.find((o) => o.userId === user?.id);
-  const currentMessages = selected ? messages.filter((m) => m.conversationId === selected.id) : [];
-  const linkedTicket = selected ? tickets.find((t) => t.conversationId === selected.id) : undefined;
-  const convTags = selected ? (localTags[selected.id] ?? selected.tags) : [];
-  const convNotes = selected ? (notes[selected.id] ?? []) : [];
-  const convWeCom = selected ? weComNotifications.filter((n) => n.conversationId === selected.id) : [];
-  const recordsBadgeCount = convTags.length + convNotes.length + (linkedTicket ? 1 : 0);
+  const selected = useMemo(
+    () => queue.find((c) => c.id === selectedId) ?? filtered[0] ?? queue[0],
+    [queue, selectedId, filtered],
+  );
+  const user = useMemo(() => users.find((u) => u.id === selected?.userId), [selected?.userId]);
+  const currentOrder = useMemo(() => orders.find((o) => o.userId === user?.id), [user?.id]);
+  const currentMessages = useMemo(
+    () => selected ? messages.filter((m) => m.conversationId === selected.id) : [],
+    [messages, selected?.id],
+  );
+  const linkedTicket = useMemo(
+    () => selected ? tickets.find((t) => t.conversationId === selected.id) : undefined,
+    [tickets, selected?.id],
+  );
+  const convTags = useMemo(
+    () => selected ? (localTags[selected.id] ?? selected.tags) : [],
+    [localTags, selected?.id, selected?.tags],
+  );
+  const convNotes = useMemo(
+    () => selected ? (notes[selected.id] ?? []) : [],
+    [notes, selected?.id],
+  );
+  const convWeCom = useMemo(
+    () => selected ? weComNotifications.filter((n) => n.conversationId === selected.id) : [],
+    [selected?.id],
+  );
+  const recordsBadgeCount = useMemo(
+    () => convTags.length + convNotes.length + (linkedTicket ? 1 : 0),
+    [convTags.length, convNotes.length, linkedTicket],
+  );
 
   function accessConversation() {
     if (!selected) return;

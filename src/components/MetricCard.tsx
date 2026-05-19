@@ -17,13 +17,9 @@ const colorStyles: Record<string, { bg: string; text: string }> = {
 
 export function MetricCard({ label, value, trend, trendUp, color = "slate", onClick }: MetricCardProps) {
   const cs = colorStyles[color] ?? colorStyles.slate;
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={!onClick}
-      className={`flex flex-col gap-1 rounded-xl border p-4 text-left transition-shadow hover:shadow-md ${cs.bg} ${onClick ? "cursor-pointer" : "cursor-default"}`}
-    >
+  const className = `flex flex-col gap-1 rounded-xl border p-4 text-left transition-shadow hover:shadow-md ${cs.bg} ${onClick ? "cursor-pointer" : "cursor-default"}`;
+  const content = (
+    <>
       <span className="text-base font-medium text-slate-500">{label}</span>
       <span className={`text-3xl font-bold ${cs.text}`}>{value}</span>
       {trend && (
@@ -31,6 +27,16 @@ export function MetricCard({ label, value, trend, trendUp, color = "slate", onCl
           {trendUp ? "↑" : "↓"} {trend}
         </span>
       )}
-    </button>
+    </>
   );
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={className}>
+        {content}
+      </button>
+    );
+  }
+
+  return <div className={className}>{content}</div>;
 }

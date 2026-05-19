@@ -19,11 +19,10 @@ export default function PlatformRolePermission({}: PageProps) {
   const [membersOpen, setMembersOpen] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editPermissions, setEditPermissions] = useState("");
-  const allBadges = reqs.PlatformRolePermission.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const allBadges = reqs.PlatformRolePermission.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
   const editingRole = roles.find((r) => r.id === editOpen);
   const viewingRole = roles.find((r) => r.id === membersOpen);
 
@@ -42,9 +41,9 @@ export default function PlatformRolePermission({}: PageProps) {
   }
 
   return (
-    <div className="platform-roles-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="platform-roles-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50">
             <Shield size={20} className="text-indigo-600" />
@@ -54,7 +53,14 @@ export default function PlatformRolePermission({}: PageProps) {
             <p className="text-base text-slate-500 mt-1">管理平台级角色定义、成员分配及跨租户功能权限矩阵</p>
           </div>
         </div>
-        <button className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10">
+        <button
+          type="button"
+          onClick={() => {
+            const newId = `pr-${Date.now()}`;
+            setRoles(prev => [...prev, { id: newId, name: "新角色", members: 0, permissions: "待配置", status: "已启用", membersList: [] }]);
+          }}
+          className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 h-10"
+        >
           + 新增角色
         </button>
       </div>

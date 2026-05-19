@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { PageProps } from "../../types";
 import { Smartphone } from "lucide-react";
 import { RequirementBadge } from "../../components/RequirementBadge";
@@ -15,21 +15,27 @@ const defaultChannels = [
 export default function TenantChannelConfig({}: PageProps) {
   const [channels, setChannels] = useState(defaultChannels);
   const [detailOpen, setDetailOpen] = useState<string | null>(null);
-  const allBadges = reqs.TenantChannelConfig.flatMap(group =>
-  group.reqs.map((req, i) => (
-    <RequirementBadge key={req.id} req={req} sectionSelector={group.selector} index={i} />
-  ))
-);
+  const [editForm, setEditForm] = useState({ name: "", type: "", description: "" });
+  const allBadges = reqs.TenantChannelConfig.map(group => {
+    const merged = { ...group.reqs[0], content: group.reqs.map(r => `## ${r.title}\n\n${r.content}`).join('\n\n---\n\n') };
+    return <RequirementBadge key={merged.id} req={merged} sectionSelector={group.selector} index={0} />;
+  });
   const selected = channels.find((c) => c.id === detailOpen);
+
+  useEffect(() => {
+    if (selected) {
+      setEditForm({ name: selected.name, type: selected.type, description: selected.description });
+    }
+  }, [selected]);
 
   function toggleStatus(id: string) {
     setChannels((prev) => prev.map((c) => c.id === id ? { ...c, status: c.status === "已启用" ? "配置中" : "已启用" } : c));
   }
 
   return (
-    <div className="channel-config-page">
-      <div className="flex items-center justify-between mb-6">
+    <div className="channel-config-page relative">
       {allBadges}
+      <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50">
             <Smartphone size={20} className="text-blue-600" />
@@ -78,10 +84,10 @@ export default function TenantChannelConfig({}: PageProps) {
       <Modal open={!!detailOpen} title="渠道配置" onClose={() => setDetailOpen(null)}>
         {selected && (
           <div className="space-y-3 text-base">
-            <div><label className="text-base font-medium text-slate-700">渠道名称</label><input defaultValue={selected.name} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
-            <div><label className="text-base font-medium text-slate-700">类型</label><input defaultValue={selected.type} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
-            <div><label className="text-base font-medium text-slate-700">描述</label><textarea defaultValue={selected.description} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-20 resize-none" /></div>
-            <div className="flex justify-end gap-3"><button onClick={() => setDetailOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => setDetailOpen(null)} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
+            <div><label className="text-base font-medium text-slate-700">渠道名称</label><input value={editForm.name} onChange={e => setEditForm(f => ({...f, name: e.target.value}))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">类型</label><input value={editForm.type} onChange={e => setEditForm(f => ({...f, type: e.target.value}))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400" /></div>
+            <div><label className="text-base font-medium text-slate-700">描述</label><textarea value={editForm.description} onChange={e => setEditForm(f => ({...f, description: e.target.value}))} className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-base outline-none focus:border-blue-400 h-20 resize-none" /></div>
+            <div className="flex justify-end gap-3"><button onClick={() => setDetailOpen(null)} className="rounded-lg border border-slate-200 px-4 py-2 text-slate-600">取消</button><button onClick={() => { if (detailOpen) { setChannels(prev => prev.map(c => c.id === detailOpen ? {...c, ...editForm} : c)); setDetailOpen(null); }}} className="rounded-lg bg-blue-600 px-4 py-2 text-white">保存</button></div>
           </div>
         )}
       </Modal>

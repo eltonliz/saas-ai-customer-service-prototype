@@ -160,6 +160,7 @@ export function RequirementBadge({ req, sectionSelector, index = 0, className = 
   const badgeRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef({ dragging: false, startX: 0, startY: 0, posX: 0, posY: 0 });
+  const hasClaimedRef = useRef(false);
 
   // Find parent container (the page's relative div) and target module element
   useEffect(() => {
@@ -217,13 +218,15 @@ export function RequirementBadge({ req, sectionSelector, index = 0, className = 
   }, [open, clampTooltip]);
 
   const handleMouseEnter = () => {
-    if (!openTooltipRegistry.has(req.id)) {
+    if (!openTooltipRegistry.has(req.id) && !hasClaimedRef.current) {
+      hasClaimedRef.current = true;
       openTooltipRegistry.add(req.id);
       setOpen(true);
     }
   };
 
   const handleClose = () => {
+    hasClaimedRef.current = false;
     openTooltipRegistry.delete(req.id);
     setOpen(false);
     dragRef.current.posX = 0;
@@ -231,7 +234,10 @@ export function RequirementBadge({ req, sectionSelector, index = 0, className = 
   };
 
   useEffect(() => {
-    return () => { openTooltipRegistry.delete(req.id); };
+    return () => {
+      hasClaimedRef.current = false;
+      openTooltipRegistry.delete(req.id);
+    };
   }, [req.id]);
 
   const handleTooltipMouseDown = (e: React.MouseEvent) => {
